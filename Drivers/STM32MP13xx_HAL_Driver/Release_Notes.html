@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Release Notes for STM32MP13xx HAL drivers</title>
+  <style type="text/css">
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <link rel="stylesheet" href="_htmresc/mini-st_2020.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+  <link rel="icon" type="image/x-icon" href="_htmresc/favicon.png" />
+</head>
+<body>
+<div class="row">
+<div class="col-sm-12 col-lg-4">
+<center>
+<h1 id="release-notes-for-stm32mp13xx-hal-drivers">Release Notes for <mark>STM32MP13xx HAL drivers</mark></h1>
+<p>Copyright ©  2021 STMicroelectronics<br />
+</p>
+<a href="https://www.st.com" class="logo"><img src="_htmresc/st_logo_2020.png" alt="ST logo" /></a>
+</center>
+<h1 id="purpose">Purpose</h1>
+<p>The STM32Cube HAL , an STM32 abstraction layer embedded software, ensure maximized portability across STM32 portfolio.</p>
+<p>The portable APIs layer provides a generic, multi instanced and simple set of APIs to interact with the upper layer (application, libraries and stacks). It is composed of native and extended APIs set. It is directly built around a generic architecture and allows the build-upon layers, like the middleware layer, to implement its functions without knowing in-depth the used STM32 device. This improves the library code reusability and guarantees an easy portability on other devices and STM32 families.</p>
+</div>
+<div class="col-sm-12 col-lg-8">
+<h1 id="update-history">Update History</h1>
+<div class="collapse">
+<input type="checkbox" id="collapse-section0" checked aria-hidden="true"> <label for="collapse-section0" checked aria-hidden="true"><strong>V0.4.0 / 04-March-2022</strong></label>
+<div>
+<h2 id="main-changes">Main Changes</h2>
+<p>This release is the <strong>2nd ALPHA DV of HAL drivers</strong> for STM32MP13xx devices.</p>
+<h2 id="contents">Contents</h2>
+<ul>
+<li>General updates to fix known defects and enhancements implementation</li>
+<li><strong>Major update</strong> of drivers for STM32MP13xx devices:
+<ul>
+<li><strong>CRYP driver</strong> (including CRYP/SAES)
+<ul>
+<li>Driver maturation</li>
+<li>Fix SAES MDMA issues</li>
+<li>SAES : add BYTE size support for header message (used for CCM/GCM)</li>
+</ul></li>
+<li><strong>VREFBUF</strong>:
+<ul>
+<li>Lowest voltage changed from 1.5 V (Cut1.0) to 1.65 V (Cut1.1)</li>
+<li>Reoder VREFBUF values</li>
+</ul></li>
+<li><strong>DDR</strong> - API Change
+<ul>
+<li>Driver maturation</li>
+</ul></li>
+<li><strong>RCC</strong> - No API Change
+<ul>
+<li>remove LSE clock source for RNG1 (cut1.1)</li>
+<li>Fix __HAL_RCC_MRD_CONFIG macro</li>
+<li>Use RSTSSETR instead of RSTSCLRR to read reset status flags</li>
+</ul></li>
+<li><strong>Align HAL Drivers with STM32 Families</strong> - No API Change
+<ul>
+<li>DMA, EXTI, GPIO, IWDG, LPTIM, QSPI, SDMMC, TIM, UART, USART</li>
+</ul></li>
+<li><strong>Implement LL Drivers</strong>:
+<ul>
+<li>DMA/DMAMUX, GPIO, RCC &amp; BUS, USART</li>
+</ul></li>
+</ul></li>
+<li>List of HAL drivers implemented :
+<ul>
+<li>ADC, BSEC, CRC, CRYP ( including SAES), DDR, DMA, DTS, EXTI, FDCAN, GPIO, HASH, I2C, IWDG, LPTIM, LTDC, MCE, MDMA, PKA, PWR, QSPI, RCC, RNG, RTC (including TAMP), SDMMC, SMARTCARD, SPI, TIM, UART, USART, USB</li>
+</ul></li>
+<li>List of LL drivers implemented :
+<ul>
+<li>DMA/DMAMUX, GPIO, RCC &amp; BUS, USART</li>
+</ul></li>
+</ul>
+<h2 id="known-limitations">Known Limitations</h2>
+<ul>
+<li>No</li>
+</ul>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section3" aria-hidden="true"> <label for="collapse-section3" aria-hidden="true"><strong>V0.3.0 / 03-December-2021</strong></label>
+<div>
+<h2 id="main-changes-1">Main Changes</h2>
+<p>This release is the <strong>ALPHA DV of HAL drivers</strong> for STM32MP13xx devices.</p>
+<h2 id="contents-1">Contents</h2>
+<ul>
+<li>General updates to fix known defects and enhancements implementation</li>
+<li><strong>Major update</strong> of drivers for STM32MP13xx devices:
+<ul>
+<li><strong>CRYP and SAES HAL factorized</strong> in the common CRYP driver.</li>
+<li><strong>HASH</strong> remove comments related to “MD5 feature” as not supported on STM32MP13xx family.</li>
+<li><strong>RTC</strong> Fix doxygen documentation generation.</li>
+<li><strong>Implement HAL driver</strong> for STM32MP13xx:
+<ul>
+<li>BSEC, DTS, FDCAN, LTDC, PWR, QSPI, SDMMC, USB</li>
+</ul></li>
+<li><strong>Align HAL Drivers with STM32 Families</strong>:
+<ul>
+<li>CRC, I2C, LPTIM, SPI, TIM</li>
+</ul></li>
+<li>All HAL Drivers
+<ul>
+<li>Update the way to declare licenses in Cube</li>
+</ul></li>
+</ul></li>
+<li>List of HAL drivers implemented :
+<ul>
+<li>ADC, BSEC, CRC, CRYP ( including SAES), DDR, DMA, DTS, EXTI, FDCAN, GPIO, HASH, I2C, IWDG, LPTIM, LTDC, MCE, MDMA, PKA, PWR, QSPI, RCC, RNG, RTC (including TAMP), SDMMC, SMARTCARD, SPI, TIM, UART, USART, USB</li>
+</ul></li>
+</ul>
+<h2 id="known-limitations-1">Known Limitations</h2>
+<ul>
+<li><strong>CRYP/SAES ported in same driver</strong> but
+<ul>
+<li>Some SAES features still under maturation</li>
+<li>Transfer with MDMA not fully functional</li>
+</ul></li>
+<li><strong>LL drivers</strong> implemented : only ADC ( as required for HAL ADC driver)</li>
+</ul>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section2" aria-hidden="true"> <label for="collapse-section2" aria-hidden="true"><strong>V0.2.0 / 09-June-2021</strong></label>
+<div>
+<h2 id="main-changes-2">Main Changes</h2>
+<p>This release is the <strong>PRE-ALPHA DV of HAL drivers</strong> for STM32MP13xx devices.</p>
+<h2 id="contents-2">Contents</h2>
+<ul>
+<li><strong>HAL DDR</strong> driver
+<ul>
+<li>Fix regression in save command</li>
+<li>Treat PHY calibration skip flag in static configuration</li>
+</ul></li>
+<li><strong>HAL SYSCFG / DBG</strong> driver
+<ul>
+<li>Rework IOCompensation function</li>
+<li>Replace SET_BIT in some condition</li>
+<li>Add DBG LP mode enable/disable function in stm32mp13xx_hal.h</li>
+<li>Clean code for stm32mp13</li>
+</ul></li>
+<li><strong>HAL I2C</strong> driver
+<ul>
+<li>Fix HAL_I2CEx_DisableFastModePlus function</li>
+</ul></li>
+<li><strong>HAL LPTIM</strong> driver
+<ul>
+<li>Alignment with other STM32 families (No API Change)</li>
+</ul></li>
+<li><strong>HAL RNG</strong> driver -Fix HAL_GetTick() timeout vulnerability</li>
+<li><strong>HAL UART</strong> driver -Fix state reset in case of error returned after DMA reception start</li>
+</ul>
+<h2 id="known-limitations-2">Known Limitations</h2>
+<ul>
+<li><strong>Only SAES</strong> algo in CRYP driver ( CRYP or AES algo will be delivered later)</li>
+<li><strong>LL drivers</strong> implemented : only ADC ( as required for HAL ADC driver)</li>
+</ul>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section1" aria-hidden="true"> <label for="collapse-section1" aria-hidden="true"><strong>V0.1.0 / 20-April-2021</strong></label>
+<div>
+<h2 id="main-changes-3">Main Changes</h2>
+<p>This release is the <strong>Bring Up DV of HAL drivers</strong> for STM32MP13xx devices.</p>
+<h2 id="contents-3">Contents</h2>
+<ul>
+<li><strong>HAL drivers</strong> implemented :
+<ul>
+<li>ADC, CRC, CRYP ( but only SAES), DDR, DMA, EXTI, GPIO, HASH, I2C, IWDG, LPTIM, MCE, MDMA, PKA, RNG, RCC, RTC, SMARTCARD, SPI, TIM, UART, USART</li>
+</ul></li>
+<li><strong>LL drivers</strong> implemented :
+<ul>
+<li>only ADC ( as required for HAL ADC driver)</li>
+</ul></li>
+</ul>
+<h2 id="known-limitations-3">Known Limitations</h2>
+<ul>
+<li>Only SAES algo in CRYP driver ( CRYP or AES algo will be delivered later)</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<footer class="sticky">
+<p>For complete documentation on STM32 Microcontrollers </mark> , visit: <span style="font-color: blue;"><a href="http://www.st.com/stm32">www.st.com/stm32</a></span></p>
+This release note uses up to date web standards and, for this reason, should not be opened with Internet Explorer but preferably with popular browsers such as Google Chrome, Mozilla Firefox, Opera or Microsoft Edge.
+</footer>
+</body>
+</html>

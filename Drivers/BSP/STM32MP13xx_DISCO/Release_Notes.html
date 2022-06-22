@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Release Notes for STM32MP13xx_DISCO BSP Drivers</title>
+  <style type="text/css">
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <link rel="stylesheet" href="_htmresc/mini-st_2020.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+  <link rel="icon" type="image/x-icon" href="_htmresc/favicon.png" />
+</head>
+<body>
+<div class="row">
+<div class="col-sm-12 col-lg-4">
+<center>
+<h1 id="release-notes-for-stm32mp13xx_disco-bsp-drivers">Release Notes for <mark>STM32MP13xx_DISCO BSP Drivers</mark></h1>
+<p>Copyright © 2021 STMicroelectronics<br />
+</p>
+<a href="https://www.st.com" class="logo"><img src="_htmresc/st_logo_2020.png" alt="ST logo" /></a>
+</center>
+<h1 id="purpose">Purpose</h1>
+<p>The BSP (Board Specific Package) drivers are parts of the STM32Cube package based on the HAL drivers and provide a set of high level APIs relative to the hardware components and features in the disco boards coming with the STM32Cube package for a given STM32 serie.</p>
+<p>The BSP drivers allow a quick access to the boards’ services using high level APIs and without any specific configuration as the link with the HAL and the external components is done in intrinsic within the drivers.</p>
+<p>From project settings points of view, user has only to add the necessary driver’s files in the workspace and call the needed functions from examples. However some low level configuration functions are weak and can be overridden by the applications if user wants to change some BSP drivers default behavior.</p>
+</div>
+<div class="col-sm-12 col-lg-8">
+<h1 id="update-history">Update History</h1>
+<div class="collapse">
+<input type="checkbox" id="collapse-section0" checked aria-hidden="true"> <label for="collapse-section0" aria-hidden="true"><strong>V0.4.0 / 04-March-2022</strong></label>
+<div>
+<h2 id="main-changes">Main Changes</h2>
+<p><strong>2nd ALPHA DV</strong> of STMP32MP13xx_DISCO BSP</p>
+<h2 id="contents">Contents</h2>
+<ul>
+<li>STPMIC file: VDDCPU nominal voltage is 1.25 V (and not 1.20 V)</li>
+<li>Add BSP_Error_Handler() to manage BSP Errors</li>
+<li>LCD file : Fix missing LCD clock</li>
+</ul>
+<h2 id="notes">Notes</h2>
+<p>stm32mp13xx_disco_conf_template.h file must be copied in user application as &gt;stm32mp13xx_disco_conf.h with optional configuration update</p>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section3" aria-hidden="true"> <label for="collapse-section3" aria-hidden="true"><strong>V0.3.0 / 03-December-2021</strong></label>
+<div>
+<h2 id="main-changes-1">Main Changes</h2>
+<p><strong>ALPHA DV</strong> of STMP32MP13xx_DISCO BSP</p>
+<h2 id="contents-1">Contents</h2>
+<ul>
+<li>Fix build issue when PMIC flag not enabled</li>
+<li>Add BSP support for IO expander mcp23017</li>
+<li>Add TAMPER_BUTTON support</li>
+<li>Add BSP support for LCD Driver</li>
+</ul>
+<h2 id="notes-1">Notes</h2>
+<p>stm32mp13xx_disco_conf_template.h file must be copied in user application as &gt;stm32mp13xx_disco_conf.h with optional configuration update</p>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section2" aria-hidden="true"> <label for="collapse-section2" aria-hidden="true"><strong>V0.2.0 / 09-June-2021</strong></label>
+<div>
+<h2 id="main-changes-2">Main Changes</h2>
+<p><strong>PRE-ALPHA DV</strong> of STMP32MP13xx_DISCO BSP</p>
+<h2 id="contents-2">Contents</h2>
+<p>Update the licenses declaration</p>
+<h2 id="notes-2">Notes</h2>
+<p>stm32mp13xx_disco_conf_template.h file must be copied in user application as &gt;stm32mp13xx_disco_conf.h with optional configuration update</p>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section1" aria-hidden="true"> <label for="collapse-section1" aria-hidden="true"><strong>V0.1.0 / 20-April-2021</strong></label>
+<div>
+<h2 id="main-changes-3">Main Changes</h2>
+<p><strong>Bring Up DV</strong> of STM32MP13xx_DISCO BSP</p>
+<h2 id="contents-3">Contents</h2>
+<p>This release is the Bring Up DV of STM32MP13xx_DISCO BSP drivers</p>
+<h2 id="notes-3">Notes</h2>
+<p>stm32mp13xx_disco_conf_template.h file must be copied in user application as &gt;stm32mp13xx_disco_conf.h with optional configuration update</p>
+</div>
+</div>
+</div>
+</div>
+<footer class="sticky">
+For complete documentation on <mark>STM32 Microcontrollers</mark> , visit: <span style="font-color: blue;"><a href="http://www.st.com/STM32">www.st.com</a></span>
+</footer>
+</body>
+</html>
