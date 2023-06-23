@@ -77,16 +77,16 @@ void HAL_UART_MspInit(UART_HandleTypeDef *huart)
   USARTx_RX_GPIO_CLK_ENABLE();
 
   /* Select SysClk as source of UART4 clocks */
-#if (MX_UART_INSTANCE == MX_UART4)
+#if (UTIL_UART_INSTANCE == UTIL_UART4)
   RCC_PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_UART4;
   RCC_PeriphClkInit.Uart4ClockSelection  = RCC_UART4CLKSOURCE_HSI;
-#elif (MX_UART_INSTANCE == MX_UART5)
+#elif (UTIL_UART_INSTANCE == UTIL_UART5)
   RCC_PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_UART35;
   RCC_PeriphClkInit.Uart35ClockSelection = RCC_UART35CLKSOURCE_HSI;
-#elif (MX_UART_INSTANCE == MX_UART7)
+#elif (UTIL_UART_INSTANCE == UTIL_UART7)
   RCC_PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_UART78;
   RCC_PeriphClkInit.Uart78ClockSelection = RCC_UART78CLKSOURCE_HSI;
-#elif (MX_UART_INSTANCE == MX_UART8)
+#elif (UTIL_UART_INSTANCE == UTIL_UART8)
   RCC_PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_UART78;
   RCC_PeriphClkInit.Uart78ClockSelection = RCC_UART78CLKSOURCE_HSI;
 #endif
@@ -145,6 +145,7 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef *huart)
   */
 int HAL_DDR_MspInit(ddr_type type)
 {
+#if (UTIL_USE_PMIC)
   uint16_t buck2_mv = 1350;
 
   switch (type) {
@@ -193,6 +194,7 @@ int HAL_DDR_MspInit(ddr_type type)
   default:
     break;
   }
+#endif /* UTIL_USE_PMIC */
 
   return 0;
 }

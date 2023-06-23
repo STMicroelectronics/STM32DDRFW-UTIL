@@ -9,7 +9,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2013 STMicroelectronics.
+  * Copyright (c) 2013-2023 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -27,8 +27,8 @@
 
 #include "ddr_tool_util.h"
 #include "main.h"
-#include "stm32mp_cubemx_conf.h"
-#include "stm32mp_cubemx_ddr_conf.h"
+#include "stm32mp_util_conf.h"
+#include "stm32mp_util_ddr_conf.h"
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
@@ -62,13 +62,13 @@ void UART_Config(void)
       - BaudRate    = 115200 baud
       - Hardware flow control disabled (RTS and CTS signals) */
   huart.Instance        = USARTx;
-  huart.Init.BaudRate   = MX_UART_BAUDRATE;
-  huart.Init.WordLength = MX_UART_WORDLENGTH;
-  huart.Init.StopBits   = MX_UART_STOPBITS;
-  huart.Init.Parity     = MX_UART_PARITY;
-  huart.Init.HwFlowCtl  = MX_UART_HWFLOWCTL;
-  huart.Init.Mode       = MX_UART_MODE;
-  huart.Init.OverSampling = MX_UART_OVERSAMPLING;
+  huart.Init.BaudRate   = UTIL_UART_BAUDRATE;
+  huart.Init.WordLength = UTIL_UART_WORDLENGTH;
+  huart.Init.StopBits   = UTIL_UART_STOPBITS;
+  huart.Init.Parity     = UTIL_UART_PARITY;
+  huart.Init.HwFlowCtl  = UTIL_UART_HWFLOWCTL;
+  huart.Init.Mode       = UTIL_UART_MODE;
+  huart.Init.OverSampling = UTIL_UART_OVERSAMPLING;
 
   /* Clear UART configuration if need be */
   if(HAL_UART_DeInit(&huart) != HAL_OK)
@@ -104,7 +104,7 @@ void UART_Config(void)
 
   /* Output a message on Hyperterminal using printf function */
   printf("\n\r=============== UTILITIES-DDR Tool ===============\r");
-  printf("\n\rModel: %s \r", MX_MODEL);
+  printf("\n\rModel: %s \r", UTIL_MODEL);
   printf("\n\rRAM: %s \n\r", DDR_MEM_NAME);
 
 #if 0

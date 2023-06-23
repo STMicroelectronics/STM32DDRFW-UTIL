@@ -67,7 +67,9 @@ extern IRQHandler_t IRQ_Vector_Table[MAX_IRQ_n];
    Initialize the System and update the SystemCoreClock variable.
  */
 extern void SystemInit (void);
-
+extern void SystemInit_cpu1 (void);
+extern void SystemInit_Interrupts_SoftIRQn_Handler(uint32_t Software_Interrupt_Id, uint8_t cpu_id_request);
+extern void SecurePhysicalTimer_IRQHandler(void);
 
 /**
   \brief  Update SystemCoreClock variable.
@@ -100,4 +102,4 @@ extern void MMU_CreateTranslationTable(void);
 /**
   * @}
   */
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+

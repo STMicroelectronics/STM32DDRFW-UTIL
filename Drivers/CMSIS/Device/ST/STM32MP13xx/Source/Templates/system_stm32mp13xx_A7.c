@@ -47,6 +47,7 @@
 
 #include "stm32mp13xx.h"
 #include "irq_ctrl.h"
+#include "math.h"
 
 /**
   * @}
@@ -78,16 +79,16 @@ extern void ZeroBss( void );
 
 
 /* This defines are associated to GICv2 IP from ARM */
-#define GIC_HIGHEST_INTERRUPT_VALUE 1020
-#define GIC_HIGHEST_SGI_PPI_VALUE     31
-#define GIC_HIGHEST_SGI_VALUE         15
+#define GIC_HIGHEST_INTERRUPT_VALUE 1020U
+#define GIC_HIGHEST_SGI_PPI_VALUE     31U
+#define GIC_HIGHEST_SGI_VALUE         15U
 
 /*
  * ID 1023. This value is returned to a processor, in response to an interrupt acknowledge,
  * if there is no pending interrupt with sufficient priority for
  * it to be signaled to the processor.
  */
-#define GIC_ACKNOWLEDGE_RESPONSE 1023
+#define GIC_ACKNOWLEDGE_RESPONSE 1023U
 
 /*  GICC_IAR bit assignments
  * [31:13] - Reserved.
@@ -148,31 +149,34 @@ extern void ZeroBss( void );
 static uint32_t GetPLL1PClockFreq(void)
 {
   uint32_t   pllsource, pll1m, pll1fracen, pll1p_freq;
-  float fracn1, pll1vco =0;
+  float_t fracn1, pll1vco;
 
   pllsource = (RCC->RCK12SELR & RCC_RCK12SELR_PLL12SRC);
   pll1m = ((RCC->PLL1CFGR1 & RCC_PLL1CFGR1_DIVM1)>> RCC_PLL1CFGR1_DIVM1_Pos) + 1U;
   pll1fracen = (RCC->PLL1FRACR & RCC_PLL1FRACR_FRACLE) >> 16U;
-  fracn1 = (pll1fracen * ((RCC->PLL1FRACR & RCC_PLL1FRACR_FRACV) >> 3U));
-  pll1vco = (((RCC->PLL1CFGR1 & RCC_PLL1CFGR1_DIVN) + 1U) + (fracn1/0x1FFFU));
+  fracn1 = ((float_t)(uint32_t)(pll1fracen * ((RCC->PLL1FRACR & RCC_PLL1FRACR_FRACV) >> 3)));
+  pll1vco = ((float_t)(uint32_t)(((RCC->PLL1CFGR1 & RCC_PLL1CFGR1_DIVN) + 1U)) + (fracn1/(float_t)0x1FFF));
 
   if (pll1m != 0U)
   {
     switch (pllsource)
     {
       case 0x00:  /* HSI used as PLL clock source */
-       pll1vco *= ((HSI_VALUE >> (RCC->HSICFGR & RCC_HSICFGR_HSIDIV )) / pll1m);
+       pll1vco *= ((float_t)(uint32_t)(HSI_VALUE >> (RCC->HSICFGR & RCC_HSICFGR_HSIDIV )) / (float_t)pll1m);
        break;
 
       case 0x01:  /* HSE used as PLL clock source */
-        pll1vco *= (HSE_VALUE / pll1m);
+        pll1vco *= ((float_t)(uint32_t)HSE_VALUE / (float_t)pll1m);
         break;
 
       case 0x02:  /* No clock source for PLL */
-        pll1vco = 0;
+        pll1vco = (float_t)0;
+        break;
+
+      default:
         break;
     }
-    pll1p_freq = (uint32_t)(pll1vco/((RCC->PLL1CFGR2 & RCC_PLL1CFGR2_DIVP) + 1U));
+    pll1p_freq = (((uint32_t)(float_t)pll1vco)/(uint32_t)((RCC->PLL1CFGR2 & RCC_PLL1CFGR2_DIVP) + 1U));
   }
   else
   {
@@ -198,20 +202,20 @@ static void SystemInit_IRQ_ErrorHandler(void)
 {
 #if !defined(USE_SECOND_A7_CORE)
   /* Behavior in case of Exception or IRQ handling Errors */
-  while(1);
+  while(1U);
 #endif
 }
 
 __weak void SystemInit_Interrupts_SoftIRQn_Handler(uint32_t Software_Interrupt_Id, uint8_t cpu_id_request)
 {
   /* Prevent unused argument(s) compilation warning */
-  UNUSED(Software_Interrupt_Id);
-  UNUSED(cpu_id_request);
+  UNUSED((void)Software_Interrupt_Id);
+  UNUSED((void)cpu_id_request);
 }
 
 void SecurePhysicalTimer_IRQHandler(void)
 {
-  IRQ_ClearPending(SecurePhysicalTimer_IRQn);
+  IRQ_ClearPending((IRQn_ID_t)SecurePhysicalTimer_IRQn);
 
 #if 0
 /* Simple version
@@ -264,7 +268,7 @@ void SecurePhysicalTimer_IRQHandler(void)
      6 CLK/tick = 6/48000 = 0.01 % = 0.1ms/s
 */
 
-  PL1_SetLoadValue(HSI_VALUE/1000 + PL1_GetCurrentValue());
+  PL1_SetLoadValue((HSI_VALUE/1000U) + PL1_GetCurrentValue());
 
   HAL_IncTick();
 }
@@ -282,22 +286,22 @@ __irq __arm void IRQ_Handler(void) {
   uint32_t ItId;
   IRQHandler_t handler;
 
-  while (1)
+  while (1U)
   {
     /* Get highest pending Interrupt Id from GIC driver*/
-    ItId = IRQ_GetActiveIRQ();
+    ItId = (uint32_t)IRQ_GetActiveIRQ();
 
     if (ItId <= GIC_HIGHEST_INTERRUPT_VALUE) /* Highest value of GIC Valid Interrupt */
     {
       /* Check validity of IRQ */
-      if (ItId >= MAX_IRQ_n)
+      if (ItId >= (uint32_t)MAX_IRQ_n)
       {
         SystemInit_IRQ_ErrorHandler();
       }
       else
       {
         /* Find appropriate IRQ Handler (Require registration before!) */
-        handler = IRQ_GetHandler(ItId);
+        handler = IRQ_GetHandler((IRQn_ID_t)ItId);
 
         if (handler!=NULL)
         {
@@ -312,7 +316,7 @@ __irq __arm void IRQ_Handler(void) {
       }
 
       /* End Acknowledge interrupt */
-      IRQ_EndOfInterrupt(ItId);
+      IRQ_EndOfInterrupt((IRQn_ID_t)ItId);
     }
     else
     {
@@ -430,8 +434,8 @@ void SystemInit (void)
   IRQ_Initialize();
 
   /* Set Interrupt vectors */
-  for (i = 0U; i < MAX_IRQ_n ; i++) {
-    IRQ_SetHandler(i, IRQ_Vector_Table[i]);
+  for (i = 0U; i < (uint32_t)MAX_IRQ_n ; i++) {
+    IRQ_SetHandler((IRQn_ID_t)i, IRQ_Vector_Table[i]);
   }
 #endif
 }
@@ -567,6 +571,9 @@ void SystemCoreClockUpdate (void)
       SystemCoreClock = (GetPLL1PClockFreq() >> 16U); /* divided by 16 */
     }
     break;
+
+  default:
+    break;
   }
 }
 /**
@@ -580,3 +587,4 @@ void SystemCoreClockUpdate (void)
 /**
   * @}
   */
+

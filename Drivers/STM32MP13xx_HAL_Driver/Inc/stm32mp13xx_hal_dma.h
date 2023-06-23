@@ -214,7 +214,7 @@ typedef struct __DMA_HandleTypeDef
   * @brief    DMA Request selection
   * @{
   */
-/* D2 Domain : DMAMUX1 requests */
+/* DMAMUX1 requests */
 #define DMA_REQUEST_MEM2MEM          0U  /*!< memory to memory transfer   */
 
 #define DMA_REQUEST_GENERATOR0       1U  /*!< DMAMUX1 request generator 0 */
@@ -356,7 +356,17 @@ typedef struct __DMA_HandleTypeDef
 
 
 #if defined DMAMUX2
-/* D2 Domain : DMAMUX2 requests */
+/* DMAMUX2 requests */
+#define DMA_REQUEST_SEC_MEM2MEM          0U  /*!< memory to memory transfer   */
+
+#define DMA_REQUEST_SEC_GENERATOR0       1U  /*!< DMAMUX2 request generator 0 */
+#define DMA_REQUEST_SEC_GENERATOR1       2U  /*!< DMAMUX2 request generator 1 */
+#define DMA_REQUEST_SEC_GENERATOR2       3U  /*!< DMAMUX2 request generator 2 */
+#define DMA_REQUEST_SEC_GENERATOR3       4U  /*!< DMAMUX2 request generator 3 */
+#define DMA_REQUEST_SEC_GENERATOR4       5U  /*!< DMAMUX2 request generator 4 */
+#define DMA_REQUEST_SEC_GENERATOR5       6U  /*!< DMAMUX2 request generator 5 */
+#define DMA_REQUEST_SEC_GENERATOR6       7U  /*!< DMAMUX2 request generator 6 */
+#define DMA_REQUEST_SEC_GENERATOR7       8U  /*!< DMAMUX2 request generator 7 */
 
 #define DMA_REQUEST_SEC_ADC1             9U   /*!< DMAMUX2 ADC1 request */
 #define DMA_REQUEST_SEC_ADC2             10U  /*!< DMAMUX2 ADC2 request */
@@ -945,7 +955,7 @@ uint32_t             HAL_DMA_GetError(DMA_HandleTypeDef *hdma);
 #define IS_DMA_REQUEST(REQUEST) ((REQUEST) <= DMA_REQUEST_I2C5_TX)
 
 #if defined (DMAMUX2)
-#define IS_DMAMUX2_REQUEST(REQUEST) (((REQUEST) >= DMA_REQUEST_SEC_ADC1) && ((REQUEST) <= DMA_REQUEST_SEC_TIM17_UP))
+#define IS_DMA3_REQUEST(REQUEST) (((REQUEST) >= DMA_REQUEST_SEC_MEM2MEM) && ((REQUEST) <= DMA_REQUEST_SEC_TIM17_UP))
 #endif
 
 #define IS_DMA_INSTANCE(__HANDLE__) ( \

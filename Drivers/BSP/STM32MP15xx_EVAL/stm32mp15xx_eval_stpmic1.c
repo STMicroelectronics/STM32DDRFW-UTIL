@@ -20,6 +20,7 @@
 #include "stm32mp15xx_eval.h"
 #include "stm32mp15xx_eval_bus.h"
 #include "stm32mp15xx_eval_stpmic1.h"
+#include <stdio.h>
 #include <string.h>
 
 /** @addtogroup BSP
@@ -319,7 +320,7 @@ nvm_rank_ldo5:
 /* Private variables ---------------------------------------------------------*/
 /* I2C handler declaration */
 I2C_HandleTypeDef I2cHandle;
-extern I2C_HandleTypeDef hI2c4;
+extern I2C_HandleTypeDef hI2c;
 
 uint16_t buck1_voltage_table[] = {
   600,
@@ -961,7 +962,7 @@ uint8_t STPMU1_Register_Read(uint8_t register_id)
   uint32_t status = BSP_ERROR_NONE;
   uint8_t Value = 0;
 
-  status = BSP_I2C4_ReadReg(STPMU1_I2C_ADDRESS, (uint16_t)register_id, &Value, 1);
+  status = BSP_I2C_ReadReg(STPMU1_I2C_ADDRESS, (uint16_t)register_id, &Value, 1);
 
   /* Check the communication status */
   if(status != BSP_ERROR_NONE)
@@ -975,7 +976,7 @@ void STPMU1_Register_Write(uint8_t register_id, uint8_t value)
 {
   uint32_t status = BSP_ERROR_NONE;
 
-  status = BSP_I2C4_WriteReg(STPMU1_I2C_ADDRESS, (uint16_t)register_id, &value, 1);
+  status = BSP_I2C_WriteReg(STPMU1_I2C_ADDRESS, (uint16_t)register_id, &value, 1);
 
   /* Check the communication status */
   if(status != BSP_ERROR_NONE)
@@ -1029,7 +1030,7 @@ static uint32_t BSP_PMIC_MspInit(I2C_HandleTypeDef *hi2c)
   GPIO_InitTypeDef  GPIO_InitStruct;
 
   /*##-1- Configure the I2C clock source, GPIO and Interrupt #*/
-  BSP_I2C4_Init();
+  BSP_I2C_Init();
 
   /*##-2- Configure PMIC GPIOs Interface ########################################*/
 
@@ -1061,7 +1062,7 @@ static uint32_t BSP_PMIC_MspDeInit(I2C_HandleTypeDef *hi2c)
 {
   uint32_t  status = BSP_ERROR_NONE;
 /*##-1- Reset I2C Clock / Disable peripherals and GPIO Clocks###############*/
-  status = BSP_I2C4_DeInit();
+  status = BSP_I2C_DeInit();
 
   /*##-2- Disable PMIC clk ###########################################*/
   PMIC_INTn_CLK_DISABLE();
@@ -1084,7 +1085,7 @@ uint32_t BSP_PMIC_Is_Device_Ready(void)
   int32_t  status = BSP_ERROR_NONE;
 
   /* Write the TxBuffer1 at @0, then read @0 when device ready */
-  if (BSP_I2C4_IsReady(STPMU1_I2C_ADDRESS, 1) != BSP_ERROR_NONE)
+  if (BSP_I2C_IsReady(STPMU1_I2C_ADDRESS, 1) != BSP_ERROR_NONE)
   {
     status = BSP_ERROR_BUSY;
   }
@@ -1101,7 +1102,7 @@ uint32_t BSP_PMIC_Init(void)
 	
 
   /*##-1- Configure the I2C peripheral ######################################*/
-  BSP_PMIC_MspInit(&hI2c4);
+  BSP_PMIC_MspInit(&hI2c);
 
   status = BSP_PMIC_Is_Device_Ready();
   if ( status != BSP_ERROR_NONE )
@@ -1128,10 +1129,10 @@ uint32_t BSP_PMIC_Init(void)
 uint32_t BSP_PMIC_DeInit(void)
 {
   uint32_t  status = BSP_ERROR_NONE;
-  if(HAL_I2C_GetState(&hI2c4) != HAL_I2C_STATE_RESET)
+  if(HAL_I2C_GetState(&hI2c) != HAL_I2C_STATE_RESET)
   {
     /* Deinit the I2C */
-    BSP_PMIC_MspDeInit(&hI2c4);
+    BSP_PMIC_MspDeInit(&hI2c);
 
   }
   return status;
@@ -1279,7 +1280,7 @@ void BSP_PMIC_INTn_IRQHandler(void)
   STPMU1_IrqHandler();
 }
 
-void HAL_I2C_ErrorCallback(I2C_HandleTypeDef *hI2c4)
+void HAL_I2C_ErrorCallback(I2C_HandleTypeDef *hI2c)
 {
   while(1);
 }

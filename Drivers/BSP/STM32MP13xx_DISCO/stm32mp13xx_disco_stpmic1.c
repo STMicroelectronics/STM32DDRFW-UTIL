@@ -36,10 +36,12 @@
   */
 /* Driver for PMIC ---------------------------------------------------------------*/
 #if (USE_STPMIC1x == 1)
-#define NAME_LENGHT 15
+#define NAME_LENGHT 15U
 
 /* Board Configuration ------------------------------------------------------------*/
 /* Definition of PMIC <=> stm32mp1 Signals */
+extern void __attribute__ ((weak)) EXTI8_IRQHandler(void);
+
 #define PMIC_INTn_PIN               GPIO_PIN_8
 #define PMIC_INTn_PORT              GPIOF
 #define PMIC_INTn_CLK_ENABLE()      __HAL_RCC_GPIOF_CLK_ENABLE()
@@ -82,14 +84,14 @@ typedef struct {
  0x00,
  0x33,
  * */
-#define NVM_SECTOR3_REGISTER_0  0xF7
-#define NVM_SECTOR3_REGISTER_1  0x92
-#define NVM_SECTOR3_REGISTER_2  0xC0
-#define NVM_SECTOR3_REGISTER_3  0x02
-#define NVM_SECTOR3_REGISTER_4  0xFA
-#define NVM_SECTOR3_REGISTER_5  0x30
-#define NVM_SECTOR3_REGISTER_6  0x00
-#define NVM_SECTOR3_REGISTER_7  0x33
+#define NVM_SECTOR3_REGISTER_0  0xF7U
+#define NVM_SECTOR3_REGISTER_1  0x92U
+#define NVM_SECTOR3_REGISTER_2  0xC0U
+#define NVM_SECTOR3_REGISTER_3  0x02U
+#define NVM_SECTOR3_REGISTER_4  0xFAU
+#define NVM_SECTOR3_REGISTER_5  0x30U
+#define NVM_SECTOR3_REGISTER_6  0x00U
+#define NVM_SECTOR3_REGISTER_7  0x33U
 
 /* nvm_vinok_hyst: VINOK hysteresis voltage
  00: 200mV
@@ -121,12 +123,12 @@ typedef struct {
 
  *
  */
-#define OTP_VINOK_HYST  	((NVM_SECTOR3_REGISTER_0 & 0xC0) >> 6) 	// nvm_vinok_hyst
-#define OTP_VINOK		  	((NVM_SECTOR3_REGISTER_0 & 0x30) >> 4) 	// nvm_vinok
-#define OTP_LDO4_FORCED     ((NVM_SECTOR3_REGISTER_0 & 0x08) >> 3) 	// Otp_ldo4_forced
-#define OTP_LONGKEYPRESSED  ((NVM_SECTOR3_REGISTER_0 & 0x04) >> 2)	// nvm_longkeypress
-#define OTP_AUTOTURNON  	((NVM_SECTOR3_REGISTER_0 & 0x02) >> 1)	// nvm_autoturnon
-#define OTP_CC_KEEPOFF  	((NVM_SECTOR3_REGISTER_0 & 0x01))		// nvm_cc_keepoff
+#define OTP_VINOK_HYST  	((NVM_SECTOR3_REGISTER_0 & 0xC0U) >> 6) 	// nvm_vinok_hyst
+#define OTP_VINOK		  	((NVM_SECTOR3_REGISTER_0 & 0x30U) >> 4) 	// nvm_vinok
+#define OTP_LDO4_FORCED     ((NVM_SECTOR3_REGISTER_0 & 0x08U) >> 3) 	// Otp_ldo4_forced
+#define OTP_LONGKEYPRESSED  ((NVM_SECTOR3_REGISTER_0 & 0x04U) >> 2)	// nvm_longkeypress
+#define OTP_AUTOTURNON  	((NVM_SECTOR3_REGISTER_0 & 0x02U) >> 1)	// nvm_autoturnon
+#define OTP_CC_KEEPOFF  	((NVM_SECTOR3_REGISTER_0 & 0x01U))		// nvm_cc_keepoff
 
 /*
  * nvm_rank_buck4:
@@ -151,10 +153,10 @@ typedef struct {
  11:  rank3
  *
  */
-#define OTP_RANK_BUCK4  	((NVM_SECTOR3_REGISTER_1 & 0xC0) >> 6) 	// nvm_rank_buck4
-#define OTP_RANK_BUCK3		((NVM_SECTOR3_REGISTER_1 & 0x30) >> 4) 	// nvm_rank_buck3
-#define OTP_RANK_BUCK2     	((NVM_SECTOR3_REGISTER_1 & 0x0C) >> 2) 	// nvm_rank_buck2
-#define OTP_RANK_BUCK1  	((NVM_SECTOR3_REGISTER_1 & 0x03))		// nvm_rank_buck1
+#define OTP_RANK_BUCK4  	((NVM_SECTOR3_REGISTER_1 & 0xC0U) >> 6) 	// nvm_rank_buck4
+#define OTP_RANK_BUCK3		((NVM_SECTOR3_REGISTER_1 & 0x30U) >> 4) 	// nvm_rank_buck3
+#define OTP_RANK_BUCK2     	((NVM_SECTOR3_REGISTER_1 & 0x0CU) >> 2) 	// nvm_rank_buck2
+#define OTP_RANK_BUCK1  	((NVM_SECTOR3_REGISTER_1 & 0x03U))		// nvm_rank_buck1
 
 
 /*
@@ -180,10 +182,10 @@ typedef struct {
  11:  rank3
  *
  */
-#define OTP_RANK_LDO4  		((NVM_SECTOR3_REGISTER_2 & 0xC0) >> 6) 	// nvm_rank_ldo4
-#define OTP_RANK_LDO3		((NVM_SECTOR3_REGISTER_2 & 0x30) >> 4) 	// nvm_rank_ldo3
-#define OTP_RANK_LDO2     	((NVM_SECTOR3_REGISTER_2 & 0x0C) >> 2) 	// nvm_rank_ldo2
-#define OTP_RANK_LDO1  		((NVM_SECTOR3_REGISTER_2 & 0x03))		// nvm_rank_ldo1
+#define OTP_RANK_LDO4  		((NVM_SECTOR3_REGISTER_2 & 0xC0U) >> 6) 	// nvm_rank_ldo4
+#define OTP_RANK_LDO3		((NVM_SECTOR3_REGISTER_2 & 0x30U) >> 4) 	// nvm_rank_ldo3
+#define OTP_RANK_LDO2     	((NVM_SECTOR3_REGISTER_2 & 0x0CU) >> 2) 	// nvm_rank_ldo2
+#define OTP_RANK_LDO1  		((NVM_SECTOR3_REGISTER_2 & 0x03U))		// nvm_rank_ldo1
 
 /*
  * nvm_clamp_output_buck: Clamp output value to 1.3V max
@@ -213,11 +215,11 @@ nvm_rank_ldo5:
  11:  rank3
  *
  */
-#define OTP_CLAMP_OUTPUT_BUCK4  ((NVM_SECTOR3_REGISTER_3 & 0x80) >> 7) 	// nvm_clamp_output_buck4
-#define OTP_BYPASS_MODE_LDO3  	((NVM_SECTOR3_REGISTER_3 & 0x40) >> 6) 	// nvm_bypass_mode_ldo3
-#define OTP_RANK_VREFDDR		((NVM_SECTOR3_REGISTER_3 & 0x30) >> 4) 	// nvm_rank_vrefddr
-#define OTP_RANK_LDO6     		((NVM_SECTOR3_REGISTER_3 & 0x0C) >> 2) 	// nvm_rank_ldo6
-#define OTP_RANK_LDO5  			((NVM_SECTOR3_REGISTER_3 & 0x03))		// nvm_rank_ldo5
+#define OTP_CLAMP_OUTPUT_BUCK4  ((NVM_SECTOR3_REGISTER_3 & 0x80U) >> 7) 	// nvm_clamp_output_buck4
+#define OTP_BYPASS_MODE_LDO3  	((NVM_SECTOR3_REGISTER_3 & 0x40U) >> 6) 	// nvm_bypass_mode_ldo3
+#define OTP_RANK_VREFDDR		((NVM_SECTOR3_REGISTER_3 & 0x30U) >> 4) 	// nvm_rank_vrefddr
+#define OTP_RANK_LDO6     		((NVM_SECTOR3_REGISTER_3 & 0x0CU) >> 2) 	// nvm_rank_ldo6
+#define OTP_RANK_LDO5  			((NVM_SECTOR3_REGISTER_3 & 0x03U))		// nvm_rank_ldo5
 
 /*
  * nvm_output_buck4: Buck4 default output selection
@@ -242,10 +244,10 @@ nvm_rank_ldo5:
  11:  1.25V
  *
  */
-#define OTP_OUTPUT_BUCK4  		((NVM_SECTOR3_REGISTER_4 & 0xC0) >> 6) 	// nvm_output_buck4
-#define OTP_OUTPUT_BUCK3		((NVM_SECTOR3_REGISTER_4 & 0x30) >> 4) 	// nvm_output_buck3
-#define OTP_OUTPUT_BUCK2     	((NVM_SECTOR3_REGISTER_4 & 0x0C) >> 2) 	// nvm_output_buck2
-#define OTP_OUTPUT_BUCK1  		((NVM_SECTOR3_REGISTER_4 & 0x03))		// nvm_output_buck1
+#define OTP_OUTPUT_BUCK4  		((NVM_SECTOR3_REGISTER_4 & 0xC0U) >> 6) 	// nvm_output_buck4
+#define OTP_OUTPUT_BUCK3		((NVM_SECTOR3_REGISTER_4 & 0x30U) >> 4) 	// nvm_output_buck3
+#define OTP_OUTPUT_BUCK2     	((NVM_SECTOR3_REGISTER_4 & 0x0CU) >> 2) 	// nvm_output_buck2
+#define OTP_OUTPUT_BUCK1  		((NVM_SECTOR3_REGISTER_4 & 0x03U))		// nvm_output_buck1
 
 /*
  * [7]	OTP_SWOFF_BY_BOOST_OVP:
@@ -274,10 +276,10 @@ nvm_rank_ldo5:
 
  *
  */
-#define OTP_SWOFF_BY_BOOST_OVP  ((NVM_SECTOR3_REGISTER_5 & 0x80) >> 7) 	// OTP_SWOFF_BY_BOOST_OVP
-#define OTP_OUTPUT_LDO3			((NVM_SECTOR3_REGISTER_5 & 0x30) >> 4) 	// nvm_output_ldo3
-#define OTP_OUTPUT_LDO2     	((NVM_SECTOR3_REGISTER_5 & 0x0C) >> 2) 	// nvm_output_ldo2
-#define OTP_OUTPUT_LDO1  		((NVM_SECTOR3_REGISTER_5 & 0x03))		// nvm_output_ldo1
+#define OTP_SWOFF_BY_BOOST_OVP  ((NVM_SECTOR3_REGISTER_5 & 0x80U) >> 7) 	// OTP_SWOFF_BY_BOOST_OVP
+#define OTP_OUTPUT_LDO3			((NVM_SECTOR3_REGISTER_5 & 0x30U) >> 4) 	// nvm_output_ldo3
+#define OTP_OUTPUT_LDO2     	((NVM_SECTOR3_REGISTER_5 & 0x0CU) >> 2) 	// nvm_output_ldo2
+#define OTP_OUTPUT_LDO1  		((NVM_SECTOR3_REGISTER_5 & 0x03U))		// nvm_output_ldo1
 
 /*
  * 	[7:4]	reserved
@@ -296,8 +298,8 @@ nvm_rank_ldo5:
  *
  */
 
-#define OTP_OUTPUT_LDO6     	((NVM_SECTOR3_REGISTER_6 & 0x0C) >> 2) 	// nvm_output_ldo6
-#define OTP_OUTPUT_LDO5  		((NVM_SECTOR3_REGISTER_6 & 0x03))		// nvm_output_ldo5
+#define OTP_OUTPUT_LDO6     	((NVM_SECTOR3_REGISTER_6 & 0x0CU) >> 2) 	// nvm_output_ldo6
+#define OTP_OUTPUT_LDO5  		((NVM_SECTOR3_REGISTER_6 & 0x03U))		// nvm_output_ldo5
 
 /*
  * 	[7]	reserved
@@ -316,10 +318,9 @@ nvm_rank_ldo5:
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 /* I2C handler declaration */
-I2C_HandleTypeDef I2cHandle;
-extern I2C_HandleTypeDef hI2c4;
+static I2C_HandleTypeDef hpmic_i2c;
 
-uint16_t buck1_voltage_table[] = {
+static uint16_t buck1_voltage_table[] = {
   600,
   625,
   650,
@@ -354,7 +355,7 @@ uint16_t buck1_voltage_table[] = {
   1350,// 31  1,35
 };
 
-uint16_t buck2_voltage_table[] = {
+static uint16_t buck2_voltage_table[] = {
   1000, // 1
   1000, //
   1000, // 1
@@ -394,7 +395,7 @@ uint16_t buck2_voltage_table[] = {
   1500, // 1,5
 };
 
-uint16_t buck3_voltage_table[] = {
+static uint16_t buck3_voltage_table[] = {
   1000, // 1
   1000, // 1
   1000, // 1
@@ -453,7 +454,7 @@ uint16_t buck3_voltage_table[] = {
   3400, // 3,4
 };
 
-uint16_t buck4_voltage_table[] = {
+static uint16_t buck4_voltage_table[] = {
   600,
   625,
   650,
@@ -517,7 +518,7 @@ uint16_t buck4_voltage_table[] = {
   3900,// 60  3,9
 };
 
-uint16_t ldo1_voltage_table[] = {
+static uint16_t ldo1_voltage_table[] = {
   1700, // 1,7
   1700, // 1,7
   1700, // 1,7
@@ -545,7 +546,7 @@ uint16_t ldo1_voltage_table[] = {
   3300, // 3,3
 };
 
-uint16_t ldo2_voltage_table[] = {
+static uint16_t ldo2_voltage_table[] = {
   1700, // 1,7
   1700, // 1,7
   1700, // 1,7
@@ -573,7 +574,7 @@ uint16_t ldo2_voltage_table[] = {
   3300, // 3,3
 };
 
-uint16_t ldo3_voltage_table[] = {
+static uint16_t ldo3_voltage_table[] = {
   1700, // 1,7
   1700, // 1,7
   1700, // 1,7
@@ -609,7 +610,7 @@ uint16_t ldo3_voltage_table[] = {
 };
 
 
-uint16_t ldo5_voltage_table[] = {
+static uint16_t ldo5_voltage_table[] = {
   1700, // 1,7
   1700, // 1,7
   1700, // 1,7
@@ -643,7 +644,7 @@ uint16_t ldo5_voltage_table[] = {
   3900, // 3,9
 };
 
-uint16_t ldo6_voltage_table[] = {
+static uint16_t ldo6_voltage_table[] = {
   900, // 0,9
   1000, // 1,0
   1100, // 1,1
@@ -672,11 +673,11 @@ uint16_t ldo6_voltage_table[] = {
 };
 
 
-uint16_t ldo4_voltage_table[] = {
+static uint16_t ldo4_voltage_table[] = {
   3300, // 3,3
 };
 
-uint16_t vref_ddr_voltage_table[] = {
+static uint16_t vref_ddr_voltage_table[] = {
   3300, // 3,3
 };
 
@@ -686,7 +687,7 @@ uint16_t vref_ddr_voltage_table[] = {
 
 
 
-regul_struct regulators_table[] = {
+static regul_struct regulators_table[] = {
     {
       .id       = STPMU1_BUCK1,
       .voltage_table   = buck1_voltage_table,
@@ -801,10 +802,12 @@ static regul_struct *STPMU1_Get_Regulator_Data(PMIC_RegulId_TypeDef id)
 {
   uint8_t i ;
 
-  for (i = 0 ; i < MAX_REGUL ; i++ )
+  for (i = 0U ; i < MAX_REGUL ; i++ )
   {
     if (id == regulators_table[i].id)
+    {
       return &regulators_table[i];
+    }
   }
   /* id not found */
   BSP_Error_Handler();
@@ -815,10 +818,9 @@ static uint8_t STPMU1_Voltage_Find_Index(PMIC_RegulId_TypeDef id, uint16_t miliv
 {
   regul_struct *regul = STPMU1_Get_Regulator_Data(id);
   uint8_t i;
-  for ( i = 0 ; i < regul->voltage_table_size ; i++)
+  for ( i = 0U ; i < regul->voltage_table_size ; i++)
   {
     if ( regul->voltage_table[i] == milivolts ) {
-      //printf("idx:%d for %dmV\n\r", (int)i, (int)milivolts);
       return i;
     }
   }
@@ -832,13 +834,15 @@ void STPMU1_Enable_Interrupt(PMIC_IRQn IRQn)
   uint8_t irq_reg , irq_reg_value ;
 
   if (IRQn >= IRQ_NR)
+  {
     return ;
+  }
 
   /* IRQ register is IRQ Number divided by 8 */
-  irq_reg = IRQn >> 3 ;
+  irq_reg = (uint8_t)IRQn >> 3U ;
 
-  /* value to be set in IRQ register corresponds to BIT(7-N) where N is the Interrupt id modulo 8 */
-  irq_reg_value = 1 << ( 7 - ( IRQn%8 ) );
+  /* value to be set in IRQ register corresponds to BIT_PMIC(7-N) where N is the Interrupt id modulo 8 */
+  irq_reg_value = 1U << ( 7U - ( (uint8_t)IRQn%8U ) );
 
   /* Clear previous event stored in latch */
   STPMU1_Register_Write(ITCLEARLATCH1_REG+irq_reg, irq_reg_value );
@@ -853,13 +857,15 @@ extern void STPMU1_Disable_Interrupt(PMIC_IRQn IRQn)
   uint8_t irq_reg , irq_reg_value ;
 
   if (IRQn >= IRQ_NR)
+  {
     return ;
+  }
 
   /* IRQ register is IRQ Number divided by 8 */
-  irq_reg = IRQn >> 3 ;
+  irq_reg = (uint8_t)IRQn >> 3U ;
 
-  /* value to be set in IRQ register corresponds to BIT(7-N) where N is the Interrupt id modulo 8 */
-  irq_reg_value = 1 << ( 7 - ( IRQn%8 ) );
+  /* value to be set in IRQ register corresponds to BIT_PMIC(7-N) where N is the Interrupt id modulo 8 */
+  irq_reg_value = 1U << ( 7U - ( (uint8_t)IRQn%8U ) );
 
   /* Clear previous event stored in latch */
   STPMU1_Register_Write(ITCLEARLATCH1_REG+irq_reg, irq_reg_value );
@@ -874,19 +880,19 @@ void STPMU1_IrqHandler(void)
 {
   uint8_t irq_reg,mask,latch_events,i;
 
-  for (irq_reg = 0 ; irq_reg < STM32_PMIC_NUM_IRQ_REGS ; irq_reg++)
+  for (irq_reg = 0U ; irq_reg < STM32_PMIC_NUM_IRQ_REGS ; irq_reg++)
   {
     /* Get latch events & active mask from register */
     mask = STPMU1_Register_Read(ITMASK1_REG+irq_reg);
     latch_events = STPMU1_Register_Read(ITLATCH1_REG+irq_reg) & ~mask ;
 
     /* Go through all bits for each register */
-    for (i = 0 ; i < 8 ; i++ )
+    for (i = 0U ; i < 8U ; i++ )
     {
-      if ( latch_events & ( 1 << i ) )
+      if ( (latch_events & ( 1U << i )) != 0U )
       {
         /* Callback with parameter computes as "PMIC Interrupt" enum */
-        STPMU1_INTn_Callback( (PMIC_IRQn )(irq_reg*8 + (7-i)));
+        STPMU1_INTn_Callback( (PMIC_IRQn )(uint8_t)(((irq_reg*8U) + (7U-i))));
       }
     }
     /* Clear events in appropriate register for the event with mask set */
@@ -898,22 +904,21 @@ void STPMU1_IrqHandler(void)
 void STPMU1_Sw_Reset(void)
 {
   /* Write 1 in bit 0 of MAIN_CONTROL Register */
-  STPMU1_Register_Update(MAIN_CONTROL_REG, SET , SOFTWARE_SWITCH_OFF_ENABLED );
-  return ;
+  STPMU1_Register_Update((uint8_t)MAIN_CONTROL_REG, (uint8_t)1U , (uint8_t)SOFTWARE_SWITCH_OFF_ENABLED);
 }
 
 void STPMU1_Regulator_Enable(PMIC_RegulId_TypeDef id)
 {
   regul_struct *regul = STPMU1_Get_Regulator_Data(id);
 
-  STPMU1_Register_Update(regul->control_reg,BIT(0),BIT(0));
+  STPMU1_Register_Update((uint8_t)regul->control_reg, (uint8_t)BIT_PMIC(0U), (uint8_t)BIT_PMIC(0U));
 }
 
 void STPMU1_Regulator_Disable(PMIC_RegulId_TypeDef id)
 {
   regul_struct *regul = STPMU1_Get_Regulator_Data(id);
 
-  STPMU1_Register_Update(regul->control_reg,0,BIT(0));
+  STPMU1_Register_Update((uint8_t)regul->control_reg, (uint8_t)0U, (uint8_t)BIT_PMIC(0U));
 }
 
 uint8_t STPMU1_Is_Regulator_Enabled(PMIC_RegulId_TypeDef id)
@@ -924,14 +929,14 @@ uint8_t STPMU1_Is_Regulator_Enabled(PMIC_RegulId_TypeDef id)
 
   val = STPMU1_Register_Read(regul->control_reg);
 
-  return (val&0x1);
+  return (val&0x1U);
 }
 
 void STPMU1_Regulator_Voltage_Set(PMIC_RegulId_TypeDef id,uint16_t milivolts)
 {
   uint8_t voltage_index = STPMU1_Voltage_Find_Index(id,milivolts);
   regul_struct *regul = STPMU1_Get_Regulator_Data(id);
-  STPMU1_Register_Update(regul->control_reg, voltage_index<<2 , 0xFC );
+  STPMU1_Register_Update(regul->control_reg, voltage_index<<2 , 0xFCU );
 }
 
 /* register direct access */
@@ -940,10 +945,10 @@ uint8_t STPMU1_Register_Read(uint8_t register_id)
   uint32_t status = BSP_ERROR_NONE;
   uint8_t Value = 0;
 
-  status = BSP_I2C4_ReadReg(STPMU1_I2C_ADDRESS, (uint16_t)register_id, &Value, 1);
+  status = (uint32_t)BSP_I2C_ReadReg(STPMU1_I2C_ADDRESS, (uint16_t)register_id, &Value, 1U);
 
   /* Check the communication status */
-  if(status != BSP_ERROR_NONE)
+  if(status != (uint32_t)BSP_ERROR_NONE)
   {
     BSP_Error_Handler();
   }
@@ -954,16 +959,16 @@ void STPMU1_Register_Write(uint8_t register_id, uint8_t value)
 {
   uint32_t status = BSP_ERROR_NONE;
 
-  status = BSP_I2C4_WriteReg(STPMU1_I2C_ADDRESS, (uint16_t)register_id, &value, 1);
+  status = (uint32_t)BSP_I2C_WriteReg(STPMU1_I2C_ADDRESS, (uint16_t)register_id, &value, 1U);
 
   /* Check the communication status */
-  if(status != BSP_ERROR_NONE)
+  if(status != (uint32_t)BSP_ERROR_NONE)
   {
     BSP_Error_Handler();
   }
 
   /* verify register content */
-  if ((register_id!=WATCHDOG_CONTROL_REG) && (register_id<=0x40))
+  if ((register_id!=WATCHDOG_CONTROL_REG) && (register_id<=0x40U))
   {
     uint8_t readval = STPMU1_Register_Read(register_id);
     if (readval != value)
@@ -1008,7 +1013,7 @@ static uint32_t BSP_PMIC_MspInit(I2C_HandleTypeDef *hi2c)
   GPIO_InitTypeDef  GPIO_InitStruct;
 
   /*##-1- Configure the I2C clock source, GPIO and Interrupt #*/
-  BSP_I2C4_Init();
+  BSP_I2C_Init();
 
   /*##-2- Configure PMIC GPIOs Interface ########################################*/
 
@@ -1018,15 +1023,15 @@ static uint32_t BSP_PMIC_MspInit(I2C_HandleTypeDef *hi2c)
   GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
   GPIO_InitStruct.Pull      = GPIO_PULLUP; //GPIO_NOPULL;
   GPIO_InitStruct.Speed     = GPIO_SPEED_FREQ_HIGH;
-  GPIO_InitStruct.Alternate = 0 ;
+  GPIO_InitStruct.Alternate = 0U;
   BSP_ENTER_CRITICAL_SECTION(PMIC_INTn_PORT);
   HAL_GPIO_Init(PMIC_INTn_PORT, &GPIO_InitStruct);
   BSP_EXIT_CRITICAL_SECTION(PMIC_INTn_PORT);
 
   /* Enable and set INTn EXTI Interrupt  */
 #if defined(CORE_CA7)
-  IRQ_SetPriority(PMIC_INTn_EXTI_IRQ, 0);
-  IRQ_Enable(PMIC_INTn_EXTI_IRQ);
+  IRQ_SetPriority((IRQn_ID_t)PMIC_INTn_EXTI_IRQ, 0);
+  IRQ_Enable((IRQn_ID_t)PMIC_INTn_EXTI_IRQ);
 #endif
 
   return status;
@@ -1035,16 +1040,18 @@ static uint32_t BSP_PMIC_MspInit(I2C_HandleTypeDef *hi2c)
 
 static uint32_t BSP_PMIC_MspDeInit(I2C_HandleTypeDef *hi2c)
 {
+  UNUSED(hi2c);
+
   uint32_t  status = BSP_ERROR_NONE;
 /*##-1- Reset I2C Clock / Disable peripherals and GPIO Clocks###############*/
-  status = BSP_I2C4_DeInit();
+  status = (uint32_t)BSP_I2C_DeInit();
 
   /*##-2- Disable PMIC clk ###########################################*/
   PMIC_INTn_CLK_DISABLE();
 
   /*##-3- Disable the NVIC for PMIC ##########################################*/
 #if defined(CORE_CA7)
-  IRQ_Disable(PMIC_INTn_EXTI_IRQ);
+  IRQ_Disable((IRQn_ID_t)PMIC_INTn_EXTI_IRQ);
 #endif
   BSP_ENTER_CRITICAL_SECTION(PMIC_INTn_PORT);
   HAL_GPIO_DeInit(PMIC_INTn_PORT,PMIC_INTn_PIN);
@@ -1055,35 +1062,35 @@ static uint32_t BSP_PMIC_MspDeInit(I2C_HandleTypeDef *hi2c)
 
 uint32_t BSP_PMIC_Is_Device_Ready(void)
 {
-  int32_t  status = BSP_ERROR_NONE;
+  uint32_t  status = BSP_ERROR_NONE;
 
   /* Write the TxBuffer1 at @0, then read @0 when device ready */
-  if (BSP_I2C4_IsReady(STPMU1_I2C_ADDRESS, 1) != BSP_ERROR_NONE)
+  if ((uint32_t)BSP_I2C_IsReady(STPMU1_I2C_ADDRESS, 1) != (uint32_t)BSP_ERROR_NONE)
   {
-    status = BSP_ERROR_BUSY;
+    status = (uint32_t)BSP_ERROR_BUSY;
   }
   return status ;
 }
 
 /* Use Xls I2C COnfiguration Tools with I2C Clock config + output clocks requirement */
-#define I2C_TIMING     0x10805E89
+#define I2C_TIMING     0x10805E89U
 
 uint32_t BSP_PMIC_Init(void)
 {
-  int32_t status = BSP_ERROR_NONE;
+  uint32_t status = BSP_ERROR_NONE;
 
   /*##-1- Configure the I2C peripheral ######################################*/
-  BSP_PMIC_MspInit(&hI2c4);
+  BSP_PMIC_MspInit(&hpmic_i2c);
 
   status = BSP_PMIC_Is_Device_Ready();
-  if ( status != BSP_ERROR_NONE )
+  if ( status != (uint32_t)BSP_ERROR_NONE )
   {
     return status;
   }
 
-  if (STPMU1_Register_Read(VERSION_STATUS_REG) != 0x21)
+  if (STPMU1_Register_Read(VERSION_STATUS_REG) != 0x21U)
   {
-    status = BSP_ERROR_BUS_FAILURE;
+    status = (uint32_t)BSP_ERROR_BUS_FAILURE;
     return status;
   }
 
@@ -1096,10 +1103,10 @@ uint32_t BSP_PMIC_Init(void)
 uint32_t BSP_PMIC_DeInit(void)
 {
   uint32_t  status = BSP_ERROR_NONE;
-  if(HAL_I2C_GetState(&hI2c4) != HAL_I2C_STATE_RESET)
+  if(HAL_I2C_GetState(&hpmic_i2c) != HAL_I2C_STATE_RESET)
   {
     /* Deinit the I2C */
-    BSP_PMIC_MspDeInit(&hI2c4);
+    BSP_PMIC_MspDeInit(&hpmic_i2c);
 
   }
   return status;
@@ -1121,50 +1128,50 @@ uint32_t BSP_PMIC_InitRegulators(void)
 {
   uint32_t  status = BSP_ERROR_NONE;
 
-  STPMU1_Register_Write(MAIN_CONTROL_REG, 0x04);
-  STPMU1_Register_Write(VIN_CONTROL_REG, 0xc0);
+  STPMU1_Register_Write(MAIN_CONTROL_REG, 0x04U);
+  STPMU1_Register_Write(VIN_CONTROL_REG, 0xc0U);
 
-  STPMU1_Register_Write(MASK_RESET_BUCK_REG, 0x04);
+  STPMU1_Register_Write(MASK_RESET_BUCK_REG, 0x04U);
 
   /* vddcpu */
-  STPMU1_Regulator_Voltage_Set(STPMU1_BUCK1, 1250);
+  STPMU1_Regulator_Voltage_Set(STPMU1_BUCK1, 1250U);
   STPMU1_Regulator_Enable(STPMU1_BUCK1);
 
   /* vdd_ddr */
-  STPMU1_Regulator_Voltage_Set(STPMU1_BUCK2, 1350);
+  STPMU1_Regulator_Voltage_Set(STPMU1_BUCK2, 1350U);
   STPMU1_Regulator_Disable(STPMU1_BUCK2);
 
   /* vdd */
-  STPMU1_Regulator_Voltage_Set(STPMU1_BUCK3, 3300);
+  STPMU1_Regulator_Voltage_Set(STPMU1_BUCK3, 3300U);
   STPMU1_Regulator_Enable(STPMU1_BUCK3);
 
   /* vddcore */
-  STPMU1_Regulator_Voltage_Set(STPMU1_BUCK4, 1250);
+  STPMU1_Regulator_Voltage_Set(STPMU1_BUCK4, 1250U);
   STPMU1_Regulator_Enable(STPMU1_BUCK4);
 
   /* vdd_adc */
-  STPMU1_Regulator_Voltage_Set(STPMU1_LDO1, 3300);
+  STPMU1_Regulator_Voltage_Set(STPMU1_LDO1, 3300U);
   STPMU1_Regulator_Enable(STPMU1_LDO1);
 
   /* ldo2 is unused */
   /* lod3 is unused */
 
   /* vdd_usb */
-  STPMU1_Regulator_Voltage_Set(STPMU1_LDO4, 3300);
+  STPMU1_Regulator_Voltage_Set(STPMU1_LDO4, 3300U);
   STPMU1_Regulator_Enable(STPMU1_LDO4);
 
   /* vdd_sd */
-  STPMU1_Regulator_Voltage_Set(STPMU1_LDO5, 2900);
+  STPMU1_Regulator_Voltage_Set(STPMU1_LDO5, 2900U);
   STPMU1_Regulator_Enable(STPMU1_LDO5);
 
   /* v1v8_periph */
-  STPMU1_Regulator_Voltage_Set(STPMU1_LDO6, 1800);
+  STPMU1_Regulator_Voltage_Set(STPMU1_LDO6, 1800U);
   STPMU1_Regulator_Enable(STPMU1_LDO6);
 
   STPMU1_Regulator_Disable(STPMU1_VREFDDR);
 
   /* v3v3_sw   enable usb SWOUT , enable active discharge */
-  STPMU1_Register_Write(USB_CONTROL_REG, 0x34);
+  STPMU1_Register_Write(USB_CONTROL_REG, 0x34U);
 
   return status;
 }
@@ -1194,8 +1201,8 @@ uint32_t BSP_PMIC_PrepareLpLvStop(void)
   BSP_PMIC_PrepareLpStop();
 
   /* vdd_cpu and vddcore in retention */
-  STPMU1_Register_Write(BUCK1_PWRCTRL_REG, 0x31); /* 0.9v */
-  STPMU1_Register_Write(BUCK4_PWRCTRL_REG, 0x31); /* 0.9v */
+  STPMU1_Register_Write(BUCK1_PWRCTRL_REG, 0x31U); /* 0.9v */
+  STPMU1_Register_Write(BUCK4_PWRCTRL_REG, 0x31U); /* 0.9v */
 
   /* PWR_ON pin changes when enter in STOP */
   SET_BIT(PWR->CR1, PWR_CR1_LPCFG);
@@ -1208,9 +1215,9 @@ uint32_t BSP_PMIC_PrepareLpLvStop2(void)
   BSP_PMIC_PrepareLpStop();
 
   /* vdd_cpu is off */
-  STPMU1_Register_Write(BUCK1_PWRCTRL_REG, 0x30); /* off */
+  STPMU1_Register_Write(BUCK1_PWRCTRL_REG, 0x30U); /* off */
   /* vddcore in retention */
-  STPMU1_Register_Write(BUCK4_PWRCTRL_REG, 0x31); /* 0.9v */
+  STPMU1_Register_Write(BUCK4_PWRCTRL_REG, 0x31U); /* 0.9v */
 
   /* PWR_ON pin changes when enter in STOP */
   SET_BIT(PWR->CR1, PWR_CR1_LPCFG);
@@ -1223,13 +1230,13 @@ uint32_t BSP_PMIC_PrepareStandbySelfRefresh(void)
   BSP_PMIC_PrepareLpStop();
 
   /* all but vdd, and ddr power supply on */
-  STPMU1_Register_Write(BUCK1_PWRCTRL_REG, 0x0);
-  STPMU1_Register_Write(BUCK4_PWRCTRL_REG, 0x0);
+  STPMU1_Register_Write(BUCK1_PWRCTRL_REG, 0x0U);
+  STPMU1_Register_Write(BUCK4_PWRCTRL_REG, 0x0U);
 
-  STPMU1_Register_Write(LDO1_PWRCTRL_REG, 0x0);
-  STPMU1_Register_Write(LDO4_PWRCTRL_REG, 0x0);
-  STPMU1_Register_Write(LDO5_PWRCTRL_REG, 0x0);
-  STPMU1_Register_Write(LDO6_PWRCTRL_REG, 0x0);
+  STPMU1_Register_Write(LDO1_PWRCTRL_REG, 0x0U);
+  STPMU1_Register_Write(LDO4_PWRCTRL_REG, 0x0U);
+  STPMU1_Register_Write(LDO5_PWRCTRL_REG, 0x0U);
+  STPMU1_Register_Write(LDO6_PWRCTRL_REG, 0x0U);
 
   return BSP_ERROR_NONE;
 }
@@ -1239,8 +1246,8 @@ uint32_t BSP_PMIC_PrepareStandby(void)
   BSP_PMIC_PrepareStandbySelfRefresh();
 
   /* only keep only vdd on */
-  STPMU1_Register_Write(BUCK2_PWRCTRL_REG, 0);
-  STPMU1_Register_Write(VREF_DDR_PWRCTRL_REG, 0);
+  STPMU1_Register_Write(BUCK2_PWRCTRL_REG, 0x0U);
+  STPMU1_Register_Write(VREF_DDR_PWRCTRL_REG, 0x0U);
 
   return BSP_ERROR_NONE;
 }
@@ -1249,51 +1256,12 @@ uint32_t BSP_PMIC_SwitchOff(void)
 {
   uint32_t  status = BSP_ERROR_NONE;
 
-  STPMU1_Register_Write(MAIN_CONTROL_REG, 0x01);
+  STPMU1_Register_Write(MAIN_CONTROL_REG, 0x01U);
   return status;
 }
 
 __weak void BSP_PMIC_INTn_Callback(PMIC_IRQn IRQn)
 {
-  switch (IRQn)
-  {
-    case IT_PONKEY_F:
-      printf("IT_PONKEY_F");
-      break;
-
-    case IT_PONKEY_R:
-      printf("IT_PONKEY_R");
-      break;
-
-    case IT_WAKEUP_F:
-      printf("IT_WAKEUP_F");
-      break;
-
-    case IT_WAKEUP_R:
-      printf("IT_WAKEUP_R");
-      break;
-
-    case IT_VBUS_OTG_F:
-      printf("IT_VBUS_OTG_F");
-      break;
-
-    case IT_SWOUT_F:
-      printf("IT_SWOUT_F");
-      break;
-
-    case IT_TWARN_R:
-      printf("IT_TWARN_R");
-      break;
-
-    case IT_TWARN_F:
-      printf("IT_TWARN_F");
-      break;
-
-    default:
-      printf("%d",IRQn);
-      break;
-  }
-  printf(" Interrupt received\n\r");
 }
 
 void STPMU1_INTn_Callback(PMIC_IRQn IRQn) {
@@ -1302,9 +1270,8 @@ void STPMU1_INTn_Callback(PMIC_IRQn IRQn) {
 
 void BSP_PMIC_INTn_IRQHandler(void)
 {
-  /*printf("%s:%d\n\r", __FUNCTION__, __LINE__);*/
   /* Call HAL EXTI IRQ Handler to clear appropriate flags */
-  HAL_GPIO_EXTI_IRQHandler(PMIC_INTn_PIN);
+  HAL_GPIO_EXTI_IRQHandler((uint16_t)PMIC_INTn_PIN);
 
   STPMU1_IrqHandler();
 }

@@ -318,7 +318,7 @@ nvm_rank_ldo5:
 /* Private variables ---------------------------------------------------------*/
 /* I2C handler declaration */
 I2C_HandleTypeDef I2cHandle;
-extern I2C_HandleTypeDef hI2c4;
+extern I2C_HandleTypeDef hI2c;
 
 uint16_t buck1_voltage_table[] = {
   600,
@@ -819,7 +819,6 @@ static uint8_t STPMU1_Voltage_Find_Index(PMIC_RegulId_TypeDef id, uint16_t miliv
   for ( i = 0 ; i < regul->voltage_table_size ; i++)
   {
     if ( regul->voltage_table[i] == milivolts ) {
-      //printf("idx:%d for %dmV\n\r", (int)i, (int)milivolts);
       return i;
     }
   }
@@ -960,7 +959,7 @@ uint8_t STPMU1_Register_Read(uint8_t register_id)
   uint32_t status = BSP_ERROR_NONE;
   uint8_t Value = 0;
 
-  status = BSP_I2C4_ReadReg(STPMU1_I2C_ADDRESS, (uint16_t)register_id, &Value, 1);
+  status = BSP_I2C_ReadReg(STPMU1_I2C_ADDRESS, (uint16_t)register_id, &Value, 1);
 
   /* Check the communication status */
   if(status != BSP_ERROR_NONE)
@@ -974,7 +973,7 @@ void STPMU1_Register_Write(uint8_t register_id, uint8_t value)
 {
   uint32_t status = BSP_ERROR_NONE;
 
-  status = BSP_I2C4_WriteReg(STPMU1_I2C_ADDRESS, (uint16_t)register_id, &value, 1);
+  status = BSP_I2C_WriteReg(STPMU1_I2C_ADDRESS, (uint16_t)register_id, &value, 1);
 
   /* Check the communication status */
   if(status != BSP_ERROR_NONE)
@@ -1028,7 +1027,7 @@ static uint32_t BSP_PMIC_MspInit(I2C_HandleTypeDef *hi2c)
   GPIO_InitTypeDef  GPIO_InitStruct;
 
   /*##-1- Configure the I2C clock source, GPIO and Interrupt #*/
-  BSP_I2C4_Init();
+  BSP_I2C_Init();
 
   /*##-2- Configure PMIC GPIOs Interface ########################################*/
 
@@ -1060,7 +1059,7 @@ static uint32_t BSP_PMIC_MspDeInit(I2C_HandleTypeDef *hi2c)
 {
   uint32_t  status = BSP_ERROR_NONE;
 /*##-1- Reset I2C Clock / Disable peripherals and GPIO Clocks###############*/
-  status = BSP_I2C4_DeInit();
+  status = BSP_I2C_DeInit();
 
   /*##-2- Disable PMIC clk ###########################################*/
   PMIC_INTn_CLK_DISABLE();
@@ -1083,7 +1082,7 @@ uint32_t BSP_PMIC_Is_Device_Ready(void)
   int32_t  status = BSP_ERROR_NONE;
 
   /* Write the TxBuffer1 at @0, then read @0 when device ready */
-  if (BSP_I2C4_IsReady(STPMU1_I2C_ADDRESS, 1) != BSP_ERROR_NONE)
+  if (BSP_I2C_IsReady(STPMU1_I2C_ADDRESS, 1) != BSP_ERROR_NONE)
   {
     status = BSP_ERROR_BUSY;
   }
@@ -1100,7 +1099,7 @@ uint32_t BSP_PMIC_Init(void)
 	
 
   /*##-1- Configure the I2C peripheral ######################################*/
-  BSP_PMIC_MspInit(&hI2c4);
+  BSP_PMIC_MspInit(&hI2c);
 
   status = BSP_PMIC_Is_Device_Ready();
   if ( status != BSP_ERROR_NONE )
@@ -1127,10 +1126,10 @@ uint32_t BSP_PMIC_Init(void)
 uint32_t BSP_PMIC_DeInit(void)
 {
   uint32_t  status = BSP_ERROR_NONE;
-  if(HAL_I2C_GetState(&hI2c4) != HAL_I2C_STATE_RESET)
+  if(HAL_I2C_GetState(&hI2c) != HAL_I2C_STATE_RESET)
   {
     /* Deinit the I2C */
-    BSP_PMIC_MspDeInit(&hI2c4);
+    BSP_PMIC_MspDeInit(&hI2c);
 
   }
   return status;
@@ -1177,12 +1176,12 @@ uint32_t BSP_PMIC_InitRegulators(void)
   STPMU1_Regulator_Enable(STPMU1_BUCK2);
 
   /* vdd */
-  STPMU1_Regulator_Voltage_Set(STPMU1_BUCK3, 1800);
+  STPMU1_Regulator_Voltage_Set(STPMU1_BUCK3, 3300);
   STPMU1_Regulator_Enable(STPMU1_BUCK3);
 
   /* 3v3 */
-  //STPMU1_Regulator_Voltage_Set(STPMU1_BUCK4, 3300);
-  //STPMU1_Regulator_Enable(STPMU1_BUCK4);
+  STPMU1_Regulator_Voltage_Set(STPMU1_BUCK4, 3300);
+  STPMU1_Regulator_Enable(STPMU1_BUCK4);
 
   /* 1v8_audio */
   STPMU1_Regulator_Voltage_Set(STPMU1_LDO1, 1800);
@@ -1223,45 +1222,6 @@ uint32_t BSP_PMIC_SwitchOff(void)
 
 __weak void BSP_PMIC_INTn_Callback(PMIC_IRQn IRQn)
 {
-  switch (IRQn)
-  {
-    case IT_PONKEY_F:
-      printf("IT_PONKEY_F");
-      break;
-
-    case IT_PONKEY_R:
-      printf("IT_PONKEY_R");
-      break;
-
-    case IT_WAKEUP_F:
-      printf("IT_WAKEUP_F");
-      break;
-
-    case IT_WAKEUP_R:
-      printf("IT_WAKEUP_R");
-      break;
-
-    case IT_VBUS_OTG_F:
-      printf("IT_VBUS_OTG_F");
-      break;
-
-    case IT_SWOUT_F:
-      printf("IT_SWOUT_F");
-      break;
-
-    case IT_TWARN_R:
-      printf("IT_TWARN_R");
-      break;
-
-    case IT_TWARN_F:
-      printf("IT_TWARN_F");
-      break;
-
-    default:
-      printf("%d",IRQn);
-      break;
-  }
-  printf(" Interrupt received\n\r");
 }
 
 void STPMU1_INTn_Callback(PMIC_IRQn IRQn) {
@@ -1278,7 +1238,7 @@ void BSP_PMIC_INTn_IRQHandler(void)
   STPMU1_IrqHandler();
 }
 
-void HAL_I2C_ErrorCallback(I2C_HandleTypeDef *hI2c4)
+void HAL_I2C_ErrorCallback(I2C_HandleTypeDef *hI2c)
 {
   while(1);
 }

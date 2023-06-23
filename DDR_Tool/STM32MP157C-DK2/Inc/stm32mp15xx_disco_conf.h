@@ -25,12 +25,13 @@
 #endif
 
 #include "stm32mp1xx_hal.h"
+#include "stm32mp_util_conf.h"
 
 /* Activation of Critical Section */
 #define USE_BSP_CRITICAL_SECTION            0U
 
 /* Activation of PMIC */
-#define USE_STPMIC1x                        1U
+#define USE_STPMIC1x                        UTIL_USE_PMIC
 
 /* Usage of COM feature */
 #define USE_BSP_COM_FEATURE                 0U

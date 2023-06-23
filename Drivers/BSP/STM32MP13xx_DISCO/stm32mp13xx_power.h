@@ -38,4 +38,4 @@ void SystemPower_Config(void);
 }
 #endif
 
-#endif /* __STM32MP13xx_POWER_H */
+#endif /* __STM32MP13xx_POWER_H */

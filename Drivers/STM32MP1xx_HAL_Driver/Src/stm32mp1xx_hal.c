@@ -367,7 +367,14 @@ __weak uint32_t HAL_GetTick(void)
   return uwTick;
 #else
   /* tick value directly got from 64bits CA7 register*/
-  return ( PL1_GetCurrentPhysicalValue() / (HSI_VALUE/1000));
+  if ((RCC->STGENCKSELR & RCC_STGENCKSELR_STGENSRC) == RCC_STGENCLKSOURCE_HSE)
+    {
+      return ((uint32_t)PL1_GetCurrentPhysicalValue() / (HSE_VALUE / 1000UL));
+    }
+  else
+    {
+      return ((uint32_t)PL1_GetCurrentPhysicalValue() / (HSI_VALUE / 1000UL));
+    }
 #endif
 
 #endif /* CORE_CA7 */

@@ -110,189 +110,186 @@ IRQ_NR,
   */
 
 /* Exported constants --------------------------------------------------------*/
-#define BIT(_x)  (1<<(_x))
-#define STM32_PMIC_NUM_IRQ_REGS       4
+#define BIT_PMIC(_x)  (1U<<(_x))
+#define STM32_PMIC_NUM_IRQ_REGS       4U
 
-#define TURN_ON_REG                 0x1
-#define TURN_OFF_REG                0x2
-#define ICC_LDO_TURN_OFF_REG        0x3
-#define ICC_BUCK_TURN_OFF_REG       0x4
-#define RESET_STATUS_REG            0x5
-#define VERSION_STATUS_REG          0x6
-#define MAIN_CONTROL_REG            0x10
-#define PADS_PULL_REG               0x11
-#define BUCK_PULL_DOWN_REG          0x12
-#define LDO14_PULL_DOWN_REG         0x13
-#define LDO56_PULL_DOWN_REG         0x14
-#define VIN_CONTROL_REG             0x15
-#define PONKEY_TIMER_REG            0x16
-#define MASK_RANK_BUCK_REG          0x17
-#define MASK_RESET_BUCK_REG         0x18
-#define MASK_RANK_LDO_REG           0x19
-#define MASK_RESET_LDO_REG          0x1A
-#define WATCHDOG_CONTROL_REG        0x1B
-#define WATCHDOG_TIMER_REG          0x1C
-#define BUCK_ICC_TURNOFF_REG        0x1D
-#define LDO_ICC_TURNOFF_REG         0x1E
-#define BUCK_APM_CONTROL_REG        0x1F
-#define BUCK1_CONTROL_REG           0x20
-#define BUCK2_CONTROL_REG           0x21
-#define BUCK3_CONTROL_REG           0x22
-#define BUCK4_CONTROL_REG           0x23
-#define VREF_DDR_CONTROL_REG        0x24
-#define LDO1_CONTROL_REG            0x25
-#define LDO2_CONTROL_REG            0x26
-#define LDO3_CONTROL_REG            0x27
-#define LDO4_CONTROL_REG            0x28
-#define LDO5_CONTROL_REG            0x29
-#define LDO6_CONTROL_REG            0x2A
-#define BUCK1_PWRCTRL_REG           0x30
-#define BUCK2_PWRCTRL_REG           0x31
-#define BUCK3_PWRCTRL_REG           0x32
-#define BUCK4_PWRCTRL_REG           0x33
-#define VREF_DDR_PWRCTRL_REG        0x34
-#define LDO1_PWRCTRL_REG            0x35
-#define LDO2_PWRCTRL_REG            0x36
-#define LDO3_PWRCTRL_REG            0x37
-#define LDO4_PWRCTRL_REG            0x38
-#define LDO5_PWRCTRL_REG            0x39
-#define LDO6_PWRCTRL_REG            0x3A
-#define FREQUENCY_SPREADING_REG     0x3B
-#define USB_CONTROL_REG             0x40
-#define ITLATCH1_REG                0x50
-#define ITLATCH2_REG                0x51
-#define ITLATCH3_REG                0x52
-#define ITLATCH4_REG                0x53
-#define ITSETLATCH1_REG             0x60
-#define ITSETLATCH2_REG             0x61
-#define ITSETLATCH3_REG             0x62
-#define ITSETLATCH4_REG             0x63
-#define ITCLEARLATCH1_REG           0x70
-#define ITCLEARLATCH2_REG           0x71
-#define ITCLEARLATCH3_REG           0x72
-#define ITCLEARLATCH4_REG           0x73
-#define ITMASK1_REG                 0x80
-#define ITMASK2_REG                 0x81
-#define ITMASK3_REG                 0x82
-#define ITMASK4_REG                 0x83
-#define ITSETMASK1_REG              0x90
-#define ITSETMASK2_REG              0x91
-#define ITSETMASK3_REG              0x92
-#define ITSETMASK4_REG              0x93
-#define ITCLEARMASK1_REG            0xA0
-#define ITCLEARMASK2_REG            0xA1
-#define ITCLEARMASK3_REG            0xA2
-#define ITCLEARMASK4_REG            0xA3
-#define ITSOURCE1_REG               0xB0
-#define ITSOURCE2_REG               0xB1
-#define ITSOURCE3_REG               0xB2
-#define ITSOURCE4_REG               0xB3
-#define LDO_VOLTAGE_MASK            0x7C
-#define BUCK_VOLTAGE_MASK           0xFC
-#define LDO_BUCK_VOLTAGE_SHIFT      2
+#define TURN_ON_REG                 0x1U
+#define TURN_OFF_REG                0x2U
+#define ICC_LDO_TURN_OFF_REG        0x3U
+#define ICC_BUCK_TURN_OFF_REG       0x4U
+#define RESET_STATUS_REG            0x5U
+#define VERSION_STATUS_REG          0x6U
+#define MAIN_CONTROL_REG            0x10U
+#define PADS_PULL_REG               0x11U
+#define BUCK_PULL_DOWN_REG          0x12U
+#define LDO14_PULL_DOWN_REG         0x13U
+#define LDO56_PULL_DOWN_REG         0x14U
+#define VIN_CONTROL_REG             0x15U
+#define PONKEY_TIMER_REG            0x16U
+#define MASK_RANK_BUCK_REG          0x17U
+#define MASK_RESET_BUCK_REG         0x18U
+#define MASK_RANK_LDO_REG           0x19U
+#define MASK_RESET_LDO_REG          0x1AU
+#define WATCHDOG_CONTROL_REG        0x1BU
+#define WATCHDOG_TIMER_REG          0x1CU
+#define BUCK_ICC_TURNOFF_REG        0x1DU
+#define LDO_ICC_TURNOFF_REG         0x1EU
+#define BUCK_APM_CONTROL_REG        0x1FU
+#define BUCK1_CONTROL_REG           0x20U
+#define BUCK2_CONTROL_REG           0x21U
+#define BUCK3_CONTROL_REG           0x22U
+#define BUCK4_CONTROL_REG           0x23U
+#define VREF_DDR_CONTROL_REG        0x24U
+#define LDO1_CONTROL_REG            0x25U
+#define LDO2_CONTROL_REG            0x26U
+#define LDO3_CONTROL_REG            0x27U
+#define LDO4_CONTROL_REG            0x28U
+#define LDO5_CONTROL_REG            0x29U
+#define LDO6_CONTROL_REG            0x2AU
+#define BUCK1_PWRCTRL_REG           0x30U
+#define BUCK2_PWRCTRL_REG           0x31U
+#define BUCK3_PWRCTRL_REG           0x32U
+#define BUCK4_PWRCTRL_REG           0x33U
+#define VREF_DDR_PWRCTRL_REG        0x34U
+#define LDO1_PWRCTRL_REG            0x35U
+#define LDO2_PWRCTRL_REG            0x36U
+#define LDO3_PWRCTRL_REG            0x37U
+#define LDO4_PWRCTRL_REG            0x38U
+#define LDO5_PWRCTRL_REG            0x39U
+#define LDO6_PWRCTRL_REG            0x3AU
+#define FREQUENCY_SPREADING_REG     0x3BU
+#define USB_CONTROL_REG             0x40U
+#define ITLATCH1_REG                0x50U
+#define ITLATCH2_REG                0x51U
+#define ITLATCH3_REG                0x52U
+#define ITLATCH4_REG                0x53U
+#define ITSETLATCH1_REG             0x60U
+#define ITSETLATCH2_REG             0x61U
+#define ITSETLATCH3_REG             0x62U
+#define ITSETLATCH4_REG             0x63U
+#define ITCLEARLATCH1_REG           0x70U
+#define ITCLEARLATCH2_REG           0x71U
+#define ITCLEARLATCH3_REG           0x72U
+#define ITCLEARLATCH4_REG           0x73U
+#define ITMASK1_REG                 0x80U
+#define ITMASK2_REG                 0x81U
+#define ITMASK3_REG                 0x82U
+#define ITMASK4_REG                 0x83U
+#define ITSETMASK1_REG              0x90U
+#define ITSETMASK2_REG              0x91U
+#define ITSETMASK3_REG              0x92U
+#define ITSETMASK4_REG              0x93U
+#define ITCLEARMASK1_REG            0xA0U
+#define ITCLEARMASK2_REG            0xA1U
+#define ITCLEARMASK3_REG            0xA2U
+#define ITCLEARMASK4_REG            0xA3U
+#define ITSOURCE1_REG               0xB0U
+#define ITSOURCE2_REG               0xB1U
+#define ITSOURCE3_REG               0xB2U
+#define ITSOURCE4_REG               0xB3U
+#define LDO_VOLTAGE_MASK            0x7CU
+#define BUCK_VOLTAGE_MASK           0xFCU
+#define LDO_BUCK_VOLTAGE_SHIFT      2U
 
-#define LDO_ENABLE_MASK             0x01
-#define BUCK_ENABLE_MASK            0x01
-#define BUCK_HPLP_ENABLE_MASK       0x02
-#define LDO_HPLP_ENABLE_MASK        0x02
-#define LDO_BUCK_HPLP_SHIFT         1
+#define LDO_ENABLE_MASK             0x01U
+#define BUCK_ENABLE_MASK            0x01U
+#define BUCK_HPLP_ENABLE_MASK       0x02U
+#define LDO_HPLP_ENABLE_MASK        0x02U
+#define LDO_BUCK_HPLP_SHIFT         1U
 
-#define LDO_BUCK_RANK_MASK          0x01
-#define LDO_BUCK_RESET_MASK         0x01
-#define LDO_BUCK_PULL_DOWN_MASK     0x03
+#define LDO_BUCK_RANK_MASK          0x01U
+#define LDO_BUCK_RESET_MASK         0x01U
+#define LDO_BUCK_PULL_DOWN_MASK     0x03U
 
 
 /* Main PMIC Control Register
  * MAIN_CONTROL_REG
  * Address : 0x10
  * */
-#define ICC_EVENT_ENABLED           BIT(4)
-#define PWRCTRL_POLARITY_HIGH       BIT(3)
-#define PWRCTRL_PIN_VALID           BIT(2)
-#define RESTART_REQUEST_ENABLED     BIT(1)
-#define SOFTWARE_SWITCH_OFF_ENABLED BIT(0)
+#define ICC_EVENT_ENABLED           BIT_PMIC(4U)
+#define PWRCTRL_POLARITY_HIGH       BIT_PMIC(3U)
+#define PWRCTRL_PIN_VALID           BIT_PMIC(2U)
+#define RESTART_REQUEST_ENABLED     BIT_PMIC(1U)
+#define SOFTWARE_SWITCH_OFF_ENABLED BIT_PMIC(0U)
 
 /* Main PMIC PADS Control Register
  * PADS_PULL_REG
  * Address : 0x11
  * */
-#define WAKEUP_DETECTOR_DISABLED    BIT(4)
-#define PWRCTRL_PD_ACTIVE           BIT(3)
-#define PWRCTRL_PU_ACTIVE           BIT(2)
-#define WAKEUP_PD_ACTIVE            BIT(1)
-#define PONKEY_PU_ACTIVE            BIT(0)
+#define WAKEUP_DETECTOR_DISABLED    BIT_PMIC(4U)
+#define PWRCTRL_PD_ACTIVE           BIT_PMIC(3U)
+#define PWRCTRL_PU_ACTIVE           BIT_PMIC(2U)
+#define WAKEUP_PD_ACTIVE            BIT_PMIC(1U)
+#define PONKEY_PU_ACTIVE            BIT_PMIC(0U)
 
 
 /* Main PMIC VINLOW Control Register
  * VIN_CONTROL_REGC DMSC
  * Address : 0x15
  * */
-#define SWIN_DETECTOR_ENABLED       BIT(7)
-#define SWOUT_DETECTOR_ENABLED      BIT(6)
-#define VINLOW_HYST_MASK            0x3
-#define VINLOW_HYST_SHIFT           4
-#define VINLOW_THRESHOLD_MASK       0x7
-#define VINLOW_THRESHOLD_SHIFT      1
-#define VINLOW_ENABLED              0x01
-#define VINLOW_CTRL_REG_MASK        0xFF
+#define SWIN_DETECTOR_ENABLED       BIT_PMIC(7U)
+#define SWOUT_DETECTOR_ENABLED      BIT_PMIC(6U)
+#define VINLOW_HYST_MASK            0x3U
+#define VINLOW_HYST_SHIFT           4U
+#define VINLOW_THRESHOLD_MASK       0x7U
+#define VINLOW_THRESHOLD_SHIFT      1U
+#define VINLOW_ENABLED              0x01U
+#define VINLOW_CTRL_REG_MASK        0xFFU
 
 
 /* USB Control Register
  * Address : 0x40
  * */
-#define BOOST_OVP_DISABLED          BIT(7)
-#define VBUS_OTG_DETECTION_DISABLED BIT(6)
+#define BOOST_OVP_DISABLED          BIT_PMIC(7U)
+#define VBUS_OTG_DETECTION_DISABLED BIT_PMIC(6U)
 // Discharge not implemented
-#define OCP_LIMIT_HIGH              BIT(3)
-#define SWIN_SWOUT_ENABLED          BIT(2)
-#define USBSW_OTG_SWITCH_ENABLED    BIT(1)
+#define OCP_LIMIT_HIGH              BIT_PMIC(3U)
+#define SWIN_SWOUT_ENABLED          BIT_PMIC(2U)
+#define USBSW_OTG_SWITCH_ENABLED    BIT_PMIC(1U)
 
 
 /* IRQ masks */
 /* Interrupt Mask for Register 1 (0x50 for latch) */
-#define IT_SWOUT_R_MASK             BIT(7)
-#define IT_SWOUT_F_MASK             BIT(6)
-#define IT_VBUS_OTG_R_MASK          BIT(5)
-#define IT_VBUS_OTG_F_MASK          BIT(4)
-#define IT_WAKEUP_R_MASK            BIT(3)
-#define IT_WAKEUP_F_MASK            BIT(2)
-#define IT_PONKEY_R_MASK            BIT(1)
-#define IT_PONKEY_F_MASK            BIT(0)
+#define IT_SWOUT_R_MASK             BIT_PMIC(7U)
+#define IT_SWOUT_F_MASK             BIT_PMIC(6U)
+#define IT_VBUS_OTG_R_MASK          BIT_PMIC(5U)
+#define IT_VBUS_OTG_F_MASK          BIT_PMIC(4U)
+#define IT_WAKEUP_R_MASK            BIT_PMIC(3U)
+#define IT_WAKEUP_F_MASK            BIT_PMIC(2U)
+#define IT_PONKEY_R_MASK            BIT_PMIC(1U)
+#define IT_PONKEY_F_MASK            BIT_PMIC(0U)
 
 /* Interrupt Mask for Register 2 (0x51 for latch) */
-#define IT_OVP_BOOST_MASK           BIT(7)
-#define IT_OCP_BOOST_MASK           BIT(6)
-#define IT_OCP_SWOUT_MASK           BIT(5)
-#define IT_OCP_OTG_MASK             BIT(4)
-#define IT_CURLIM_BUCK4_MASK        BIT(3)
-#define IT_CURLIM_BUCK3_MASK        BIT(2)
-#define IT_CURLIM_BUCK2_MASK        BIT(1)
-#define IT_CURLIM_BUCK1_MASK        BIT(0)
+#define IT_OVP_BOOST_MASK           BIT_PMIC(7U)
+#define IT_OCP_BOOST_MASK           BIT_PMIC(6U)
+#define IT_OCP_SWOUT_MASK           BIT_PMIC(5U)
+#define IT_OCP_OTG_MASK             BIT_PMIC(4U)
+#define IT_CURLIM_BUCK4_MASK        BIT_PMIC(3U)
+#define IT_CURLIM_BUCK3_MASK        BIT_PMIC(2U)
+#define IT_CURLIM_BUCK2_MASK        BIT_PMIC(1U)
+#define IT_CURLIM_BUCK1_MASK        BIT_PMIC(0U)
 
 /* Interrupt Mask for Register 3 (0x52 for latch) */
-#define IT_SHORT_SWOUT_MASK         BIT(7)
-#define IT_SHORT_SWOTG_MASK         BIT(6)
-#define IT_CURLIM_LDO6_MASK         BIT(5)
-#define IT_CURLIM_LDO5_MASK         BIT(4)
-#define IT_CURLIM_LDO4_MASK         BIT(3)
-#define IT_CURLIM_LDO3_MASK         BIT(2)
-#define IT_CURLIM_LDO2_MASK         BIT(1)
-#define IT_CURLIM_LDO1_MASK         BIT(0)
+#define IT_SHORT_SWOUT_MASK         BIT_PMIC(7U)
+#define IT_SHORT_SWOTG_MASK         BIT_PMIC(6U)
+#define IT_CURLIM_LDO6_MASK         BIT_PMIC(5U)
+#define IT_CURLIM_LDO5_MASK         BIT_PMIC(4U)
+#define IT_CURLIM_LDO4_MASK         BIT_PMIC(3U)
+#define IT_CURLIM_LDO3_MASK         BIT_PMIC(2U)
+#define IT_CURLIM_LDO2_MASK         BIT_PMIC(1U)
+#define IT_CURLIM_LDO1_MASK         BIT_PMIC(0U)
 
 /* Interrupt Mask for Register 4 (0x53 for latch) */
-#define IT_SWIN_R_MASK              BIT(7)
-#define IT_SWIN_F_MASK              BIT(6)
+#define IT_SWIN_R_MASK              BIT_PMIC(7U)
+#define IT_SWIN_F_MASK              BIT_PMIC(6U)
 /*  Reserved 1 */
 /*  Reserved 2 */
-#define IT_VINLOW_R_MASK            BIT(3)
-#define IT_VINLOW_F_MASK            BIT(2)
-#define IT_TWARN_R_MASK             BIT(1)
-#define IT_TWARN_F_MASK             BIT(0)
+#define IT_VINLOW_R_MASK            BIT_PMIC(3U)
+#define IT_VINLOW_F_MASK            BIT_PMIC(2U)
+#define IT_TWARN_R_MASK             BIT_PMIC(1U)
+#define IT_TWARN_F_MASK             BIT_PMIC(0U)
 
-#define PMIC_VERSION_ID             0x10
-
-#define NVM_SECTOR3_REGISTER_7      0x33
-//#define STPMU1_I2C_ADDRESS          ((NVM_SECTOR3_REGISTER_7 & 0x7F) << 1 )
+#define PMIC_VERSION_ID             0x10U
 
 /**
   * @}
@@ -312,6 +309,7 @@ void STPMU1_Regulator_Enable(PMIC_RegulId_TypeDef id);
 void STPMU1_Regulator_Disable(PMIC_RegulId_TypeDef id);
 uint8_t STPMU1_Is_Regulator_Enabled(PMIC_RegulId_TypeDef id);
 void STPMU1_Regulator_Voltage_Set(PMIC_RegulId_TypeDef id,uint16_t milivolts);
+void STPMU1_Sw_Reset(void);
 uint32_t BSP_PMIC_Init(void);
 uint32_t BSP_PMIC_DeInit(void);
 uint32_t BSP_PMIC_Is_Device_Ready(void);

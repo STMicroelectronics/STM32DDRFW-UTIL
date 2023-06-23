@@ -31,6 +31,8 @@
 #include "stm32mp13xx_disco_io.h"
 #endif
 
+#include "stdio.h"
+
 /** @addtogroup BSP
   * @{
   */
@@ -54,8 +56,8 @@ typedef void (* BSP_EXTI_LineCallback)(void);
 /** @brief STM32MP13XX DISCO BSP Driver version number V0.0.2
   */
 #define STM32MP13XX_DISCO_BSP_VERSION_MAIN   (0x00U) /*!< [31:24] main version */
-#define STM32MP13XX_DISCO_BSP_VERSION_SUB1   (0x00U) /*!< [23:16] sub1 version */
-#define STM32MP13XX_DISCO_BSP_VERSION_SUB2   (0x02U) /*!< [15:8]  sub2 version */
+#define STM32MP13XX_DISCO_BSP_VERSION_SUB1   (0x06U) /*!< [23:16] sub1 version */
+#define STM32MP13XX_DISCO_BSP_VERSION_SUB2   (0x00U) /*!< [15:8]  sub2 version */
 #define STM32MP13XX_DISCO_BSP_VERSION_RC     (0x00U) /*!< [7:0]  release candidate */
 #define STM32MP13XX_DISCO_BSP_VERSION         ((STM32MP13XX_DISCO_BSP_VERSION_MAIN << 24)\
                                              |(STM32MP13XX_DISCO_BSP_VERSION_SUB1 << 16)\
@@ -78,7 +80,7 @@ static GPIO_TypeDef* LED_PORT[LEDn] = {LED3_GPIO_PORT,
 #endif
                                       };
 
-static const uint32_t LED_PIN[LEDn] = {LED3_PIN,
+static const uint16_t LED_PIN[LEDn] = {LED3_PIN,
                                        LED4_PIN,
 #if defined (MCP_IOEXPANDER) /* need MCP IOEXPANDER usage for LED6 and LED7*/
                                        LED6_PIN,
@@ -97,13 +99,13 @@ static const uint16_t BUTTON_PIN[BUTTONn] = {WAKEUP_BUTTON_PIN,
                                              USER2_BUTTON_PIN,
                                              TAMPER_BUTTON_PIN};
 
-static const uint16_t BUTTON_IRQn[BUTTONn] = {WAKEUP_BUTTON_EXTI_IRQn,
+static const IRQn_Type BUTTON_IRQn[BUTTONn] = {WAKEUP_BUTTON_EXTI_IRQn,
                                               USER_BUTTON_EXTI_IRQn,
                                               USER2_BUTTON_EXTI_IRQn,
                                               TAMPER_BUTTON_EXTI_IRQn};
 
 #ifdef HAL_EXTI_MODULE_ENABLED
-EXTI_HandleTypeDef   hExtiButtonHandle[BUTTONn];
+static EXTI_HandleTypeDef   hExtiButtonHandle[BUTTONn];
 #endif
 
 #if (USE_BSP_COM_FEATURE == 1)
@@ -473,8 +475,8 @@ int32_t BSP_PB_Init(Button_TypeDef Button, ButtonMode_TypeDef ButtonMode)
     }
 #endif
 #if defined (CORE_CA7)
-        IRQ_SetPriority(BUTTON_IRQn[Button], BSP_BUTTON_IT_PRIORITY[Button]);
-        IRQ_Enable(BUTTON_IRQn[Button]);
+        IRQ_SetPriority((IRQn_ID_t)BUTTON_IRQn[Button], BSP_BUTTON_IT_PRIORITY[Button]);
+        IRQ_Enable((IRQn_ID_t)BUTTON_IRQn[Button]);
 #else
         HAL_NVIC_SetPriority((IRQn_Type)(BUTTON_IRQn[Button]), BSP_BUTTON_IT_PRIORITY[Button], 0x00);
         HAL_NVIC_EnableIRQ((IRQn_Type)(BUTTON_IRQn[Button]));
@@ -522,7 +524,7 @@ int32_t BSP_PB_DeInit(Button_TypeDef Button)
   }
 
 #if defined (CORE_CA7)
-  IRQ_Disable(BUTTON_IRQn[Button]);
+  IRQ_Disable((IRQn_ID_t)BUTTON_IRQn[Button]);
 #else
   HAL_NVIC_DisableIRQ((IRQn_Type)(BUTTON_IRQn[Button]));
 #endif
@@ -544,7 +546,7 @@ int32_t BSP_PB_DeInit(Button_TypeDef Button)
   *            @arg  BUTTON_USER2: User2 Push Button
   * @retval The Button GPIO pin value (GPIO_PIN_RESET = button pressed)
   */
-uint32_t BSP_PB_GetState(Button_TypeDef Button)
+int32_t BSP_PB_GetState(Button_TypeDef Button)
 {
   return (int32_t) HAL_GPIO_ReadPin(BUTTON_PORT[Button], BUTTON_PIN[Button]);
 }
@@ -629,7 +631,7 @@ int32_t BSP_COM_Init(COM_TypeDef COM, COM_InitTypeDef *COM_Init)
     }
 #endif
 
-    if(MX_UART4_Init(&hComHandle[COM], COM_Init) != HAL_OK)
+    if(MX_UART_Init(&hComHandle[COM], COM_Init) != HAL_OK)
     {
       ret = BSP_ERROR_PERIPH_FAILURE;
     }
@@ -678,7 +680,7 @@ int32_t BSP_COM_DeInit(COM_TypeDef COM)
   *                  configuration information for the specified USART peripheral.
   * @retval HAL error code
   */
-__weak HAL_StatusTypeDef MX_UART4_Init(UART_HandleTypeDef *huart, COM_InitTypeDef *COM_Init)
+__weak HAL_StatusTypeDef MX_UART_Init(UART_HandleTypeDef *huart, COM_InitTypeDef *COM_Init)
 {
   /* USART configuration */
  huart->Instance          = COM_USART[COM1];
@@ -815,7 +817,7 @@ int fgetc(FILE * f)
 {
   uint8_t ch = 0;
   HAL_UART_Receive(&hComHandle[COM_ActiveLogPort], (uint8_t *)&ch, 1, COM1_POLL_TIMEOUT);
-  return ch;
+  return (int)ch;
 }
 #endif /* USE_COM_LOG */
 
@@ -915,6 +917,7 @@ void BSP_PB_IRQHandler(Button_TypeDef Button)
   */
 static void COM1_MspInit(UART_HandleTypeDef *huart)
 {
+  UNUSED(huart);
   GPIO_InitTypeDef gpio_init_structure;
   /* Enable GPIO clock */
   COM1_TX_GPIO_CLK_ENABLE();
@@ -949,6 +952,8 @@ static void COM1_MspInit(UART_HandleTypeDef *huart)
   */
 static void COM1_MspDeInit(UART_HandleTypeDef *huart)
 {
+  UNUSED(huart);
+
   GPIO_InitTypeDef gpio_init_structure;
 
   /* COM GPIO pin configuration */

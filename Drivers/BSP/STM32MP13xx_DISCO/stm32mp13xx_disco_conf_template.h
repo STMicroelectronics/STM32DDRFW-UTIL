@@ -1,8 +1,10 @@
 /**
   ******************************************************************************
-  * @file    stm32mp13xx_disco_conf.h
+  * @file    stm32mp13xx_disco_conf_template.h
   * @author  MCD Application Team
   * @brief   configuration file.
+  *          This file should be copied to the application folder and renamed
+  *          to stm32mp13xx_disco_conf.h
   ******************************************************************************
   * @attention
   *
@@ -25,13 +27,13 @@
 #endif
 
 #include "stm32mp13xx_hal.h"
-
+#include "stm32mp_util_conf.h"
 
 /* Activation of Critical Section */
 #define USE_BSP_CRITICAL_SECTION           0U
 
 /* Activation of PMIC */
-#define USE_STPMIC1x                        1U
+#define USE_STPMIC1x                        UTIL_USE_PMIC
 
 /* Usage of COM feature */
 #define USE_BSP_COM_FEATURE                 1U

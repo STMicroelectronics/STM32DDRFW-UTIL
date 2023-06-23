@@ -45,7 +45,7 @@
   */
 void SystemPower_Config(void)
 {
-#if (MX_USE_PMIC == 0)
+#if (UTIL_USE_PMIC == 0)
   /* Nothing to do */
 #else
   /* PMIC initialization */

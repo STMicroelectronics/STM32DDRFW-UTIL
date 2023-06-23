@@ -43,14 +43,14 @@
 			<locationURI>PARENT-2-PROJECT_LOC/readme.txt</locationURI>
 		</link>
 		<link>
-			<name>Tool/ddr_tests.c</name>
+			<name>User/ddr_tests.c</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/Tool/Src/ddr_tests.c</locationURI>
+			<locationURI>PARENT-1-PROJECT_LOC/Src/ddr_tests.c</locationURI>
 		</link>
 		<link>
-			<name>Tool/ddr_tool.c</name>
+			<name>User/ddr_tool.c</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/Tool/Src/ddr_tool.c</locationURI>
+			<locationURI>PARENT-1-PROJECT_LOC/Src/ddr_tool.c</locationURI>
 		</link>
 		<link>
 			<name>User/main.c</name>
@@ -80,7 +80,7 @@
 		<link>
 			<name>Drivers/CMSIS/irq_ctrl_gic.c</name>
 			<type>1</type>
-			<locationURI>PARENT-3-PROJECT_LOC/Drivers/CMSIS/Core_A/Source/irq_ctrl_gic.c</locationURI>
+			<locationURI>PARENT-3-PROJECT_LOC/Drivers/CMSIS/MP1/Core_A/Source/irq_ctrl_gic.c</locationURI>
 		</link>
 		<link>
 			<name>Drivers/CMSIS/startup_stm32mp157cxx_ca7.c</name>

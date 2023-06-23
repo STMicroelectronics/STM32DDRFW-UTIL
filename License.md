@@ -5,3 +5,4 @@
 | STM32MP1xx HAL                  | STMicroelectronics                 | BSD-3-Clause                                     |
 | BSP for STM32MP1 Series MPUs    | STMicroelectronics                 | BSD-3-Clause                                     |
 | DDR_Tool                        | STMicroelectronics                 | BSD-3-Clause                                     |
+| imageheader                     | STMicroelectronics                 | BSD-3-Clause                                     |

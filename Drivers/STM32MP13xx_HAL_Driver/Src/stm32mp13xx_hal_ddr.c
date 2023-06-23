@@ -37,17 +37,17 @@
 
 #ifdef HAL_DDR_MODULE_ENABLED
 
-#include <errno.h>
 #include <stdbool.h>
 #ifdef DDR_INTERACTIVE
 #include <stdlib.h>
+#include <stdio.h>
 #include <ctype.h>
 #endif
 #include <string.h>
 
 #ifdef DDR_INTERACTIVE
-  #include "stm32mp_cubemx_conf.h"
-  #include "stm32mp_cubemx_ddr_conf.h"
+  #include "stm32mp_util_conf.h"
+  #include "stm32mp_util_ddr_conf.h"
 #else /* DDR_INTERACTIVE */
 #if defined DDR_TYPE_DDR3_4Gb
       #include "stm32mp13xx-ddr3-4Gb.h"
@@ -374,19 +374,19 @@ const char *base_name[] = {
   [BASE_DDRPHYC] = "phy",
 };
 
-#define DDR_DELAY_1_US                       1
-#define DDR_TIMEOUT_1_US                     1
-#define DDR_DELAY_2_US                       2 * DDR_DELAY_1_US
-#define DDR_DELAY_10_US                      10 * DDR_DELAY_1_US
+#define DDR_DELAY_1_US                       1U
+#define DDR_TIMEOUT_1_US                     1U
+#define DDR_DELAY_2_US                       2U * DDR_DELAY_1_US
+#define DDR_DELAY_10_US                      10U * DDR_DELAY_1_US
 #define DDR_DELAY_END_LOGIC_INIT_US          DDR_DELAY_2_US
 #define DDR_DELAY_PHY_INIT_US                DDR_DELAY_10_US
-#define DDR_TIMEOUT_10_US                    10 * DDR_TIMEOUT_1_US
-#define DDR_TIMEOUT_50_US                    50 * DDR_TIMEOUT_1_US
+#define DDR_TIMEOUT_10_US                    10U * DDR_TIMEOUT_1_US
+#define DDR_TIMEOUT_50_US                    50U * DDR_TIMEOUT_1_US
 #define DDR_TIMEOUT_500_US                   500 * DDR_TIMEOUT_1_US
-#define DDR_TIMEOUT_200_MS                   200000 * DDR_TIMEOUT_1_US
-#define DDR_TIMEOUT_1S                       1000000 * DDR_TIMEOUT_1_US
+#define DDR_TIMEOUT_200_MS                   200000U * DDR_TIMEOUT_1_US
+#define DDR_TIMEOUT_1S                       1000000U * DDR_TIMEOUT_1_US
 
-#define TIMESLOT_1US                         (__get_CNTFRQ() / 1000000)
+#define TIMESLOT_1US                         (__get_CNTFRQ() / 1000000U)
 
 #define DDRCTRL_MSTR_DATA_BUS_WIDTH_HALF     DDRCTRL_MSTR_DATA_BUS_WIDTH_0
 #define DDRCTRL_MSTR_DATA_BUS_WIDTH_QUARTER  DDRCTRL_MSTR_DATA_BUS_WIDTH_1
@@ -396,7 +396,7 @@ const char *base_name[] = {
 #define DDRCTRL_STAT_SELFREF_TYPE_ASR        (DDRCTRL_STAT_SELFREF_TYPE_0 | \
                                               DDRCTRL_STAT_SELFREF_TYPE_1)
 #define DDRCTRL_STAT_SELFREF_TYPE_SR         DDRCTRL_STAT_SELFREF_TYPE_1
-#define DDRCTRL_MRCTRL0_MR_TYPE_WRITE        0
+#define DDRCTRL_MRCTRL0_MR_TYPE_WRITE        0U
 #define DDRCTRL_MRCTRL0_MR_TYPE_READ         DDRCTRL_MRCTRL0_MR_TYPE
 #define DDRCTRL_MRCTRL0_MR_RANK_ALL          DDRCTRL_MRCTRL0_MR_RANK
 #define DDRCTRL_INIT0_SKIP_DRAM_INIT_NORMAL  DDRCTRL_INIT0_SKIP_DRAM_INIT_0
@@ -411,16 +411,16 @@ const char *base_name[] = {
                                               DDRCTRL_DBGCAM_DBG_LPR_Q_DEPTH | \
                                               DDRCTRL_DBGCAM_DBG_HPR_Q_DEPTH)
 
-#define DDR_BASE_ADDR                        0xC0000000
-#define DDR_MAX_SIZE                         0x40000000
+#define DDR_BASE_ADDR                        0xC0000000U
+#define DDR_MAX_SIZE                         0x40000000U
 #define DDR_PATTERN                          0xAAAAAAAAU
 #define DDR_ANTIPATTERN                      0x55555555U
-#define DDR_TRAINING_AREA_SIZE               64
+#define DDR_TRAINING_AREA_SIZE               64U
 
 #define RCC_DDRITFCR_DDRCKMOD_ASR1           RCC_DDRITFCR_DDRCKMOD_0
 #define RCC_DDRITFCR_DDRCKMOD_HSR1           RCC_DDRITFCR_DDRCKMOD_1
 
-#define BKPRAM_ZDATA_OFFSET                  0
+#define BKPRAM_ZDATA_OFFSET                  0U
 
 #define SCTLR_C_BIT                          (1U << 2)
 /**
@@ -1829,18 +1829,18 @@ pstat_failed:
  ******************************************************************************/
 static uint32_t ddr_test_rw_access(void)
 {
-  uint32_t saved_value = READ_REG(DDR_BASE_ADDR);
+  uint32_t saved_value = READ_REG(*(volatile uint32_t*)DDR_BASE_ADDR);
 
   WRITE_REG(*(volatile uint32_t*)DDR_BASE_ADDR, DDR_PATTERN);
 
-  if (READ_REG(DDR_BASE_ADDR) != DDR_PATTERN)
+  if (READ_REG(*(volatile uint32_t*)DDR_BASE_ADDR) != DDR_PATTERN)
   {
     return (uint32_t)DDR_BASE_ADDR;
   }
 
   WRITE_REG(*(volatile uint32_t*)DDR_BASE_ADDR, saved_value);
 
-  return 0;
+  return 0U;
 }
 
 /*******************************************************************************
@@ -1865,7 +1865,7 @@ static uint32_t ddr_test_data_bus(void)
     }
   }
 
-  return 0;
+  return 0U;
 }
 
 /*******************************************************************************
@@ -1932,7 +1932,7 @@ static uint32_t ddr_test_addr_bus(void)
               DDR_PATTERN);
   }
 
-  return 0;
+  return 0U;
 }
 
 /*******************************************************************************
@@ -2165,13 +2165,13 @@ static HAL_DDR_SelfRefreshModeTypeDef ddr_sr_read_mode(void)
   *         - DDRCTRL and DDRPHY configuration and initialization,
   *         - self-refresh mode setup,
   *         - data/addr tests execution after training.
-  * @param  DDR initialisation structure
+  * @param  iddr DDR initialisation structure
   * @retval None.
   */
 HAL_StatusTypeDef HAL_DDR_Init(DDR_InitTypeDef *iddr)
 {
   HAL_StatusTypeDef ret = HAL_OK;
-  int iret = -EINVAL;
+  int iret = -1;
   uint32_t ddr_reten;
   uint32_t pir;
   uint32_t uret;

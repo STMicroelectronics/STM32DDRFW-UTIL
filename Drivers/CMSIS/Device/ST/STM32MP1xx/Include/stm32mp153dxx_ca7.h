@@ -2378,8 +2378,8 @@ typedef struct
   __IO uint32_t CMP;      /*!< LPTIM Compare register,                             Address offset: 0x14 */
   __IO uint32_t ARR;      /*!< LPTIM Autoreload register,                          Address offset: 0x18 */
   __IO uint32_t CNT;      /*!< LPTIM Counter register,                             Address offset: 0x1C */
-  uint16_t  RESERVED1;    /*!< Reserved, 0x20                                                 */
-  __IO uint32_t CFGR2;    /*!< LPTIM Option register,                              Address offset: 0x24 */
+  uint32_t  RESERVED1;    /*!< Reserved, 0x20                                                 */
+  __IO uint32_t CFGR2;    /*!< LPTIM Configuration register 2,                     Address offset: 0x24 */
   uint32_t  RESERVED2[242];    /*!< Reserved, 0x28-0x3EC                                                */
   __IO uint32_t HWCFGR;   /*!< LPTIM HW configuration register,                    Address offset: 0x3F0 */
   __IO uint32_t VERR;     /*!< LPTIM version register,                             Address offset: 0x3F4 */
@@ -2416,17 +2416,13 @@ typedef struct
   __IO uint32_t CR2;    /*!< USART Control register 2,                 Address offset: 0x04 */
   __IO uint32_t CR3;    /*!< USART Control register 3,                 Address offset: 0x08 */
   __IO uint32_t BRR;    /*!< USART Baud rate register,                 Address offset: 0x0C */
-  __IO uint16_t GTPR;   /*!< USART Guard time and prescaler register,  Address offset: 0x10 */
-  uint16_t  RESERVED2;  /*!< Reserved, 0x12                                                 */
+  __IO uint32_t GTPR;   /*!< USART Guard time and prescaler register,  Address offset: 0x10 */
   __IO uint32_t RTOR;   /*!< USART Receiver Time Out register,         Address offset: 0x14 */
-  __IO uint16_t RQR;    /*!< USART Request register,                   Address offset: 0x18 */
-  uint16_t  RESERVED3;  /*!< Reserved, 0x1A                                                 */
+  __IO uint32_t RQR;    /*!< USART Request register,                   Address offset: 0x18 */
   __IO uint32_t ISR;    /*!< USART Interrupt and status register,      Address offset: 0x1C */
   __IO uint32_t ICR;    /*!< USART Interrupt flag Clear register,      Address offset: 0x20 */
-  __IO uint16_t RDR;    /*!< USART Receive Data register,              Address offset: 0x24 */
-  uint16_t  RESERVED4;  /*!< Reserved, 0x26                                                 */
-  __IO uint16_t TDR;    /*!< USART Transmit Data register,             Address offset: 0x28 */
-  uint16_t  RESERVED5;  /*!< Reserved, 0x2A                                                 */
+  __IO uint32_t RDR;    /*!< USART Receive Data register,              Address offset: 0x24 */
+  __IO uint32_t TDR;    /*!< USART Transmit Data register,             Address offset: 0x28 */
   __IO uint32_t PRESC;  /*!< USART clock Prescaler register,           Address offset: 0x2C */
   uint32_t  RESERVED6[239];  /*!< Reserved,                                    0x30 - 0x3E8 */
   __IO uint32_t HWCFGR2;  /*!< USART Configuration2 register,          Address offset: 0x3EC */
@@ -12410,8 +12406,10 @@ typedef struct
 #define ETH_MACPFR_PCF_Pos                  (6U)
 #define ETH_MACPFR_PCF_Msk                  (0x3UL << ETH_MACPFR_PCF_Pos)                        /*!< 0x000000C0 */
 #define ETH_MACPFR_PCF                      ETH_MACPFR_PCF_Msk                                  /*!< Pass Control Packets */
-#define ETH_MACPFR_PCF_0                    (0x1UL << ETH_MACPFR_PCF_Pos)                       /*!< 0x00000040 */
-#define ETH_MACPFR_PCF_1                    (0x2UL << ETH_MACPFR_PCF_Pos)                       /*!< 0x00000080 */
+#define ETH_MACPFR_PCF_BLOCKALL                 (0x0UL << ETH_MACPFR_PCF_Pos)                     /*!< 0x00000000 */
+#define ETH_MACPFR_PCF_FORWARDALLEXCEPTPA       (0x1UL << ETH_MACPFR_PCF_Pos)                     /*!< 0x00000010 */
+#define ETH_MACPFR_PCF_FORWARDALL               (0x2UL << ETH_MACPFR_PCF_Pos)                     /*!< 0x00000020 */
+#define ETH_MACPFR_PCF_FORWARDPASSEDADDRFILTER  (0x3UL << ETH_MACPFR_PCF_Pos)                     /*!< 0x00000030 */
 #define ETH_MACPFR_SAIF_Pos                 (8U)
 #define ETH_MACPFR_SAIF_Msk                 (0x1UL << ETH_MACPFR_SAIF_Pos)                       /*!< 0x00000100 */
 #define ETH_MACPFR_SAIF                     ETH_MACPFR_SAIF_Msk                                 /*!< SA Inverse Filtering */
@@ -12572,8 +12570,16 @@ typedef struct
 #define ETH_MACVTR_EVLS_Pos                 (21U)
 #define ETH_MACVTR_EVLS_Msk                 (0x3UL << ETH_MACVTR_EVLS_Pos)                       /*!< 0x00600000 */
 #define ETH_MACVTR_EVLS                     ETH_MACVTR_EVLS_Msk                                 /*!< Enable VLAN Tag Stripping on Receive */
-#define ETH_MACVTR_EVLS_0                   (0x1UL << ETH_MACVTR_EVLS_Pos)                  /*!< 0x00200000 */
-#define ETH_MACVTR_EVLS_1                   (0x2UL << ETH_MACVTR_EVLS_Pos)                  /*!< 0x00400000 */
+#define ETH_MACVTR_EVLS_DONOTSTRIP          ((uint32_t)0x00000000)                              /* Do not strip */
+#define ETH_MACVTR_EVLS_STRIPIFPASS_Pos     (21U)
+#define ETH_MACVTR_EVLS_STRIPIFPASS_Msk     (0x1UL << ETH_MACVTR_EVLS_STRIPIFPASS_Pos)          /*!< 0x00200000 */
+#define ETH_MACVTR_EVLS_STRIPIFPASS         ETH_MACVTR_EVLS_STRIPIFPASS_Msk                     /* Strip if VLAN filter passes */
+#define ETH_MACVTR_EVLS_STRIPIFFAILS_Pos    (22U)
+#define ETH_MACVTR_EVLS_STRIPIFFAILS_Msk    (0x1UL << ETH_MACVTR_EVLS_STRIPIFFAILS_Pos)         /*!< 0x00400000 */
+#define ETH_MACVTR_EVLS_STRIPIFFAILS        ETH_MACVTR_EVLS_STRIPIFFAILS_Msk                    /* Strip if VLAN filter fails */
+#define ETH_MACVTR_EVLS_ALWAYSSTRIP_Pos     (21U)
+#define ETH_MACVTR_EVLS_ALWAYSSTRIP_Msk     (0x3UL << ETH_MACVTR_EVLS_ALWAYSSTRIP_Pos)          /*!< 0x00600000 */
+#define ETH_MACVTR_EVLS_ALWAYSSTRIP         ETH_MACVTR_EVLS_ALWAYSSTRIP_Msk                     /* Always strip */
 #define ETH_MACVTR_EVLRXS_Pos               (24U)
 #define ETH_MACVTR_EVLRXS_Msk               (0x1UL << ETH_MACVTR_EVLRXS_Pos)                     /*!< 0x01000000 */
 #define ETH_MACVTR_EVLRXS                   ETH_MACVTR_EVLRXS_Msk                               /*!< Enable VLAN Tag in Rx status */
@@ -12589,8 +12595,16 @@ typedef struct
 #define ETH_MACVTR_EIVLS_Pos                (28U)
 #define ETH_MACVTR_EIVLS_Msk                (0x3UL << ETH_MACVTR_EIVLS_Pos)                      /*!< 0x30000000 */
 #define ETH_MACVTR_EIVLS                    ETH_MACVTR_EIVLS_Msk                                /*!< Enable Inner VLAN Tag Stripping on Receive */
-#define ETH_MACVTR_EIVLS_0                  (0x1UL << ETH_MACVTR_EIVLS_Pos)               /*!< 0x10000000 */
-#define ETH_MACVTR_EIVLS_1                  (0x2UL << ETH_MACVTR_EIVLS_Pos)               /*!< 0x20000000 */
+#define ETH_MACVTR_EIVLS_DONOTSTRIP         ((uint32_t)0x00000000)                              /* Do not strip */
+#define ETH_MACVTR_EIVLS_STRIPIFPASS_Pos    (28U)
+#define ETH_MACVTR_EIVLS_STRIPIFPASS_Msk    (0x1UL << ETH_MACVTR_EIVLS_STRIPIFPASS_Pos)         /*!< 0x10000000 */
+#define ETH_MACVTR_EIVLS_STRIPIFPASS        ETH_MACVTR_EIVLS_STRIPIFPASS_Msk                    /* Strip if VLAN filter passes */
+#define ETH_MACVTR_EIVLS_STRIPIFFAILS_Pos   (29U)
+#define ETH_MACVTR_EIVLS_STRIPIFFAILS_Msk   (0x1UL << ETH_MACVTR_EIVLS_STRIPIFFAILS_Pos)        /*!< 0x20000000 */
+#define ETH_MACVTR_EIVLS_STRIPIFFAILS       ETH_MACVTR_EIVLS_STRIPIFFAILS_Msk                   /* Strip if VLAN filter fails */
+#define ETH_MACVTR_EIVLS_ALWAYSSTRIP_Pos    (28U)
+#define ETH_MACVTR_EIVLS_ALWAYSSTRIP_Msk    (0x3UL << ETH_MACVTR_EIVLS_ALWAYSSTRIP_Pos)         /*!< 0x30000000 */
+#define ETH_MACVTR_EIVLS_ALWAYSSTRIP         ETH_MACVTR_EIVLS_ALWAYSSTRIP_Msk                   /* Always strip */
 #define ETH_MACVTR_EIVLRXS_Pos              (31U)
 #define ETH_MACVTR_EIVLRXS_Msk              (0x1UL << ETH_MACVTR_EIVLRXS_Pos)                    /*!< 0x80000000 */
 #define ETH_MACVTR_EIVLRXS                  ETH_MACVTR_EIVLRXS_Msk                              /*!< Enable Inner VLAN Tag in Rx Status */
@@ -12639,8 +12653,16 @@ typedef struct
 #define ETH_MACVIR_VLC_Pos                  (16U)
 #define ETH_MACVIR_VLC_Msk                  (0x3UL << ETH_MACVIR_VLC_Pos)                        /*!< 0x00030000 */
 #define ETH_MACVIR_VLC                      ETH_MACVIR_VLC_Msk                                  /*!< VLAN Tag Control in Transmit Packets */
-#define ETH_MACVIR_VLC_0                    (0x1UL << ETH_MACVIR_VLC_Pos)                    /*!< 0x00010000 */
-#define ETH_MACVIR_VLC_1                    (0x2UL << ETH_MACVIR_VLC_Pos)                    /*!< 0x00020000 */
+#define ETH_MACVIR_VLC_NOVLANTAG            ((uint32_t)0x00000000)                              /* No VLAN tag deletion, insertion, or replacement */
+#define ETH_MACVIR_VLC_VLANTAGDELETE_Pos    (16U)
+#define ETH_MACVIR_VLC_VLANTAGDELETE_Msk    (0x1UL << ETH_MACVIR_VLC_VLANTAGDELETE_Pos)         /*!< 0x00010000 */
+#define ETH_MACVIR_VLC_VLANTAGDELETE        ETH_MACVIR_VLC_VLANTAGDELETE_Msk                    /* VLAN tag deletion */
+#define ETH_MACVIR_VLC_VLANTAGINSERT_Pos    (17U)
+#define ETH_MACVIR_VLC_VLANTAGINSERT_Msk    (0x1UL << ETH_MACVIR_VLC_VLANTAGINSERT_Pos)         /*!< 0x00020000 */
+#define ETH_MACVIR_VLC_VLANTAGINSERT        ETH_MACVIR_VLC_VLANTAGINSERT_Msk                    /* VLAN tag insertion */
+#define ETH_MACVIR_VLC_VLANTAGREPLACE_Pos   (16U)
+#define ETH_MACVIR_VLC_VLANTAGREPLACE_Msk   (0x3UL << ETH_MACVIR_VLC_VLANTAGREPLACE_Pos)        /*!< 0x00030000 */
+#define ETH_MACVIR_VLC_VLANTAGREPLACE       ETH_MACVIR_VLC_VLANTAGREPLACE_Msk                   /* VLAN tag replacement */
 #define ETH_MACVIR_VLP_Pos                  (18U)
 #define ETH_MACVIR_VLP_Msk                  (0x1UL << ETH_MACVIR_VLP_Pos)                        /*!< 0x00040000 */
 #define ETH_MACVIR_VLP                      ETH_MACVIR_VLP_Msk                                  /*!< VLAN Priority Control */
@@ -13008,6 +13030,9 @@ typedef struct
 #define ETH_MACLCSR_LPITE_Pos               (20U)
 #define ETH_MACLCSR_LPITE_Msk               (0x1UL << ETH_MACLCSR_LPITE_Pos)                     /*!< 0x00100000 */
 #define ETH_MACLCSR_LPITE                   ETH_MACLCSR_LPITE_Msk                               /*!< LPI Timer Enable */
+#define ETH_MACLCSR_LPITCSE_Pos             (21U)
+#define ETH_MACLCSR_LPITCSE_Msk             (0x1UL << ETH_MACLCSR_LPITCSE_Pos)                   /*!< 0x00200000 */
+#define ETH_MACLCSR_LPITCSE                 ETH_MACLCSR_LPITCSE_Msk                             /* LPI Tx Clock Stop Enable */
 
 /**************  Bit definition for ETH_MACLTCR register  **************/
 #define ETH_MACLTCR_TWT_Pos                 (0U)
@@ -15582,9 +15607,14 @@ typedef struct
 #define ETH_MTLTXQ0OMR_TTC_Pos              (4U)
 #define ETH_MTLTXQ0OMR_TTC_Msk              (0x7UL << ETH_MTLTXQ0OMR_TTC_Pos)                    /*!< 0x00000070 */
 #define ETH_MTLTXQ0OMR_TTC                  ETH_MTLTXQ0OMR_TTC_Msk                              /*!< Transmit Threshold Control */
-#define ETH_MTLTXQ0OMR_TTC_0                (0x1UL << ETH_MTLTXQ0OMR_TTC_Pos)                   /*!< 0x00000010 */
-#define ETH_MTLTXQ0OMR_TTC_1                (0x2UL << ETH_MTLTXQ0OMR_TTC_Pos)                   /*!< 0x00000020 */
-#define ETH_MTLTXQ0OMR_TTC_2                (0x4UL << ETH_MTLTXQ0OMR_TTC_Pos)                   /*!< 0x00000040 */
+#define ETH_MTLTXQ0OMR_TTC_32BITS           (0x0UL << ETH_MTLTXQ0OMR_TTC_Pos)                    /*!< 0x00000000 */
+#define ETH_MTLTXQ0OMR_TTC_64BITS           (0x1UL << ETH_MTLTXQ0OMR_TTC_Pos)                    /*!< 0x00000010 */
+#define ETH_MTLTXQ0OMR_TTC_96BITS           (0x2UL << ETH_MTLTXQ0OMR_TTC_Pos)                    /*!< 0x00000020 */
+#define ETH_MTLTXQ0OMR_TTC_128BITS          (0x3UL << ETH_MTLTXQ0OMR_TTC_Pos)                    /*!< 0x00000030 */
+#define ETH_MTLTXQ0OMR_TTC_192BITS          (0x4UL << ETH_MTLTXQ0OMR_TTC_Pos)                    /*!< 0x00000040 */
+#define ETH_MTLTXQ0OMR_TTC_256BITS          (0x5UL << ETH_MTLTXQ0OMR_TTC_Pos)                    /*!< 0x00000050 */
+#define ETH_MTLTXQ0OMR_TTC_384BITS          (0x6UL << ETH_MTLTXQ0OMR_TTC_Pos)                    /*!< 0x00000060 */
+#define ETH_MTLTXQ0OMR_TTC_512BITS          (0x7UL << ETH_MTLTXQ0OMR_TTC_Pos)                    /*!< 0x00000070 */
 #define ETH_MTLTXQ0OMR_TQS_Pos              (16U)
 #define ETH_MTLTXQ0OMR_TQS_Msk              (0x1FFUL << ETH_MTLTXQ0OMR_TQS_Pos)                  /*!< 0x01FF0000 */
 #define ETH_MTLTXQ0OMR_TQS                  ETH_MTLTXQ0OMR_TQS_Msk                              /*!< Transmit Queue Size */
@@ -15701,8 +15731,10 @@ typedef struct
 #define ETH_MTLRXQ0OMR_RTC_Pos              (0U)
 #define ETH_MTLRXQ0OMR_RTC_Msk              (0x3UL << ETH_MTLRXQ0OMR_RTC_Pos)                    /*!< 0x00000003 */
 #define ETH_MTLRXQ0OMR_RTC                  ETH_MTLRXQ0OMR_RTC_Msk                              /*!< Receive Queue Threshold Control */
-#define ETH_MTLRXQ0OMR_RTC_0                (0x1UL << ETH_MTLRXQ0OMR_RTC_Pos)                    /*!< 0x00000001 */
-#define ETH_MTLRXQ0OMR_RTC_1                (0x2UL << ETH_MTLRXQ0OMR_RTC_Pos)                    /*!< 0x00000002 */
+#define ETH_MTLRXQ0OMR_RTC_64BITS           (0x0UL << ETH_MTLRXQ0OMR_RTC_Pos)                    /*!< 0x00000000 */
+#define ETH_MTLRXQ0OMR_RTC_32BITS           (0x1UL << ETH_MTLRXQ0OMR_RTC_Pos)                    /*!< 0x00000001 */
+#define ETH_MTLRXQ0OMR_RTC_96BITS           (0x2UL << ETH_MTLRXQ0OMR_RTC_Pos)                    /*!< 0x00000002 */
+#define ETH_MTLRXQ0OMR_RTC_128BITS          (0x3UL << ETH_MTLRXQ0OMR_RTC_Pos)                    /*!< 0x00000003 */
 #define ETH_MTLRXQ0OMR_FUP_Pos              (3U)
 #define ETH_MTLRXQ0OMR_FUP_Msk              (0x1UL << ETH_MTLRXQ0OMR_FUP_Pos)                    /*!< 0x00000008 */
 #define ETH_MTLRXQ0OMR_FUP                  ETH_MTLRXQ0OMR_FUP_Msk                              /*!< Forward Undersized Good Packets */
@@ -16204,15 +16236,12 @@ typedef struct
 #define ETH_DMAMR_TAA_0                     (0x1UL << ETH_DMAMR_TAA_Pos)                         /*!< 0x00000004 */
 #define ETH_DMAMR_TAA_1                     (0x2UL << ETH_DMAMR_TAA_Pos)                         /*!< 0x00000008 */
 #define ETH_DMAMR_TAA_2                     (0x4UL << ETH_DMAMR_TAA_Pos)                        /*!< 0x00000010 */
+#define ETH_DMAMR_DSPW_Pos                  (8)
+#define ETH_DMAMR_DSPW_Msk                  (0x1UL << ETH_DMAMR_DSPW_Pos)                        /*!< 0x00000100 */
+#define ETH_DMAMR_DSPW                      ETH_DMAMR_DSPW_Msk                                  /*!< Descriptor Posted Write */
 #define ETH_DMAMR_TXPR_Pos                  (11U)
 #define ETH_DMAMR_TXPR_Msk                  (0x1UL << ETH_DMAMR_TXPR_Pos)                        /*!< 0x00000800 */
 #define ETH_DMAMR_TXPR                      ETH_DMAMR_TXPR_Msk                                  /*!< Transmit priority */
-#define ETH_DMAMR_PR_Pos                    (12U)
-#define ETH_DMAMR_PR_Msk                    (0x7UL << ETH_DMAMR_PR_Pos)                          /*!< 0x00007000 */
-#define ETH_DMAMR_PR                        ETH_DMAMR_PR_Msk                                    /*!< Priority ratio */
-#define ETH_DMAMR_PR_0                      (0x1UL << ETH_DMAMR_PR_Pos)                       /*!< 0x00001000 */
-#define ETH_DMAMR_PR_1                      (0x2UL << ETH_DMAMR_PR_Pos)                       /*!< 0x00002000 */
-#define ETH_DMAMR_PR_2                      (0x4UL << ETH_DMAMR_PR_Pos)                       /*!< 0x00004000 */
 #define ETH_DMAMR_INTM_Pos                  (16U)
 #define ETH_DMAMR_INTM_Msk                  (0x3UL << ETH_DMAMR_INTM_Pos)                        /*!< 0x00030000 */
 #define ETH_DMAMR_INTM                      ETH_DMAMR_INTM_Msk                                  /*!< Interrupt Mode */
@@ -16436,6 +16465,9 @@ typedef struct
 #define ETH_DMAC0TXCR_TSE_Pos               (12U)
 #define ETH_DMAC0TXCR_TSE_Msk               (0x1UL << ETH_DMAC0TXCR_TSE_Pos)                     /*!< 0x00001000 */
 #define ETH_DMAC0TXCR_TSE                   ETH_DMAC0TXCR_TSE_Msk                               /*!< TCP Segmentation Enabled */
+#define ETH_DMAC0TXCR_IPBL_Pos              (15U)
+#define ETH_DMAC0TXCR_IPBL_Msk              (0x1UL << ETH_DMAC0TXCR_IPBL_Pos)                     /*!< 0x00008000 */
+#define ETH_DMAC0TXCR_IPBL                  ETH_DMAC0TXCR_IPBL_Msk                               /*!< Ignore PBL Requirement */
 #define ETH_DMAC0TXCR_TXPBL_Pos             (16U)
 #define ETH_DMAC0TXCR_TXPBL_Msk             (0x3FUL << ETH_DMAC0TXCR_TXPBL_Pos)                  /*!< 0x003F0000 */
 #define ETH_DMAC0TXCR_TXPBL                 ETH_DMAC0TXCR_TXPBL_Msk                             /*!< Transmit Programmable Burst Length */
@@ -37948,8 +37980,8 @@ typedef struct
 /****************************** IWDG Instances ********************************/
 #define IS_IWDG_ALL_INSTANCE(INSTANCE)  (((INSTANCE) == IWDG1) || ((INSTANCE) == IWDG2))
 
-/****************************** USB Instances ********************************/
-#define IS_USB_ALL_INSTANCE(INSTANCE) ((INSTANCE) == USB)
+/****************************** USB PCD Instances ********************************/
+#define IS_PCD_ALL_INSTANCE(INSTANCE) ((INSTANCE) == USB_OTG_HS)
 
 /****************************** WWDG Instances ********************************/
 

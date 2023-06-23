@@ -207,12 +207,6 @@ typedef struct __I2C_HandleTypeDef
 
   DMA_HandleTypeDef          *hdmarx;        /*!< I2C Rx DMA handle parameters              */
 
-#ifdef HAL_MDMA_MODULE_ENABLED
-  MDMA_HandleTypeDef         *hmdmatx;       /*!< I2C Tx MDMA handle parameters             */
-
-  MDMA_HandleTypeDef         *hmdmarx;       /*!< I2C Rx MDMA handle parameters             */
-#endif /* HAL_MDMA_MODULE_ENABLED */
-
   HAL_LockTypeDef            Lock;           /*!< I2C locking object                        */
 
   __IO HAL_I2C_StateTypeDef  State;          /*!< I2C communication state                   */
@@ -222,6 +216,10 @@ typedef struct __I2C_HandleTypeDef
   __IO uint32_t              ErrorCode;      /*!< I2C Error code                            */
 
   __IO uint32_t              AddrEventCount; /*!< I2C Address Event counter                 */
+
+  __IO uint32_t              Devaddress;     /*!< I2C Target device address                 */
+
+  __IO uint32_t              Memaddress;     /*!< I2C Target memory address                 */
 
 #if (USE_HAL_I2C_REGISTER_CALLBACKS == 1)
   void (* MasterTxCpltCallback)(struct __I2C_HandleTypeDef *hi2c);

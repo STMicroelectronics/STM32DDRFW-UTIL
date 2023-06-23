@@ -532,7 +532,7 @@ int32_t BSP_COM_Init(COM_TypeDef COM, COM_InitTypeDef *COM_Init)
     }
 #endif
 
-    if(MX_UART4_Init(&hComHandle[COM], COM_Init) != HAL_OK)
+    if(MX_UART_Init(&hComHandle[COM], COM_Init) != HAL_OK)
     {
       ret = BSP_ERROR_PERIPH_FAILURE;
     }
@@ -581,7 +581,7 @@ int32_t BSP_COM_DeInit(COM_TypeDef COM)
   *                  configuration information for the specified USART peripheral.
   * @retval HAL error code
   */
-__weak HAL_StatusTypeDef MX_UART4_Init(UART_HandleTypeDef *huart, COM_InitTypeDef *COM_Init)
+__weak HAL_StatusTypeDef MX_UART_Init(UART_HandleTypeDef *huart, COM_InitTypeDef *COM_Init)
 {
   /* USART configuration */
  huart->Instance          = COM_USART[COM1];

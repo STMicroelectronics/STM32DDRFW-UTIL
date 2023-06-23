@@ -68,16 +68,16 @@ typedef enum
   BUTTONn
 }Button_TypeDef;
 
-typedef enum
-{
-  BUTTON_MODE_GPIO = 0,
-  BUTTON_MODE_EXTI = 1
+typedef enum 
+{  
+  BUTTON_MODE_GPIO = 0U,
+  BUTTON_MODE_EXTI = 1U
 }ButtonMode_TypeDef;
 
 #if (USE_BSP_COM_FEATURE == 1)
 typedef enum
 {
-  COM1 = 0,
+  COM1 = 0U,
   COMn
 }COM_TypeDef;
 
@@ -291,13 +291,13 @@ int32_t         BSP_LED_GetState (Led_TypeDef Led);
   */
 int32_t         BSP_PB_Init(Button_TypeDef Button, ButtonMode_TypeDef ButtonMode);
 int32_t         BSP_PB_DeInit(Button_TypeDef Button);
-uint32_t         BSP_PB_GetState(Button_TypeDef Button);
-void             BSP_PB_Callback(Button_TypeDef Button);
-void             BSP_PB_IRQHandler(Button_TypeDef Button);
-void             BSP_PB_WAKEUP_EXTI_LINE_0_IRQHandler(void);
-void             BSP_PB_USER_EXTI_LINE_14_IRQHandler(void);
-void             BSP_PB_USER2_EXTI_LINE_13_IRQHandler(void);
-void             BSP_PB_TAMPER_EXTI_LINE_6_IRQHandler(void);
+int32_t         BSP_PB_GetState(Button_TypeDef Button);
+void            BSP_PB_Callback(Button_TypeDef Button);
+void            BSP_PB_IRQHandler(Button_TypeDef Button);
+void            BSP_PB_WAKEUP_EXTI_LINE_0_IRQHandler(void);
+void            BSP_PB_USER_EXTI_LINE_14_IRQHandler(void);
+void            BSP_PB_USER2_EXTI_LINE_13_IRQHandler(void);
+void            BSP_PB_TAMPER_EXTI_LINE_6_IRQHandler(void);
 /**
   * @}
   */
@@ -312,7 +312,7 @@ int32_t         BSP_COM_DeInit(COM_TypeDef COM);
 #if( USE_COM_LOG == 1)
 int32_t  BSP_COM_SelectLogPort (COM_TypeDef COM);
 #endif
-HAL_StatusTypeDef MX_UART4_Init(UART_HandleTypeDef *huart, COM_InitTypeDef *COM_Init) ;
+HAL_StatusTypeDef MX_UART_Init(UART_HandleTypeDef *huart, COM_InitTypeDef *COM_Init) ;
 #if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
 int32_t BSP_COM_RegisterDefaultMspCallbacks(COM_TypeDef COM);
 int32_t BSP_COM_RegisterMspCallbacks(COM_TypeDef COM, BSP_COM_Cb_t *Callback);

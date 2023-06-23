@@ -8,7 +8,7 @@ This document describes:
 
 ## 1 STM32DDRFW-UTIL Architecture and Design
 
-STM32DDRFW-UTIL v1.0 applies to STM32MP1 series only (STM32MP15xx and STM32MP13xx).
+STM32DDRFW-UTIL v1.0.1 applies to STM32MP1 series only (STM32MP15xx and STM32MP13xx).
 
 ### 1.1 Package overview
 
@@ -17,13 +17,13 @@ STM32DDRFW-UTIL firmware package has the following structure:
 ![](_htmresc/Package_structure.png "Package structure")
 
 STM32DDRFW-UTIL firmware is a software package containing multiple STM32CubeIDE projects applicable for all STM32 products with a DDR which includes:
-- BSP, CMSIS and HAL drivers for all applicable STM32MPxxx series
+- BSP, CMSIS and HAL drivers for all applicable STM32MPxxx series.
 - DDR_Tool full source code with:
-   - Common directory with general purpose content
-   - Tool directory with tool core and tests
-   - STM32CubeIDE Projects for all ST supported boards
+   - Common directory with general purpose content.
+   - STM32CubeIDE Projects for all ST supported boards.
 - Binaries for all supported ST boards with BootROM image header to be programmed directly into SDCARD or loaded via STM32CubeProgramer without using STM32CubeIDE tool.
-- Readme.txt document for help
+- Imageheader package to generate stm32 files with STM32CubeIDE.
+- Test Report of all applicable STM32MPxxx series.
 
 ### 1.2 Source code organisation
 
@@ -50,30 +50,30 @@ The HAL driver APIs (in stm32mpxxxx_hal_ddr.c file) provides the functions allow
 
 |  API name                    |       Description      |
 |------------------------------|------------------------|
-|**HAL_DDR_Init**   |<ul><li>**brief**<br>DDR init sequence, including <br>- reset/clock/power management (i.e. access to other IPs)<br>- DT information getting<br>- DDRCTRL and DDRPHY configuration and initialization<br>- self-refresh mode setup<br>- data/addr tests execution after training</li><li>**param**<br>*iddr* structure for DDR initialization settings allowing to define/retrieve some system global features.</li>***Note:*** *In STM32DDRFW-UTIL firmware, the low power mechanism is not used, so all parameters can be set to null or false.*<br><li>**retval** None</li></ul>|
-|**HAL_DDR_MspInit**|<ul><li>**brief**<br>board-specific DDR power initialization if any<br>***Note:*** *Unused in STM32DDRFW-UTIL firmware*<br></li><li>**param**<br>*type* DDR type</li><li>**retval** None</li></ul>|
+|**HAL_DDR_Init**   |<ul><li>**brief**<br>DDR init sequence, including <br>- reset/clock/power management (i.e. access to other IPs)<br>- DT information getting<br>- DDRCTRL and DDRPHY configuration and initialization<br>- self-refresh mode setup<br>- data/addr tests execution after training.</li><li>**param**<br>*iddr* structure for DDR initialization settings allowing to define/retrieve some system global features.</li>***Note:*** *In STM32DDRFW-UTIL firmware, the low power mechanism is not used, so all parameters can be set to null or false.*<br><li>**retval** HAL status.</li></ul>|
+|**HAL_DDR_MspInit**|<ul><li>**brief**<br>board-specific DDR power initialization if any.<br>***Note:*** *Only used in STM32DDRFW-UTIL firmware if PMIC (power management IC) is implemented on board.*<br></li><li>**param**<br>*type* DDR type.</li><li>**retval** 0 if OK.</li></ul>|
 
 <br>
 
 |  API name in DDR<br>interactive mode only  |       Description      |
 |--------------------------------------------|------------------------|
-|**HAL_DDR_ASS_Set_Clksrc**|<ul><li>**brief**<br>Set AXI Sub-System Clock Source<br>***Note:*** *In STM32DDRFW-UTIL firmware, this function is used to switch AXI clock source to a different source, in order to change PLL2 rate when changing DDR frequency*</li><li>**param**<br>*clksrc* AXI Sub-System clock source</li><li>**retval** HAL status</li></ul>|
-|**HAL_DDR_Interactive**   |<ul><li>**brief**<br>Set DDR step and run tool command.<br>User function implemented in ddr_tool.c</li><li>**param**<br>*step* DDR Interactive mode step</li><li>**retval** false or STEP_DDR_RESET</li></ul>|
-|**HAL_DDR_Dump_Param**    |<ul><li>**brief**<br>Prints input configuration parameters to be set for all DDR registers. This function will print the register value from the input configuration parameters provided in the source code and used to initialize the DDR at start.</li><li>**param**<br>*config* static DDR configuration used to initialize the DDR name register name (if NULL, all registers are printed out)</li><li>**retval** HAL status</li></ul>|
-|**HAL_DDR_Dump_Reg**      |<ul><li>**brief**<br>Dump the DDR register value. This function will print the actual register value and format the output print if save parameter is true (to be used after DDRSS initialization in DDR_READY step)</li><li>**param**<br>*name* register name (if NULL, all registers are printed out) save indicates if the output print has to be formatted with “#define …” (true) or not</li><li>**retval** HAL status</li></ul>|
-|**HAL_DDR_Edit_Param**    |<ul><li>**brief**<br>Edit input parameter value. This function allows to change the DDR configuration parameters before initialization in DDR_RESET step</li><li>**param**<br>*name* register name<br>*string* new parameter value</li><li>**retval** None</li></ul>|
-|**HAL_DDR_Edit_Reg**      |<ul><li>**brief**<br>Edit DDR register value. This function allows to change DDR settings after DDR_CTRL_INIT_DONE step for DDRCTRL registers and after DDR_PHY_INIT_DONE step for DDRPHY registers </li><li>**param**<br>*name* register name<br>*string* new parameter value</li><li>**retval** None</li></ul>|
+|**HAL_DDR_ASS_Set_Clksrc**|<ul><li>**brief**<br>Set AXI Sub-System Clock Source.<br>***Note:*** *In STM32DDRFW-UTIL firmware, this function is used to switch AXI clock source to a different source, in order to change PLL2 rate when changing DDR frequency.*</li><li>**param**<br>*clksrc* AXI Sub-System clock source.</li><li>**retval** HAL status.</li></ul>|
++|**HAL_DDR_Interactive**   |<ul><li>**brief**<br>Set DDR step and run tool command.<br>User function implemented in ddr_tool.c</li><li>**param**<br>*step* DDR Interactive mode step.</li><li>**retval** boolean.</li></ul>|
++|**HAL_DDR_Dump_Param**    |<ul><li>**brief**<br>Prints input configuration parameters to be set for all DDR settings. This function will print the setting value from the input configuration parameters provided in the source code and used to initialize the DDR at start.</li><li>**param**<br>*config* static DDR configuration used to initialize the DDR setting name (if NULL, all settings are printed out).</li><li>**retval** HAL status.</li></ul>|
++|**HAL_DDR_Dump_Reg**      |<ul><li>**brief**<br>Dump the DDR setting value. This function will print the actual setting value and format the output print if save parameter is true (to be used after DDR initialization in DDR_READY step).</li><li>**param**<br>*name* setting name (if NULL, all settings are printed out) save indicates if the output print has to be formatted with “#define …” (true) or not.</li><li>**retval** HAL status.</li></ul>|
++|**HAL_DDR_Edit_Param**    |<ul><li>**brief**<br>Edit input parameter value. This function allows to change the DDR configuration parameters before initialization in DDR_RESET step.</li><li>**param**<br>*name* setting name.<br>*string* new parameter value.</li><li>**retval** None.</li></ul>|
++|**HAL_DDR_Edit_Reg**      |<ul><li>**brief**<br>Edit DDR setting value. This function allows to change DDR settings after DDR_CTRL_INIT_DONE step for DDRC registers and after DDR_PHY_INIT_DONE step for DDRPHY user input parameters </li><li>**param**<br>*name* setting name<br>*string* new parameter value</li><li>**retval** None.</li></ul>|
 
 #### 1.3.2 DDR Interactive mode
 
 This mode enables a special way of running the DDR initialization in which we can move from one initialization step to another (forward and backward). A set of inline commands are available to set the DDR initialization step and to launch DDR Tool functionalities and tests.
 
-DDR interactive mode uses 5 steps to initialize the DDR controller and the PHY (including the "Mode Register" 0-3 sent to DDR during initialization) with parameters found in *stm32mp_cubemx_ddr_conf.h*:
+DDR interactive mode uses 5 steps to initialize the DDR controller and the PHY with parameters found in *stm32mp_util_ddr_conf.h*:
 
 ![](_htmresc/DDR_interactive_steps.png  "DDR interactive steps")
 
 ***Note:***
-*stm32mp_cubemx_ddr_conf.h provides each register value for DDR controller and PHY. To set the initial DDR configuration parameters in stm32mp_cubemx_ddr_conf.h, templates are provided for each DDR type and it is necessary to have a good knowledge of the DDR SDRAM datasheet to complete the template and provide the first register values (See §1.3.3.3 Customization).*
+*stm32mp_util_ddr_conf.h provides each register value for DDR controller and PHY. To set the initial DDR configuration parameters in stm32mp_util_ddr_conf.h, templates are provided for each DDR type and it is necessary to have a good knowledge of the DDR SDRAM datasheet to complete the template and provide the first register values (See §1.3.3.3 Customization).*
 
 #### 1.3.3 DDR configuration in STM32DDRFW-UTIL package
 
@@ -90,20 +90,20 @@ These are the two main STM32CubeIDE configuration files:
 
   Among the series of flags, some of them are important for the DDR Tool:
 - ***DDR_INTERACTIVE*** is mandatory to enable the DDR interactive mode
-- ***DDR_TYPE_X*** is also needed in order to determine the DDR type and its density, and to consider the corresponding setting template (for example, *DDR_TYPE_DDR3_4Gb* will apply settings from *stm32mp13xx-cubemx-ddr3-4Gb-template.h* in STM32MP135C-DK project). See more details in *§1.3.3.3 Customization*.
+- ***DDR_TYPE_X*** is also needed in order to determine the DDR type and its density, and to consider the corresponding setting template (for example, *DDR_TYPE_DDR3_4Gb* will apply settings from *stm32mp13xx-ddr3-4Gb-template.h* in STM32MP135C-DK project). See more details in *§1.3.3.3 Customization*.
 - ***NO_CACHE_USE**** and ***NO_MMU_USE*** are set by default to ensure real DDR device access for first tests.
 
 ##### 1.3.3.3 Customization
 
 The source code of STM32CubeIDE projects for ST boards is provided as example in STM32DDRFW-UTIL firmware package. Each project can be adapted to fit with customized board.
 Only two files need to be adapted:
-- ***stm32mp_cubemx_conf.h***
-This file contains clock related definitions, UART related configuration and PMIC related configuration (if any).
-- ***stm32mp_cubemx_ddr_conf.h***
-This file includes all the DDR settings from template file, depending on the DDR_TYPE_X flag. All known board templates are present in each project, as a starting point.
+- ***stm32mp_util_conf.h***
+This file contains UART, PMIC (if any) and PLL2 related configurations, including instance number, pin control and parameters. A specific definition determines if PMIC is active or not on the board.
+- ***stm32mp_util_ddr_conf.h***
+This file includes all the DDR settings from template file, depending on flags defined in STM32CubeIDE project (See *§1.3.3.2 Flags*). All known board templates are present in each project, as a starting point.
 
 **e.g.:**
-In STM32MP135C-DK project, *stm32mp_cubemx_ddr_conf.h* includes *stm32mp13xx-cubemx-ddr3-4Gb-template.h* for STM32MP135C DDR3 4Gb configuration. The file contains all the definitions of DDRCTRL and DDRPHY parameters for this specific type of DDR:
+In STM32MP135C-DK project, *stm32mp_util_ddr_conf.h* includes *stm32mp13xx-ddr3-4Gb-template.h* for STM32MP135C DDR3 4Gb configuration. The file contains all the definitions of DDRCTRL and DDRPHY parameters for this specific type of DDR:
 
 ```
 /**
@@ -288,7 +288,7 @@ The following table describes all the available commands with
 
 ***Note:***
 
-- *The "param" command is a simple way to test the modified settings, as it modifies the input parameters ('param' read from stm32mp_cubemx_ddr_conf.h). It is recommended to execute this command at step 0. The modified values are applied at the correct DDR steps.*
+- *The "param" command is a simple way to test the modified settings, as it modifies the input parameters ('param' read from stm32mp_util_ddr_conf.h). It is recommended to execute this command at step 0. The modified values are applied at the correct DDR steps.*
 - *The "print" and "edit" commands directly access the CTRL and PHY registers, so the values can be overridden by the input parameters when the driver executes the initialization steps. These commands are used for detailed debug of the DDR initialization.*
 
 ##### 2.3.1.2 Command examples

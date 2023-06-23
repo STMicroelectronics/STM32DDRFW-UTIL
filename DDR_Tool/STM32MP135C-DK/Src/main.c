@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2019 STMicroelectronics.
+  * Copyright (c) 2019-2023 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -18,7 +18,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "stm32mp_cubemx_conf.h"
+#include "stm32mp_util_conf.h"
 
 /** @addtogroup STM32MP1xx_HAL_Examples
   * @{
@@ -132,13 +132,13 @@ void SystemClock_Config(void)
 
   RCC_OscInitStructure.PLL2.PLLState = RCC_PLL_ON;
   RCC_OscInitStructure.PLL2.PLLSource = RCC_PLL12SOURCE_HSE;
-  RCC_OscInitStructure.PLL2.PLLM = MX_PLL2_M;
-  RCC_OscInitStructure.PLL2.PLLN = MX_PLL2_N;
-  RCC_OscInitStructure.PLL2.PLLP = MX_PLL2_P;
-  RCC_OscInitStructure.PLL2.PLLQ = MX_PLL2_Q;
-  RCC_OscInitStructure.PLL2.PLLR = MX_PLL2_R;
-  RCC_OscInitStructure.PLL2.PLLFRACV = MX_PLL2_FRACV;
-  RCC_OscInitStructure.PLL2.PLLMODE = MX_PLL2_MODE;
+  RCC_OscInitStructure.PLL2.PLLM = UTIL_PLL2_M;
+  RCC_OscInitStructure.PLL2.PLLN = UTIL_PLL2_N;
+  RCC_OscInitStructure.PLL2.PLLP = UTIL_PLL2_P;
+  RCC_OscInitStructure.PLL2.PLLQ = UTIL_PLL2_Q;
+  RCC_OscInitStructure.PLL2.PLLR = UTIL_PLL2_R;
+  RCC_OscInitStructure.PLL2.PLLFRACV = UTIL_PLL2_FRACV;
+  RCC_OscInitStructure.PLL2.PLLMODE = UTIL_PLL2_MODE;
 
   RCC_OscInitStructure.PLL3.PLLState = RCC_PLL_NONE;
   RCC_OscInitStructure.PLL4.PLLState = RCC_PLL_NONE;

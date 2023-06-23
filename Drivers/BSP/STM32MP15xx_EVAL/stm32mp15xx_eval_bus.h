@@ -29,6 +29,7 @@
  /* Includes ------------------------------------------------------------------*/
 #include "stm32mp15xx_eval_conf.h"
 #include "stm32mp15xx_eval_errno.h"
+#include "stm32mp_util_conf.h"
 
 /** @addtogroup BSP
   * @{
@@ -68,45 +69,196 @@
 /* User can use this section to tailor I2Cx/I2Cx instance used and associated 
    resources */
 
- /* Definition for I2C2 clock resources */
- #define EVAL_I2C2                             I2C2
- #define EVAL_I2C2_CLK_ENABLE()                __HAL_RCC_I2C2_CLK_ENABLE()
- #define EVAL_I2C2_CLK_DISABLE()               __HAL_RCC_I2C2_CLK_DISABLE()
- #define EVAL_I2C2_GPIO_CLK_ENABLE()           __HAL_RCC_GPIOH_CLK_ENABLE()
- #define EVAL_I2C2_GPIO_CLK_DISABLE()          __HAL_RCC_GPIOH_CLK_DISABLE()
+#if (UTIL_USE_PMIC)
+  /* Definition for I2C clock resources */
+  #if (UTIL_PMIC_I2C_PORT == UTIL_I2C1)
+    #define EVAL_I2C                             I2C1
+    #define EVAL_I2C_CLK_ENABLE()                __HAL_RCC_I2C1_CLK_ENABLE()
+    #define EVAL_I2C_CLK_DISABLE()               __HAL_RCC_I2C1_CLK_DISABLE()
+    #define EVAL_I2C_FORCE_RESET()               __HAL_RCC_I2C1_FORCE_RESET()
+    #define EVAL_I2C_RELEASE_RESET()             __HAL_RCC_I2C1_RELEASE_RESET()
+    #define EVAL_I2C_EV_IRQn                     I2C1_EV_IRQn
+    #define EVAL_I2C_ER_IRQn                     I2C1_ER_IRQn
+  #elif (UTIL_PMIC_I2C_PORT == UTIL_I2C2)
+    #define EVAL_I2C                             I2C2
+    #define EVAL_I2C_CLK_ENABLE()                __HAL_RCC_I2C2_CLK_ENABLE()
+    #define EVAL_I2C_CLK_DISABLE()               __HAL_RCC_I2C2_CLK_DISABLE()
+    #define EVAL_I2C_FORCE_RESET()               __HAL_RCC_I2C2_FORCE_RESET()
+    #define EVAL_I2C_RELEASE_RESET()             __HAL_RCC_I2C2_RELEASE_RESET()
+    #define EVAL_I2C_EV_IRQn                     I2C2_EV_IRQn
+    #define EVAL_I2C_ER_IRQn                     I2C2_ER_IRQn
+  #elif (UTIL_PMIC_I2C_PORT == UTIL_I2C3)
+    #define EVAL_I2C                             I2C3
+    #define EVAL_I2C_CLK_ENABLE()                __HAL_RCC_I2C3_CLK_ENABLE()
+    #define EVAL_I2C_CLK_DISABLE()               __HAL_RCC_I2C3_CLK_DISABLE()
+    #define EVAL_I2C_FORCE_RESET()               __HAL_RCC_I2C3_FORCE_RESET()
+    #define EVAL_I2C_RELEASE_RESET()             __HAL_RCC_I2C3_RELEASE_RESET()
+    #define EVAL_I2C_EV_IRQn                     I2C3_EV_IRQn
+    #define EVAL_I2C_ER_IRQn                     I2C3_ER_IRQn
+  #elif (UTIL_PMIC_I2C_PORT == UTIL_I2C4)
+    #define EVAL_I2C                             I2C4
+    #define EVAL_I2C_CLK_ENABLE()                __HAL_RCC_I2C4_CLK_ENABLE()
+    #define EVAL_I2C_CLK_DISABLE()               __HAL_RCC_I2C4_CLK_DISABLE()
+    #define EVAL_I2C_FORCE_RESET()               __HAL_RCC_I2C4_FORCE_RESET()
+    #define EVAL_I2C_RELEASE_RESET()             __HAL_RCC_I2C4_RELEASE_RESET()
+    #define EVAL_I2C_EV_IRQn                     I2C4_EV_IRQn
+    #define EVAL_I2C_ER_IRQn                     I2C4_ER_IRQn
+  #elif (UTIL_PMIC_I2C_PORT == UTIL_I2C5)
+    #define EVAL_I2C                             I2C5
+    #define EVAL_I2C_CLK_ENABLE()                __HAL_RCC_I2C5_CLK_ENABLE()
+    #define EVAL_I2C_CLK_DISABLE()               __HAL_RCC_I2C5_CLK_DISABLE()
+    #define EVAL_I2C_FORCE_RESET()               __HAL_RCC_I2C5_FORCE_RESET()
+    #define EVAL_I2C_RELEASE_RESET()             __HAL_RCC_I2C5_RELEASE_RESET()
+    #define EVAL_I2C_EV_IRQn                     I2C5_EV_IRQn
+    #define EVAL_I2C_ER_IRQn                     I2C5_ER_IRQn
+  #elif (UTIL_PMIC_I2C_PORT == UTIL_I2C6)
+    #define EVAL_I2C                             I2C6
+    #define EVAL_I2C_CLK_ENABLE()                __HAL_RCC_I2C6_CLK_ENABLE()
+    #define EVAL_I2C_CLK_DISABLE()               __HAL_RCC_I2C6_CLK_DISABLE()
+    #define EVAL_I2C_FORCE_RESET()               __HAL_RCC_I2C6_FORCE_RESET()
+    #define EVAL_I2C_RELEASE_RESET()             __HAL_RCC_I2C6_RELEASE_RESET()
+    #define EVAL_I2C_EV_IRQn                     I2C6_EV_IRQn
+    #define EVAL_I2C_ER_IRQn                     I2C6_ER_IRQn
+  #else
+    #error "unknown UTIL_PMIC_I2C_PORT definition."
+  #endif
 
- #define EVAL_I2C2_FORCE_RESET()               __HAL_RCC_I2C2_FORCE_RESET()
- #define EVAL_I2C2_RELEASE_RESET()             __HAL_RCC_I2C2_RELEASE_RESET()
+  #define EVAL_I2C_SCL_PIN                       UTIL_PMIC_I2C_SCL_PIN
 
- /* Definition for I2Cx Pins */
- #define EVAL_I2C2_SCL_PIN                     GPIO_PIN_4
- #define EVAL_I2C2_SCL_SDA_GPIO_PORT           GPIOH
- #define EVAL_I2C2_SCL_SDA_AF                  GPIO_AF4_I2C2
- #define EVAL_I2C2_SDA_PIN                     GPIO_PIN_5
+  #if (UTIL_PMIC_I2C_SCL_GPIO_PORT == UTIL_GPIOA)
+    #define EVAL_I2C_SCL_GPIO_PORT               GPIOA
+    #define EVAL_I2C_SCL_GPIO_CLK_ENABLE()       __HAL_RCC_GPIOA_CLK_ENABLE()
+    #define EVAL_I2C_SCL_GPIO_CLK_DISABLE()      __HAL_RCC_GPIOA_CLK_DISABLE()
+  #elif (UTIL_PMIC_I2C_SCL_GPIO_PORT == UTIL_GPIOB)
+    #define EVAL_I2C_SCL_GPIO_PORT               GPIOB
+    #define EVAL_I2C_SCL_GPIO_CLK_ENABLE()       __HAL_RCC_GPIOB_CLK_ENABLE()
+    #define EVAL_I2C_SCL_GPIO_CLK_DISABLE()      __HAL_RCC_GPIOB_CLK_DISABLE()
+  #elif (UTIL_PMIC_I2C_SCL_GPIO_PORT == UTIL_GPIOC)
+    #define EVAL_I2C_SCL_GPIO_PORT               GPIOC
+    #define EVAL_I2C_SCL_GPIO_CLK_ENABLE()       __HAL_RCC_GPIOC_CLK_ENABLE()
+    #define EVAL_I2C_SCL_GPIO_CLK_DISABLE()      __HAL_RCC_GPIOC_CLK_DISABLE()
+  #elif (UTIL_PMIC_I2C_SCL_GPIO_PORT == UTIL_GPIOD)
+    #define EVAL_I2C_SCL_GPIO_PORT               GPIOD
+    #define EVAL_I2C_SCL_GPIO_CLK_ENABLE()       __HAL_RCC_GPIOD_CLK_ENABLE()
+    #define EVAL_I2C_SCL_GPIO_CLK_DISABLE()      __HAL_RCC_GPIOD_CLK_DISABLE()
+  #elif (UTIL_PMIC_I2C_SCL_GPIO_PORT == UTIL_GPIOE)
+    #define EVAL_I2C_SCL_GPIO_PORT               GPIOE
+    #define EVAL_I2C_SCL_GPIO_CLK_ENABLE()       __HAL_RCC_GPIOE_CLK_ENABLE()
+    #define EVAL_I2C_SCL_GPIO_CLK_DISABLE()      __HAL_RCC_GPIOE_CLK_DISABLE()
+  #elif (UTIL_PMIC_I2C_SCL_GPIO_PORT == UTIL_GPIOF)
+    #define EVAL_I2C_SCL_GPIO_PORT               GPIOF
+    #define EVAL_I2C_SCL_GPIO_CLK_ENABLE()       __HAL_RCC_GPIOF_CLK_ENABLE()
+    #define EVAL_I2C_SCL_GPIO_CLK_DISABLE()      __HAL_RCC_GPIOF_CLK_DISABLE()
+  #elif (UTIL_PMIC_I2C_SCL_GPIO_PORT == UTIL_GPIOG)
+    #define EVAL_I2C_SCL_GPIO_PORT               GPIOG
+    #define EVAL_I2C_SCL_GPIO_CLK_ENABLE()       __HAL_RCC_GPIOG_CLK_ENABLE()
+    #define EVAL_I2C_SCL_GPIO_CLK_DISABLE()      __HAL_RCC_GPIOG_CLK_DISABLE()
+  #elif (UTIL_PMIC_I2C_SCL_GPIO_PORT == UTIL_GPIOH)
+    #define EVAL_I2C_SCL_GPIO_PORT               GPIOH
+    #define EVAL_I2C_SCL_GPIO_CLK_ENABLE()       __HAL_RCC_GPIOH_CLK_ENABLE()
+    #define EVAL_I2C_SCL_GPIO_CLK_DISABLE()      __HAL_RCC_GPIOH_CLK_DISABLE()
+  #elif (UTIL_PMIC_I2C_SCL_GPIO_PORT == UTIL_GPIOI)
+    #define EVAL_I2C_SCL_GPIO_PORT               GPIOI
+    #define EVAL_I2C_SCL_GPIO_CLK_ENABLE()       __HAL_RCC_GPIOI_CLK_ENABLE()
+    #define EVAL_I2C_SCL_GPIO_CLK_DISABLE()      __HAL_RCC_GPIOI_CLK_DISABLE()
+  #elif (UTIL_PMIC_I2C_SCL_GPIO_PORT == UTIL_GPIOJ)
+    #define EVAL_I2C_SCL_GPIO_PORT               GPIOJ
+    #define EVAL_I2C_SCL_GPIO_CLK_ENABLE()       __HAL_RCC_GPIOJ_CLK_ENABLE()
+    #define EVAL_I2C_SCL_GPIO_CLK_DISABLE()      __HAL_RCC_GPIOJ_CLK_DISABLE()
+  #elif (UTIL_PMIC_I2C_SCL_GPIO_PORT == UTIL_GPIOK)
+    #define EVAL_I2C_SCL_GPIO_PORT               GPIOK
+    #define EVAL_I2C_SCL_GPIO_CLK_ENABLE()       __HAL_RCC_GPIOK_CLK_ENABLE()
+    #define EVAL_I2C_SCL_GPIO_CLK_DISABLE()      __HAL_RCC_GPIOK_CLK_DISABLE()
+  #elif (UTIL_PMIC_I2C_SCL_GPIO_PORT == UTIL_GPIOZ)
+    #define EVAL_I2C_SCL_GPIO_PORT               GPIOZ
+    #define EVAL_I2C_SCL_GPIO_CLK_ENABLE()       __HAL_RCC_GPIOZ_CLK_ENABLE()
+    #define EVAL_I2C_SCL_GPIO_CLK_DISABLE()      __HAL_RCC_GPIOZ_CLK_DISABLE()
+  #else
+    #error "unknown UTIL_PMIC_I2C_SCL_GPIO_PORT definition."
+  #endif
 
- /* I2C interrupt requests */
- #define EVAL_I2C2_EV_IRQn                     I2C2_EV_IRQn
- #define EVAL_I2C2_ER_IRQn                     I2C2_ER_IRQn
+  #define EVAL_I2C_SCL_AF                        UTIL_PMIC_I2C_SCL_AF
 
-/* Definition for I2C4 clock resources */
-#define EVAL_I2C4                             I2C4
-#define EVAL_I2C4_CLK_ENABLE()                __HAL_RCC_I2C4_CLK_ENABLE()
-#define EVAL_I2C4_CLK_DISABLE()               __HAL_RCC_I2C4_CLK_DISABLE()
-#define EVAL_I2C4_GPIO_CLK_ENABLE()           __HAL_RCC_GPIOZ_CLK_ENABLE()
-#define EVAL_I2C4_GPIO_CLK_DISABLE()          __HAL_RCC_GPIOZ_CLK_DISABLE()
+  #define EVAL_I2C_SDA_PIN                       UTIL_PMIC_I2C_SDA_PIN
 
-#define EVAL_I2C4_FORCE_RESET()               __HAL_RCC_I2C4_FORCE_RESET()
-#define EVAL_I2C4_RELEASE_RESET()             __HAL_RCC_I2C4_RELEASE_RESET()
-   
-/* Definition for I2Cx Pins */
-#define EVAL_I2C4_SCL_PIN                     GPIO_PIN_4
-#define EVAL_I2C4_SCL_SDA_GPIO_PORT           GPIOZ
-#define EVAL_I2C4_SCL_SDA_AF                  GPIO_AF6_I2C4
-#define EVAL_I2C4_SDA_PIN                     GPIO_PIN_5
+  #if (UTIL_PMIC_I2C_SDA_GPIO_PORT == UTIL_GPIOA)
+    #define EVAL_I2C_SDA_GPIO_PORT               GPIOA
+    #define EVAL_I2C_SDA_GPIO_CLK_ENABLE()       __HAL_RCC_GPIOA_CLK_ENABLE()
+    #define EVAL_I2C_SDA_GPIO_CLK_DISABLE()      __HAL_RCC_GPIOA_CLK_DISABLE()
+  #elif (UTIL_PMIC_I2C_SDA_GPIO_PORT == UTIL_GPIOB)
+    #define EVAL_I2C_SDA_GPIO_PORT               GPIOB
+   #define EVAL_I2C_SDA_GPIO_CLK_ENABLE()       __HAL_RCC_GPIOB_CLK_ENABLE()
+    #define EVAL_I2C_SDA_GPIO_CLK_DISABLE()      __HAL_RCC_GPIOB_CLK_DISABLE()
+  #elif (UTIL_PMIC_I2C_SDA_GPIO_PORT == UTIL_GPIOC)
+    #define EVAL_I2C_SDA_GPIO_PORT               GPIOC
+    #define EVAL_I2C_SDA_GPIO_CLK_ENABLE()       __HAL_RCC_GPIOC_CLK_ENABLE()
+    #define EVAL_I2C_SDA_GPIO_CLK_DISABLE()      __HAL_RCC_GPIOC_CLK_DISABLE()
+  #elif (UTIL_PMIC_I2C_SDA_GPIO_PORT == UTIL_GPIOD)
+    #define EVAL_I2C_SDA_GPIO_PORT               GPIOD
+    #define EVAL_I2C_SDA_GPIO_CLK_ENABLE()       __HAL_RCC_GPIOD_CLK_ENABLE()
+    #define EVAL_I2C_SDA_GPIO_CLK_DISABLE()      __HAL_RCC_GPIOD_CLK_DISABLE()
+  #elif (UTIL_PMIC_I2C_SDA_GPIO_PORT == UTIL_GPIOE)
+    #define EVAL_I2C_SDA_GPIO_PORT               GPIOE
+    #define EVAL_I2C_SDA_GPIO_CLK_ENABLE()       __HAL_RCC_GPIOE_CLK_ENABLE()
+    #define EVAL_I2C_SDA_GPIO_CLK_DISABLE()      __HAL_RCC_GPIOE_CLK_DISABLE()
+  #elif (UTIL_PMIC_I2C_SDA_GPIO_PORT == UTIL_GPIOF)
+    #define EVAL_I2C_SDA_GPIO_PORT               GPIOF
+    #define EVAL_I2C_SDA_GPIO_CLK_ENABLE()       __HAL_RCC_GPIOF_CLK_ENABLE()
+    #define EVAL_I2C_SDA_GPIO_CLK_DISABLE()      __HAL_RCC_GPIOF_CLK_DISABLE()
+  #elif (UTIL_PMIC_I2C_SDA_GPIO_PORT == UTIL_GPIOG)
+    #define EVAL_I2C_SDA_GPIO_PORT               GPIOG
+    #define EVAL_I2C_SDA_GPIO_CLK_ENABLE()       __HAL_RCC_GPIOG_CLK_ENABLE()
+    #define EVAL_I2C_SDA_GPIO_CLK_DISABLE()      __HAL_RCC_GPIOG_CLK_DISABLE()
+  #elif (UTIL_PMIC_I2C_SDA_GPIO_PORT == UTIL_GPIOH)
+    #define EVAL_I2C_SDA_GPIO_PORT               GPIOH
+    #define EVAL_I2C_SDA_GPIO_CLK_ENABLE()       __HAL_RCC_GPIOH_CLK_ENABLE()
+    #define EVAL_I2C_SDA_GPIO_CLK_DISABLE()      __HAL_RCC_GPIOH_CLK_DISABLE()
+  #elif (UTIL_PMIC_I2C_SDA_GPIO_PORT == UTIL_GPIOI)
+    #define EVAL_I2C_SDA_GPIO_PORT               GPIOI
+    #define EVAL_I2C_SDA_GPIO_CLK_ENABLE()       __HAL_RCC_GPIOI_CLK_ENABLE()
+    #define EVAL_I2C_SDA_GPIO_CLK_DISABLE()      __HAL_RCC_GPIOI_CLK_DISABLE()
+  #elif (UTIL_PMIC_I2C_SDA_GPIO_PORT == UTIL_GPIOJ)
+    #define EVAL_I2C_SDA_GPIO_PORT               GPIOJ
+    #define EVAL_I2C_SDA_GPIO_CLK_ENABLE()       __HAL_RCC_GPIOJ_CLK_ENABLE()
+    #define EVAL_I2C_SDA_GPIO_CLK_DISABLE()      __HAL_RCC_GPIOJ_CLK_DISABLE()
+  #elif (UTIL_PMIC_I2C_SDA_GPIO_PORT == UTIL_GPIOK)
+    #define EVAL_I2C_SDA_GPIO_PORT               GPIOK
+    #define EVAL_I2C_SDA_GPIO_CLK_ENABLE()       __HAL_RCC_GPIOK_CLK_ENABLE()
+    #define EVAL_I2C_SDA_GPIO_CLK_DISABLE()      __HAL_RCC_GPIOK_CLK_DISABLE()
+  #elif (UTIL_PMIC_I2C_SDA_GPIO_PORT == UTIL_GPIOZ)
+    #define EVAL_I2C_SDA_GPIO_PORT               GPIOZ
+    #define EVAL_I2C_SDA_GPIO_CLK_ENABLE()       __HAL_RCC_GPIOZ_CLK_ENABLE()
+    #define EVAL_I2C_SDA_GPIO_CLK_DISABLE()      __HAL_RCC_GPIOZ_CLK_DISABLE()
+  #else
+    #error "unknown UTIL_PMIC_I2C_SDA_GPIO_PORT definition."
+  #endif
 
-/* I2C interrupt requests */
-#define EVAL_I2C4_EV_IRQn                     I2C4_EV_IRQn
-#define EVAL_I2C4_ER_IRQn                     I2C4_ER_IRQn
+  #define EVAL_I2C_SDA_AF                      UTIL_PMIC_I2C_SDA_AF
+#else /* UTIL_USE_PMIC */
+  /* Definition for I2C2 clock resources */
+  #define EVAL_I2C                             I2C4
+  #define EVAL_I2C_CLK_ENABLE()                __HAL_RCC_I2C4_CLK_ENABLE()
+  #define EVAL_I2C_CLK_DISABLE()               __HAL_RCC_I2C4_CLK_DISABLE()
+  #define EVAL_I2C_SCL_GPIO_CLK_ENABLE()       __HAL_RCC_GPIOZ_CLK_ENABLE()
+  #define EVAL_I2C_SCL_GPIO_CLK_DISABLE()      __HAL_RCC_GPIOZ_CLK_DISABLE()
+  #define EVAL_I2C_SDA_GPIO_CLK_ENABLE()       __HAL_RCC_GPIOZ_CLK_ENABLE()
+  #define EVAL_I2C_SDA_GPIO_CLK_DISABLE()      __HAL_RCC_GPIOZ_CLK_DISABLE()
+
+  #define EVAL_I2C_FORCE_RESET()               __HAL_RCC_I2C4_FORCE_RESET()
+  #define EVAL_I2C_RELEASE_RESET()             __HAL_RCC_I2C4_RELEASE_RESET()
+
+  /* Definition for I2Cx Pins */
+  #define EVAL_I2C_SCL_PIN                     GPIO_PIN_4
+  #define EVAL_I2C_SCL_GPIO_PORT               GPIOZ
+  #define EVAL_I2C_SCL_AF                      GPIO_AF6_I2C4
+  #define EVAL_I2C_SDA_PIN                     GPIO_PIN_5
+  #define EVAL_I2C_SDA_GPIO_PORT               GPIOZ
+  #define EVAL_I2C_SDA_AF                      GPIO_AF6_I2C4
+
+  /* I2C interrupt requests */
+  #define EVAL_I2C_EV_IRQn                     I2C4_EV_IRQn
+  #define EVAL_I2C_ER_IRQn                     I2C4_ER_IRQn
+#endif /* UTIL_USE_PMIC */
 
 /* I2C TIMING Register define when I2C clock source is SYSCLK */
 /* I2C TIMING is calculated from Bus clock (HSI) = 64 MHz */
@@ -137,41 +289,28 @@ typedef struct
   * @{
   */
 
-int32_t BSP_I2C2_Init(void);
-int32_t BSP_I2C2_DeInit(void);
-int32_t BSP_I2C2_WriteReg(uint16_t DevAddr, uint16_t Reg, uint8_t *pData, uint16_t Length);
-int32_t BSP_I2C2_ReadReg(uint16_t DevAddr, uint16_t Reg, uint8_t *pData, uint16_t Length);
-int32_t BSP_I2C2_WriteReg16(uint16_t DevAddr, uint16_t Reg, uint8_t *pData, uint16_t Length);
-int32_t BSP_I2C2_ReadReg16(uint16_t DevAddr, uint16_t Reg, uint8_t *pData, uint16_t Length);
-int32_t BSP_I2C2_Recv(uint16_t DevAddr, uint16_t Reg, uint16_t MemAddSize, uint8_t *pData, uint16_t Length);
-int32_t BSP_I2C2_Send(uint16_t DevAddr, uint16_t Reg, uint16_t MemAddSize, uint8_t *pData, uint16_t Length);
-int32_t BSP_I2C2_IsReady(uint16_t DevAddr, uint32_t Trials);
-
-int32_t BSP_I2C4_Init(void);
-int32_t BSP_I2C4_DeInit(void);
-int32_t BSP_I2C4_WriteReg(uint16_t DevAddr, uint16_t Reg, uint8_t *pData, uint16_t Length);
-int32_t BSP_I2C4_ReadReg(uint16_t DevAddr, uint16_t Reg, uint8_t *pData, uint16_t Length);
-int32_t BSP_I2C4_WriteReg16(uint16_t DevAddr, uint16_t Reg, uint8_t *pData, uint16_t Length);
-int32_t BSP_I2C4_ReadReg16(uint16_t DevAddr, uint16_t Reg, uint8_t *pData, uint16_t Length);
-int32_t BSP_I2C4_Recv(uint16_t DevAddr, uint16_t Reg, uint16_t MemAddSize, uint8_t *pData, uint16_t Length);
-int32_t BSP_I2C4_Send(uint16_t DevAddr, uint16_t Reg, uint16_t MemAddSize, uint8_t *pData, uint16_t Length);
-int32_t BSP_I2C4_IsReady(uint16_t DevAddr, uint32_t Trials);
+int32_t BSP_I2C_Init(void);
+int32_t BSP_I2C_DeInit(void);
+int32_t BSP_I2C_WriteReg(uint16_t DevAddr, uint16_t Reg, uint8_t *pData, uint16_t Length);
+int32_t BSP_I2C_ReadReg(uint16_t DevAddr, uint16_t Reg, uint8_t *pData, uint16_t Length);
+int32_t BSP_I2C_WriteReg16(uint16_t DevAddr, uint16_t Reg, uint8_t *pData, uint16_t Length);
+int32_t BSP_I2C_ReadReg16(uint16_t DevAddr, uint16_t Reg, uint8_t *pData, uint16_t Length);
+int32_t BSP_I2C_Recv(uint16_t DevAddr, uint16_t Reg, uint16_t MemAddSize, uint8_t *pData, uint16_t Length);
+int32_t BSP_I2C_Send(uint16_t DevAddr, uint16_t Reg, uint16_t MemAddSize, uint8_t *pData, uint16_t Length);
+int32_t BSP_I2C_IsReady(uint16_t DevAddr, uint32_t Trials);
 int32_t BSP_GetTick(void);
 
-int32_t BSP_I2C4_WriteBuffer(uint16_t DevAddr, uint16_t Reg, uint16_t MemAddSize, uint8_t *pData, uint16_t Length);
-int32_t BSP_I2C4_ReadBuffer(uint16_t DevAddr, uint16_t Reg, uint16_t MemAddSize, uint8_t *pData, uint16_t Length);
+int32_t BSP_I2C_WriteBuffer(uint16_t DevAddr, uint16_t Reg, uint16_t MemAddSize, uint8_t *pData, uint16_t Length);
+int32_t BSP_I2C_ReadBuffer(uint16_t DevAddr, uint16_t Reg, uint16_t MemAddSize, uint8_t *pData, uint16_t Length);
 
 
 
 
 #if (USE_HAL_I2C_REGISTER_CALLBACKS == 1) 
-int32_t BSP_I2C2_RegisterDefaultMspCallbacks (void);
-int32_t BSP_I2C2_RegisterMspCallbacks (BSP_I2C_Cb_t *Callback);
-int32_t BSP_I2C4_RegisterDefaultMspCallbacks (void);
-int32_t BSP_I2C4_RegisterMspCallbacks (BSP_I2C_Cb_t *Callback);
+int32_t BSP_I2C_RegisterDefaultMspCallbacks (void);
+int32_t BSP_I2C_RegisterMspCallbacks (BSP_I2C_Cb_t *Callback);
 #endif /* USE_HAL_I2C_REGISTER_CALLBACKS */
-__weak HAL_StatusTypeDef MX_I2C2_Init(I2C_HandleTypeDef *hI2c);
-__weak HAL_StatusTypeDef MX_I2C4_Init(I2C_HandleTypeDef *hI2c);
+__weak HAL_StatusTypeDef MX_I2C_Init(I2C_HandleTypeDef *hI2c);
 
 
 /**
