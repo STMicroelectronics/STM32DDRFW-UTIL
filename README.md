@@ -3,107 +3,122 @@
 STM32DDRFW-UTIL is the firmware used to initialize DDR and perform DDR tests.
 
 This document describes:
+
 - the Software Architecture and Design of STM32DDRFW-UTIL.
-- how to use the STM32DDRFW-UTIL firmware package for DDR configuration and test on STM32MP1 Series MPUs.
+- how to use the STM32DDRFW-UTIL firmware package for DDR configuration and test on STM32MP1 and STM32MP2 Series MPUs.
 
 ## 1 STM32DDRFW-UTIL Architecture and Design
 
-STM32DDRFW-UTIL v1.0.1 applies to STM32MP1 series only (STM32MP15xx and STM32MP13xx).
+STM32DDRFW-UTIL v1.1.0 applies to STM32MP1 (STM32MP13XX and STM32MP15XX) and STM32MP2 (STM32MP25XX) series.
 
 ### 1.1 Package overview
 
-STM32DDRFW-UTIL firmware package has the following structure: 
-
-![](_htmresc/Package_structure.png "Package structure")
-
 STM32DDRFW-UTIL firmware is a software package containing multiple STM32CubeIDE projects applicable for all STM32 products with a DDR which includes:
+
 - BSP, CMSIS and HAL drivers for all applicable STM32MPxxx series.
 - DDR_Tool full source code with:
    - Common directory with general purpose content.
    - STM32CubeIDE Projects for all ST supported boards.
-- Binaries for all supported ST boards with BootROM image header to be programmed directly into SDCARD or loaded via STM32CubeProgramer without using STM32CubeIDE tool.
+- Binaries for all supported ST boards with BootROM image header to be programmed directly into SDCARD or loaded via STM32CubeProgrammer without using STM32CubeIDE tool.
 - Imageheader package to generate stm32 files with STM32CubeIDE.
+- resourcemanager package to solve possible dependencies with board BSP (STM32MP2 only).
 - Test Report of all applicable STM32MPxxx series.
 
-### 1.2 Source code organisation
-
-The following file tree shows an example of the source code organization for STM32MP135C-DK project included in the STM32DDRFW-UTIL package:
-
-![](_htmresc/Source_code_organization.png "Project tree")
-
-### 1.3 Design principles
+### 1.2 Design principles
 
 Based on HAL DDR driver, STM32DDRFW-UTIL firmware provides 2 main functionalities:
-- Read/Write DDR registers and DDR general information (name, speed, size, …)
+
+- Read/Write DDR settings and DDR general information (name, speed, size, …)
 - Launch DDR tests
+
+Note that DDR settings are considered differently depending on the related IP:
+
+- DDR controller (DDRCTRL or DDRC) ones corresponds to IP registers
+- DDR PHY controller (DDRPHYC) ones corresponds to IP register for STM32MP1 series and to user input parameters of dedicated software for STM32MP2 series.
 
 The STM32DDRFW-UTIL firmware also implements a console in DDR Interactive mode allowing to use these functionalities.
 
 **DDR Interactive mode** enables a special way of running the DDR initialization in which we can move from one initialization step to another (forward and backward) and launch DDR tests using command-lines.
 
-#### 1.3.1 HAL DDR driver APIs
+#### 1.2.1 HAL DDR driver APIs
 
-The HAL driver APIs (in stm32mpxxxx_hal_ddr.c file) provides the functions allowing to initialize the DDR and to access DDR registers in DDR Interactive mode.
+The HAL driver APIs (in stm32mpxxx\_hal\_ddr.c file) provides the functions allowing to initialize the DDR and to access DDR settings in DDR Interactive mode.
 
 ***Note:***
-*This HAL driver does not fit the split between DRIVER and BSP as defined in  the STM32Cube specifications. Board (DDR components) and IP (Controller and PHY) are mixed in the same Hal driver.*
+*This HAL driver does not fit the split between DRIVER and BSP as defined in the STM32Cube specifications. Board (DDR components) and IP (Controller and PHY) are mixed in the same Hal driver.*
 
 |  API name                    |       Description      |
 |------------------------------|------------------------|
-|**HAL_DDR_Init**   |<ul><li>**brief**<br>DDR init sequence, including <br>- reset/clock/power management (i.e. access to other IPs)<br>- DT information getting<br>- DDRCTRL and DDRPHY configuration and initialization<br>- self-refresh mode setup<br>- data/addr tests execution after training.</li><li>**param**<br>*iddr* structure for DDR initialization settings allowing to define/retrieve some system global features.</li>***Note:*** *In STM32DDRFW-UTIL firmware, the low power mechanism is not used, so all parameters can be set to null or false.*<br><li>**retval** HAL status.</li></ul>|
-|**HAL_DDR_MspInit**|<ul><li>**brief**<br>board-specific DDR power initialization if any.<br>***Note:*** *Only used in STM32DDRFW-UTIL firmware if PMIC (power management IC) is implemented on board.*<br></li><li>**param**<br>*type* DDR type.</li><li>**retval** 0 if OK.</li></ul>|
+|**HAL\_DDR\_Init**   |<ul><li>**brief**<br>DDR init sequence, including <br>- reset/clock/power management (i.e. access to other IPs)<br>- information getting<br>- DDRC and DDRPHYC configuration and initialization<br>- self-refresh mode setup<br>- data/addr tests execution after training.</li><li>**param**<br>*iddr* structure for DDR initialization settings allowing to define/retrieve some system global features.</li>***Note:*** *In STM32DDRFW-UTIL firmware, the low power mechanism is not used, so all parameters can be set to null or false.*<br><li>**retval** HAL status.</li></ul>|
+|**HAL\_DDR\_MspInit**|<ul><li>**brief**<br>board-specific DDR power initialization if any.<br>***Note:*** *Only used in STM32DDRFW-UTIL firmware if PMIC (power management IC) is implemented on board.*<br></li><li>**param**<br>*type* DDR type.</li><li>**retval** 0 if OK.</li></ul>|
 
 <br>
 
 |  API name in DDR<br>interactive mode only  |       Description      |
 |--------------------------------------------|------------------------|
-|**HAL_DDR_ASS_Set_Clksrc**|<ul><li>**brief**<br>Set AXI Sub-System Clock Source.<br>***Note:*** *In STM32DDRFW-UTIL firmware, this function is used to switch AXI clock source to a different source, in order to change PLL2 rate when changing DDR frequency.*</li><li>**param**<br>*clksrc* AXI Sub-System clock source.</li><li>**retval** HAL status.</li></ul>|
-+|**HAL_DDR_Interactive**   |<ul><li>**brief**<br>Set DDR step and run tool command.<br>User function implemented in ddr_tool.c</li><li>**param**<br>*step* DDR Interactive mode step.</li><li>**retval** boolean.</li></ul>|
-+|**HAL_DDR_Dump_Param**    |<ul><li>**brief**<br>Prints input configuration parameters to be set for all DDR settings. This function will print the setting value from the input configuration parameters provided in the source code and used to initialize the DDR at start.</li><li>**param**<br>*config* static DDR configuration used to initialize the DDR setting name (if NULL, all settings are printed out).</li><li>**retval** HAL status.</li></ul>|
-+|**HAL_DDR_Dump_Reg**      |<ul><li>**brief**<br>Dump the DDR setting value. This function will print the actual setting value and format the output print if save parameter is true (to be used after DDR initialization in DDR_READY step).</li><li>**param**<br>*name* setting name (if NULL, all settings are printed out) save indicates if the output print has to be formatted with “#define …” (true) or not.</li><li>**retval** HAL status.</li></ul>|
-+|**HAL_DDR_Edit_Param**    |<ul><li>**brief**<br>Edit input parameter value. This function allows to change the DDR configuration parameters before initialization in DDR_RESET step.</li><li>**param**<br>*name* setting name.<br>*string* new parameter value.</li><li>**retval** None.</li></ul>|
-+|**HAL_DDR_Edit_Reg**      |<ul><li>**brief**<br>Edit DDR setting value. This function allows to change DDR settings after DDR_CTRL_INIT_DONE step for DDRC registers and after DDR_PHY_INIT_DONE step for DDRPHY user input parameters </li><li>**param**<br>*name* setting name<br>*string* new parameter value</li><li>**retval** None.</li></ul>|
+|**HAL\_DDR\_ASS\_Set\_Clksrc**   |<ul><li>**brief**<br>Set AXI Sub-System Clock Source</li>***Note:*** *In STM32DDRFW-UTIL firmware, this function is used to switch AXI clock source to a different source, in order to change PLL2 rate when changing DDR frequency. Not present on STM32MP2 series.*<br><li>**param**<br>*clksrc* AXI Sub-System clock source.</li><li>**retval** HAL status.</li></ul>|
+|**HAL\_DDR\_Interactive**   |<ul><li>**brief**<br>Set DDR step and run tool command.<br>User function implemented in ddr\_tool.c</li><li>**param**<br>*step* DDR Interactive mode step.</li><li>**retval** boolean.</li></ul>|
+|**HAL\_DDR\_Dump\_Param**    |<ul><li>**brief**<br>Prints input configuration parameters to be set for all DDR settings. This function will print the setting value from the input configuration parameters provided in the source code and used to initialize the DDR at start.</li><li>**param**<br>*config* static DDR configuration used to initialize the DDR setting name (if NULL, all settings are printed out).</li><li>**retval** HAL status.</li></ul>|
+|**HAL\_DDR\_Dump\_Reg**      |<ul><li>**brief**<br>Dump the DDR setting value. This function will print the actual setting value and format the output print if save parameter is true (to be used after DDR initialization in DDR\_READY step).</li><li>**param**<br>*name* setting name (if NULL, all settings are printed out) save indicates if the output print has to be formatted with “#define …” (true) or not.</li><li>**retval** HAL status.</li></ul>|
+|**HAL\_DDR\_Edit\_Param**    |<ul><li>**brief**<br>Edit input parameter value. This function allows to change the DDR configuration parameters before initialization in DDR\_RESET step.</li><li>**param**<br>*name* setting name.<br>*string* new parameter value.</li><li>**retval** None.</li></ul>|
+|**HAL\_DDR\_Edit\_Reg**      |<ul><li>**brief**<br>Edit DDR setting value. This function allows to change DDR settings after DDR\_CTRL\_INIT\_DONE step for DDRC registers and after DDR\_PHY\_INIT\_DONE step for DDRPHY user input parameters </li><li>**param**<br>*name* setting name<br>*string* new parameter value</li><li>**retval** None.</li></ul>|
 
-#### 1.3.2 DDR Interactive mode
+#### 1.2.2 DDR Interactive mode
 
 This mode enables a special way of running the DDR initialization in which we can move from one initialization step to another (forward and backward). A set of inline commands are available to set the DDR initialization step and to launch DDR Tool functionalities and tests.
 
-DDR interactive mode uses 5 steps to initialize the DDR controller and the PHY with parameters found in *stm32mp_util_ddr_conf.h*:
+DDR interactive mode uses 5 steps to initialize the DDR controller and the PHY with parameters found in *stm32mp\_util\_ddr\_conf.h*:
 
 ![](_htmresc/DDR_interactive_steps.png  "DDR interactive steps")
 
-***Note:***
-*stm32mp_util_ddr_conf.h provides each register value for DDR controller and PHY. To set the initial DDR configuration parameters in stm32mp_util_ddr_conf.h, templates are provided for each DDR type and it is necessary to have a good knowledge of the DDR SDRAM datasheet to complete the template and provide the first register values (See §1.3.3.3 Customization).*
+***Note 1:***
+*On STM32MP2 series, please consider that clock is initialized in step 1, contrary to what is described in the figure above.*
 
-#### 1.3.3 DDR configuration in STM32DDRFW-UTIL package
+***Note 2:***
+*stm32mp\_util\_ddr\_conf.h provides each setting value for DDR controller and PHY. To set the initial DDR configuration parameters in stm32mp\_util\_ddr\_conf.h, templates are provided for each DDR type and it is necessary to have a good knowledge of the DDR SDRAM datasheet to complete the template and provide the first register values (See §1.2.3.3 Customization).*
 
-The DDR_Tool project applies to a specific board and contains all related files. All user adaptations should be gathered inside this project directory.
+#### 1.2.3 DDR configuration in STM32DDRFW-UTIL package
+
+The DDR\_Tool project applies to a specific board and contains all related files. All user adaptations should be gathered inside this project directory.
 The objective here is not to describe all files, but to focus on major items.
 
-##### 1.3.3.1 .project and .cproject file
+##### 1.2.3.1 .project and .cproject file
 
 These are the two main STM32CubeIDE configuration files:
+
 - ***.project*** lists all the source files that must be built in order to run the project.
 - ***.cproject*** contains all the configuration parameters (such as flags, include directories) and can include similar sections in case of multiple build configurations.
 
-##### 1.3.3.2 Flags
+##### 1.2.3.2 Flags
 
-  Among the series of flags, some of them are important for the DDR Tool:
-- ***DDR_INTERACTIVE*** is mandatory to enable the DDR interactive mode
-- ***DDR_TYPE_X*** is also needed in order to determine the DDR type and its density, and to consider the corresponding setting template (for example, *DDR_TYPE_DDR3_4Gb* will apply settings from *stm32mp13xx-ddr3-4Gb-template.h* in STM32MP135C-DK project). See more details in *§1.3.3.3 Customization*.
-- ***NO_CACHE_USE**** and ***NO_MMU_USE*** are set by default to ensure real DDR device access for first tests.
+Among the series of flags, some of them are mandatory for the DDR Tool.
+  
+For STM32MP1 series:
 
-##### 1.3.3.3 Customization
+- ***DDR\_INTERACTIVE*** is mandatory to enable the DDR interactive mode
+- ***DDR\_TYPE\_X*** is also needed in order to determine the DDR type and its density, and to consider the corresponding setting template (for example, DDR\_TYPE\_DDR3\_4Gb will apply settings from stm32mp13xx-cubemx-ddr3-4Gb-template.h in STM32MP135C-DK project). See more details in *§1.2.3.3 Customization*
+- ***NO\_CACHE\_USE*** and ***NO\_MMU\_USE*** are set by default to ensure real DDR device access for first tests (this could be a very first step in a customer bring-up phase).
+  
+For STM32MP2 series:
+  
+- ***DDR\_INTERACTIVE*** enables the DDR interactive mode
+- ***DDR\_SIZE\_Gb=X*** defines the DDR density expressed in Gigabits (Gbits)
+- ***DDR\_FREQ=X*** defines the DDR frequency expressed in MegaHertz (MHz)
+- ***STM32MP\_DDR\_DUAL\_AXI\_PORT=1*** enables both AXI ports
+- ***STM32MP\_DDR3\_TYPE=0/1*** ***STM32MP\_DDR4\_TYPE=0/1*** ***STM32MP\_LPDDR4\_TYPE=0/1*** determine the DDR type (only one possible value =1, others have to be =0), and consider the corresponding setting template. See more details in *§1.2.3.3 Customization*.
+
+##### 1.2.3.3 Customization
 
 The source code of STM32CubeIDE projects for ST boards is provided as example in STM32DDRFW-UTIL firmware package. Each project can be adapted to fit with customized board.
 Only two files need to be adapted:
-- ***stm32mp_util_conf.h***
-This file contains UART, PMIC (if any) and PLL2 related configurations, including instance number, pin control and parameters. A specific definition determines if PMIC is active or not on the board.
-- ***stm32mp_util_ddr_conf.h***
-This file includes all the DDR settings from template file, depending on flags defined in STM32CubeIDE project (See *§1.3.3.2 Flags*). All known board templates are present in each project, as a starting point.
+
+- ***stm32mp\_util\_conf.h***
+This file contains UART and PMIC (if any) related configurations, including instance number, pin control and parameters. A specific definition determines if PMIC is active or not on the board.
+- ***stm32mp\_util\_ddr\_conf.h***
+This file includes all the DDR settings from template file (including PLL2 dedicated parameters), depending on flags defined in STM32CubeIDE project (See *§1.2.3.2 Flags*). All known board templates are present in each project, as a starting point.
 
 **e.g.:**
-In STM32MP135C-DK project, *stm32mp_util_ddr_conf.h* includes *stm32mp13xx-ddr3-4Gb-template.h* for STM32MP135C DDR3 4Gb configuration. The file contains all the definitions of DDRCTRL and DDRPHY parameters for this specific type of DDR:
+In STM32MP135C-DK project, *stm32mp\_util\_ddr\_conf.h* includes *stm32mp13xx-ddr3-4Gb-template.h* for STM32MP135C DDR3 4Gb configuration. The file contains all the definitions of DDRCTRL and DDRPHY parameters for this specific type of DDR:
 
 ```
 /**
@@ -178,14 +193,98 @@ In STM32MP135C-DK project, *stm32mp_util_ddr_conf.h* includes *stm32mp13xx-ddr3-
 #endif
 
 ```
+**e.g.:**
+In STM32MP257F-EV1 project, *stm32mp\_util\_ddr\_conf.h* includes *stm32mp2xx-ddr4-2x16Gbits-2x16bits-template.h*. The file contains all the definitions of DDRC and DDRPHY parameters for this specific type of DDR:
 
-These templates are available in DDR Tool projects. You can also generate a template file using STM32CubeMX Generate Code functionality (See *§3.2.4 Device Tree generation*) and copy its content in STM32CubeIDE project. The template provides DDR parameters based on DDR types used on ST boards. For customized board, with a different DDR reference, the compliance of each DDR parameter with DDR datasheet must be verified and corrections might be required.
+```
+/*
+ * STM32MP257D/F VALID3 board configuration (Cut 2.x)
+ * DDR4 2x16Gbits 2x16bits 1200MHz
+ *
+ * version	2		Product/Cut version (Panther Cut 2.x)
+ * package	1		Package selection (18x18 or 14x14)
+ * memclk	1200MHz		(2x DFI clock) + range check
+ * speed_bin	Worse		from JEDEC
+ * width	32		32: full width / 16: half width
+ * ranks	1		Single or dual rank
+ * density	16Gbits		(per 16bit device)
+ * addressing	RBC		row/bank interleaving
+ * RDBI		No		Read DBI
+ */
 
-#### 1.3.4 DDR tests
 
-##### 1.3.4.1 Test description
+#ifndef STM32MP2XX_DDR4_2x16GBITS_2x16BITS_1200MHZ_H
+#define STM32MP2XX_DDR4_2x16GBITS_2x16BITS_1200MHZ_H
+
+#define DDR_MEM_NAME	"DDR4 2x16Gbits 2x16bits 1200MHz"
+#define DDR_MEM_SPEED	1200000
+#define DDR_MEM_SIZE	0x100000000
+
+#define DDR_MSTR 0x01040010
+#define DDR_MRCTRL0 0x00000030
+#define DDR_MRCTRL1 0x00000000
+#define DDR_MRCTRL2 0x00000000
+#define DDR_DERATEEN 0x00000000
+#define DDR_DERATEINT 0x00000000
+#define DDR_DERATECTL 0x00000000
+#define DDR_PWRCTL 0x00000000
+#define DDR_PWRTMG 0x00130001
+#define DDR_HWLPCTL 0x00000002
+#define DDR_RFSHCTL0 0x00210010
+#define DDR_RFSHCTL1 0x00000000
+#define DDR_RFSHCTL3 0x00000000
+#define DDR_RFSHTMG 0x0092014A
+#define DDR_RFSHTMG1 0x008C0000
+#define DDR_CRCPARCTL0 0x00000000
+#define DDR_CRCPARCTL1 0x00001000
+#define DDR_INIT0 0xC0020002
+#define DDR_INIT1 0x00010002
+#define DDR_INIT2 0x00000D00
+#define DDR_INIT3 0x09400103
+#define DDR_INIT4 0x00180000
+#define DDR_INIT5 0x00100004
+#define DDR_INIT6 0x00080460
+#define DDR_INIT7 0x00000C0F
+#define DDR_DIMMCTL 0x00000000
+#define DDR_RANKCTL 0x0000066F
+#define DDR_RANKCTL1 0x0000000D
+…
+#define DDR_UIS_SWIZZLE_32 0x00000018
+#define DDR_UIS_SWIZZLE_33 0x00000000
+#define DDR_UIS_SWIZZLE_34 0x00000000
+#define DDR_UIS_SWIZZLE_35 0x00000000
+#define DDR_UIS_SWIZZLE_36 0x00000000
+#define DDR_UIS_SWIZZLE_37 0x00000000
+#define DDR_UIS_SWIZZLE_38 0x00000000
+#define DDR_UIS_SWIZZLE_39 0x00000000
+#define DDR_UIS_SWIZZLE_40 0x00000000
+#define DDR_UIS_SWIZZLE_41 0x00000000
+#define DDR_UIS_SWIZZLE_42 0x00000000
+#define DDR_UIS_SWIZZLE_43 0x00000000
+
+#define DDR_PLL_SOURCE RCC_PLLSOURCE_HSE
+#define DDR_PLL_MODE 0
+#define DDR_PLL_FBDIV 30
+#define DDR_PLL_FREFDIV 1
+#define DDR_PLL_FRACIN 0
+#define DDR_PLL_POSTDIV1 1
+#define DDR_PLL_POSTDIV2 2
+#define DDR_PLL_STATE RCC_PLL_ON
+#define DDR_PLL_SSM_MODE RCC_PLL_CENTERSPREAD
+#define DDR_PLL_SSM_SPREAD 0
+#define DDR_PLL_SSM_DIVVAL 0
+
+#endif
+```
+
+These templates are available in DDR\_Tool projects. You can also generate a template file using STM32CubeMX Generate Code functionality (See *§3.2.4 Device Tree generation*) and copy its content in STM32CubeIDE project. The template provides DDR parameters based on DDR types used on ST boards. For customized board, with a different DDR reference, the compliance of each DDR parameter with DDR datasheet must be verified and corrections might be required.
+
+#### 1.2.4 DDR tests
+
+##### 1.2.4.1 Test description
 
 Tests are classified in the three following types:
+
 - **Basic tests:** These simple and running fast tests are intended to capture the major configuration or hardware issues showing off immediately.
 - **Intensive tests:** These tests use extensive coverage of data and address patterns for noise and high SSO conditions, high throughput traffic or interleaved read/write. Depending on the parameters, the test run time may be long. An intensive test can be deployed progressively, with test trial before launching long and exhaustive test sequences.
 - **Stress tests:** These tests are intensive and executed with stretched conditions (such as a small frequency increase 10-20 MHz), with a skew of parameters (for example a fine step delay increase) or with specific frequency selective patterns.
@@ -199,21 +298,22 @@ All the available tests are detailed in the table below:
 
 In case of test failure, the DDR settings must be adjusted in the initial configuration parameters.
 
-##### 1.3.4.2 Test infinite read/write access to ddr
+##### 1.2.4.2 Test infinite read/write access to ddr
 
-In order to test infinite write/read access to DDR, you have to define flag *"TEST_INFINITE_ENABLE"* in your project.
+In order to test infinite write/read access to DDR, you have to define flag *"TEST\_INFINITE\_ENABLE"* in your project.
 
 These tests can only be stopped in Engineering Boot mode execution by:
+
 - breaking the debugger in STM32CubeIDE
-- changing the value of the variable "go_loop" in "DDR_Test_Infinite_write/read" function (in *ddr_tests.c* file)
+- changing the value of the variable "go\_loop" in "DDR\_Test\_Infinite\_read" and "DDR\_Test\_Infinite\_write" functions (in *ddr\_tests.c* file)
 
 ## 2 How to use STM32DDRFW-UTIL firmware
 
 ### 2.1 Hardware connections
 
 - Your PC is connected to the board through ST-LINK.
-- UART communication is handled either by the ST-LINK connection, or by a dedicated port (if available on the HW). By default, the STMicroelectronics boards use UART4 with Bps=115200 Bit=8 Parity=None Stop=1.
-- Set the correct boot pins on your board (in either Engineering mode or Boot from SD).
+- UART communication is handled either by the ST-LINK connection, or by a dedicated port (if available on the HW). By default, the STMicroelectronics boards use USART2 with Bps=115200 Bit=8 Parity=None Stop=1.
+- Set the correct boot pins on your board in either Engineering mode or Boot from SD.
 
 ![](_htmresc/Hardware_connections.png "Hardware connections")
 
@@ -221,41 +321,91 @@ These tests can only be stopped in Engineering Boot mode execution by:
 
 *- Refer to the board manual to set the boot pins in the right position*
 
-**e.g. on STM32MP13xx :**
-
-![](_htmresc/Boot_pins.png "Boot pins")
-
 *- Tera Term software (https://ttssh2.osdn.jp/index.html.en) has been used to test this release, but other terminal emulators could also be used.*
 
 ### 2.2 How to compile and launch DDR Tool project
 
 STM32DDRFW-UTIL package contains binaries that can be used directly on STM32 boards and STM32CubeIDE projects that allow to use the DDR Tool in Engineering mode and to modify the source code.
 
+Please install it not so far from root directory, because there can be some long path issues with unexpected behaviors.
+
 This section describes how to compile and launch these projects in STM32CubeIDE.
+
+<span style="color: red;">**Important:**</span>
+
+<span style="color: red;">This release combines two project types:</span>
+
+- <span style="color: red;">**STM32MP1 projects** with up to 2GB size support in aarch32 build environment (native toolchain) with STM32 V2.0 header.</span>
+
+	- <span style="color: red;">Only nominal procedures described below must be followed.</span>
+
+- <span style="color: red;">**STM32MP2 projects** with up to 4GB size support in aarch64 build environment (local toolchain) with STM32 V2.2 header.</span>
+
+	- <span style="color: red;">Extra procedures <span style="color: blue;">(marked in blue below)</span> must complete nominal ones.</span>
+
+The projects contained in STM32DDRFW-UTIL package have been tested on <span style="background-color: yellow;">STM32CubeIDE 1.13.0.23-MP2-D4\_0 release</span>.
 
 #### 2.2.1 Import the project in STM32CubeIDE
 
-The projects contained in STM32DDRFW-UTIL package have been tested on STM32CubeIDE v1.10.0.
+
 To import a DDR Tool project in STM32CubeIDE, follow these steps:
+
 - Go to File > Import
 - Select "Existing Projects into Workspace" > Next
-- Browse to your project location (In the STM32DDRFW-UTIL package, the projects are stored in DDR_Tool directory)
+- Browse to your project location (In the STM32DDRFW-UTIL package, the projects are stored in DDR\_Tool directory)
 - Select one of the listed project > Finish
 
-#### 2.2.2 Build project
+#### <span style="color: blue;">2.2.2 Add local aarch64 toolchain</span>
+
+<span style="color: blue;">(only applicable on STM32MP2 projects)</span>
+
+<span style="color: blue;">A local aarch64 toolchain has to be added in STM32CubeIDE Toolchain Manager and then enabled for the current project. Here are the recommended packages:</span>
+
+- <span style="color: blue;">Windows: **[gcc-arm-9.2-2019.12-mingw-w64-i686-aarch64-none-elf.tar.xz](https://developer.arm.com/-/media/Files/downloads/gnu-a/9.2-2019.12/binrel/gcc-arm-9.2-2019.12-mingw-w64-i686-aarch64-none-elf.tar.xz?revision=09ff6958-8d84-4694-a204-6413888aee5d&rev=a0b1b0bb25cc4bc79ca28c38fce37085&hash=DF8FBD5125F75ACF8FB826795DDC58E7DF330106)**</span>
+- <span style="color: blue;">Linux: **[gcc-arm-8.3-2019.03-x86_64-aarch64-elf.tar.xz](https://developer.arm.com/-/media/Files/downloads/gnu-a/8.3-2019.03/binrel/gcc-arm-8.3-2019.03-x86_64-aarch64-elf.tar.xz?revision=d678fd94-0ac4-485a-8054-1fbc60622a89&rev=d678fd940ac4485a80541fbc60622a89&hash=CAE423367ADC05B96378DB5EA2F9D7D1F4CC251A)**</span>
+
+<span style="color: blue;">Download the aarch64 toolchain and unzip it on your PC. Here again, please install it not so far from root directory, because there can be some long path issues with unexpected behaviors.</span>
+
+<span style="color: blue;">The project can contain several build configurations. In that case, you should firstly select the configuration corresponding to your hardware version and then add the local toolchain:</span>
+
+- <span style="color: blue;">Right click on the project in the Project Explorer</span>
+- <span style="color: blue;">Go to Build configurations > Set Active</span>
+- <span style="color: blue;">Select your configuration</span>
+- <span style="color: blue;">Right click on the project in the Project Explorer</span>
+- <span style="color: blue;">Go to Properties</span>
+- <span style="color: blue;">Select on the left C/C++ Build > Settings</span>
+- <span style="color: blue;">In Tool Settings tab, select MCU Toolchain</span>
+- <span style="color: blue;">Click on Open Toolchain Manager…</span>
+- <span style="color: blue;">Click on Add Local… and fill information (Windows example)</span>
+	- <span style="color: blue;">Name = gcc-arm-9.2-2019.12-mingw-w64-i686-aarch64-none-elf</span>
+	- <span style="color: blue;">Prefix = aarch64-none-elf-</span>
+	- <span style="color: blue;">Location = {…}\gcc-arm-9.2-2019.12-mingw-w64-i686-aarch64-none-elf\bin</span>
+	- <span style="color: blue;">Click on Finish, and then Apply and Close</span>
+- <span style="color: blue;">In “Select what toolchain to use” part, click on toolchain name and choose the newly added one</span>
+- <span style="color: blue;">Click on Apply and Close</span>
+
+<span style="color: blue;"></span>
+<span style="color: blue;"></span>
+
+#### 2.2.3 Build project
 
 The project can contain several build configurations. In that case, you should firstly select the configuration corresponding to your hardware version:
+
 - Right click on the project in the Project Explorer
 - Go to Build configurations > Set Active
 - Select your configuration
 
 To build the project in STM32CubeIDE:
-- Right click on the project in the Project Explorer
-- And click on "Build Project"
 
-#### 2.2.3 Launch project
+- Right click on the project in the Project Explorer
+- And click on "Build Project" (2 times to be sure that elf file is well-generated)
+
+A postbuild script is executed at the end of the build process in order to create a .stm32 file from the .bin, i.e. adding the STM32 header with the correct version and content. A python sub-script is then called. By default, Python3 is enabled on linux distributions. If Python2.7 needs to be used, then the postscript build has to be modified (imgtool definition). No change needed on Windows distributions, as a all-in-one standalone executable is used.
+
+#### 2.2.4 Launch project
 
 To launch the project:
+
 - Right click on the project in the Project Explorer
 - Select "Debug As / Debug Configurations”
 - In STM32 Cortex-M C/C++ Application / Select your debug configuration (if not present, double-click on "STM32 Cortex-M C/C++ Application")
@@ -272,40 +422,12 @@ To launch the project:
 #### 2.3.1 Using command lines
 
 1. Before running the project, open a terminal emulator application on your PC and configure with the serial setup menu the right port to be used and the baud rate of the serial link (in general 115200 baud)
-2. Run the project in the debug session of STM32CubeIDE (See *§2.2.3 Launch project*)
+2. Run the project in the debug session of STM32CubeIDE (See *§2.2.4 Launch project*)
 3. You will see the project banner displayed in your terminal, followed by the DDR prompt.
 
 ##### 2.3.1.1 Command description
 
-The following table describes all the available commands with
-- \<type\> = ctl, phy (for all DDR controller or PHY registers) or one category: static, timing, map, perf, dyn
-
-- \<reg\> = name of the register (mstr for example)
-
-**Command description:**
-
-![](_htmresc/Command_description.png "Command description")
-
-***Note:***
-
-- *The "param" command is a simple way to test the modified settings, as it modifies the input parameters ('param' read from stm32mp_util_ddr_conf.h). It is recommended to execute this command at step 0. The modified values are applied at the correct DDR steps.*
-- *The "print" and "edit" commands directly access the CTRL and PHY registers, so the values can be overridden by the input parameters when the driver executes the initialization steps. These commands are used for detailed debug of the DDR initialization.*
-
-##### 2.3.1.2 Command examples
-
-Here is an example of commands launched on STM32MP13XX_DK board:
-
-```
-----------------------------TERMINAL----------------------------
-=============== UTILITIES-DDR Tool ===============
-Model: STM32MP13XX_DK
-RAM: DDR3-1066 bin F 1x4Gb 533MHz v1.53
-0:DDR_RESET
-DDR>
-----------------------------------------------------------------
-```
-
-Print help command:
+The following log describes all the available commands, available through **help** instruction:
 
 ```
 ----------------------------TERMINAL----------------------------
@@ -322,7 +444,7 @@ param [type|reg]           prints input parameters
 param <reg> <val>          edits parameters in step 0
 print [type|reg]           dumps registers
 edit <reg> <val>           modifies one register
-save                       output formatted DDR regs to be saved
+save                       output formated DDR regs to be saved
 step                       lists the available step
 step <n>                   go to the step <n>
 next                       goes to the next step
@@ -332,13 +454,33 @@ test [help] | <n> [...]    lists (with help) or executes test <n>
 
 with for [type|reg]:
   all registers if absent
-  <type> = ctl, phy
-           or one category (static, timing, map, perf, dyn)
+  <type> = ctl, uib, uia, uim, uis
   <reg> = name of the register
 ----------------------------------------------------------------
 ```
 
+***Note:***
+
+- *The "param" command is a simple way to test the modified settings, as it modifies the input parameters ('param' read from stm32mp\_util\_ddr\_conf.h). It is recommended to execute this command at step 0. The modified values are applied at the correct DDR steps.*
+- *The "print" and "edit" commands directly access the DDRC registers and PHY user input parameters (or PHY registers for STM32MP1 series), so the values can be overridden by the input parameters when the driver executes the initialization steps. These commands are used for detailed debug of the DDR initialization.*
+
+##### 2.3.1.2 Command examples
+
+Here is an example of commands launched on STM32MP257F_EV1 board:
+
+```
+----------------------------TERMINAL----------------------------
+=============== UTILITIES-DDR Tool ===============
+Model: STM32MP2XX
+RAM: DDR4 2x16Gbits 2x16bits 1200MHz
+0:DDR_RESET
+----------------------------------------------------------------
+```
+
+Print help command: see *§2.3.1.1 Command description*)
+
 Before running tests, enter DDR_READY step:
+
 ```
 ----------------------------TERMINAL----------------------------
 DDR>step 3
@@ -354,10 +496,8 @@ Then you can execute tests:
 
 ```
 ----------------------------TERMINAL----------------------------
-DDR> 
-DDR>test 1 0xc0000000
+DDR>test 1 0x80000000
 Result: Pass [Test Simple DataBus]
-DDR>
 DDR>test 0
 result 1:Test Simple DataBus = Passed
 result 2:Test DataBusWalking0 = Passed
@@ -380,46 +520,35 @@ Result: Pass [Test All]
 ```
 
 You can also use print or save commands to get all registers. The command save will output formatted DDR register values to be copied directly in the DDR configuration file:
+
 ```
 ----------------------------TERMINAL----------------------------
 DDR>save
 
 /* DDR REG VALUES TO BE SAVED */
-#define DDR_MEM_NAME  "DDR3-1066 bin F 1x4Gb 533MHz v1.53"
-#define DDR_MEM_SPEED 533000
-#define DDR_MEM_SIZE  0x20000000
+#define DDR_MEM_NAME  "DDR4 2x16Gbits 2x16bits 1200MHz"
+#define DDR_MEM_SPEED 1200000
+#define DDR_MEM_SIZE  0x100000000
+
 
 /* ctl.static */
-#define DDR_MSTR 0x00040401
-#define DDR_MRCTRL0 0x00000010
+#define DDR_MSTR 0x01040010
+#define DDR_MRCTRL0 0x00000030
 ...
 ----------------------------------------------------------------
 ```
 
 #### 2.3.2 Using STM32CubeMX
-The exact same operations can be executed using the graphical user interface provided by DDR Tool in STM32CubeMX (See *§3.2.5 DDR Test Suite* for more details)
+The exact same operations can be executed using the graphical user interface provided by DDR Tool in STM32CubeMX (See *§3.2.5 DDR Test Suite* for more details):
+
 - Within STM32CubeIDE:
-   - Launch the debug session as indicated in *§2.2.3 Launch project*
+   - Launch the debug session as indicated in *§2.2.4 Launch project*
 - Within STM32CubeMX DDR Test Suite:
    - uncheck “SYSRAM Loading” box
    - DDR interactive connection Select & Connect on the UART of utilities-DDR (by default ST-Link UART on ST boards)
    - run DDR Tests
 
 You can watch DDR video tutorial in STM32CubeMX for more information (Help/Tutorial Videos/DDR Tuning Tests).
-
-### 2.4 How to use binaries from STM32DDRFW-UTIL package
-Signed binaries (containing STM32 header) are provided in STM32DDRFW-UTIL for each supported ST boards.  This will allow the user to launch DDR Tool directly from SD Card.
-- Copy the signed firmware binary you want to launch at offset 0x10000 (Section 128) on your SD card (using *HxD* tool for example).
-- Take the SD Card and insert it in SDMMC1 instance of the platform.
-- Set the boot pins of your board in « Boot from SD » mode (See *§2.1 Hardware connections*).
-- Open a terminal. Reset the board and check DDR prompt on UART.
-- Then you will be able to use the DDR Tool as described in *§2.3 How to use STM32DDRFW-UTIL functionalities*.
-
-You can also flash these binaries into SYSRAM using STM32CubeProgrammer in command line or through STM32CubeMX (See *§3.1 STM32CubeProgrammer* for more details).
-
-***Note:***
-
-*If you need to modify the source code, you can use the ‘signed’ project to generate a new binary containing STM32 header or you can use the default project and sign the output binary using Signing Tool in STM32CubeProgrammer (See §3.1.2 Signing tool).*
 
 ## 3 Interaction with STM32CubeProgrammer and STM32CubeMX
 
@@ -443,99 +572,11 @@ Download the package then execute the installer and follow the instructions. You
 
 *C:\Program Files\STMicroelectronics\STM32Cube\STM32CubeProgrammer\bin*
 
-#### 3.1.2 Signing tool
-
-STM32MP Signing Tool is a key tool that guarantees a secure platform, it ensures the signing of binary images using ECC keys generated by KeyGen tool.
-
-The STM32MP Signing Tool software generates a signed binary file from:
-- ***Binary image file***: contains the binary data to be programmed for the STM32MP1 Series device.
-- ***Public key file***: contains the generated ECC public key in PEM format (generated with the [KeyGen tool](https://wiki.st.com/stm32mpu/wiki/KeyGen_tool)).
-- ***Private key file***: contains the encrypted ECC private key in PEM format (generated with the [KeyGen tool](https://wiki.st.com/stm32mpu/wiki/KeyGen_tool)).
-
-Signing tool “STM32MP_SigningTool_CLI.exe” is located in the install path.
-
-The key generator STM32MP_KeyGen_CLI.exe is in the same directory.
-
-For signing a DDR Tool binary built in STM32CubeIDE, you have to launch the two executable programs from the install path
-*C:\Program Files\STMicroelectronics\STM32Cube\STM32CubeProgrammer\bin*:
-- ***STM32MP_KeyGen_CLI.exe*** for generating the keys
-- ***STM32MP_SigningTool_CLI.exe*** for signing the binary
-
-For more information, read Signing tool [wiki](https://wiki.st.com/stm32mpu/wiki/Signing_tool). 
-
-**e.g. on STM32MP135C-DK:**
-1. Generate the 8 public/private keys with Keygen. This step is mandatory to insert STM32 header version 2. Launch *STM32MP_KeyGen_CLI.exe* in a command prompt:
-
-<span style="color:blue;"> 
-
-```
-STM32MP_KeyGen_CLI -abs KeyFolder/ -pwd abc1 abc2 abc3 abc4 abc5 abc6 abc7 abc8 -n 8
-```
-
-</span>
-
-![](_htmresc/STM32MP_KeyGen.png "STM32MP KeyGen")
-
-2. Then launch Signing tool using the generated keys. Replace the name and location of the input and output binaries in the following command line:
-
-<span style="color:blue;"> 
-
-```
-STM32MP_SigningTool_CLI -bin input.bin -la 0x2ffe0000 -o output_signed.stm32 -ep 0x2ffe0000 -t fsbl -iv 2 stm32 -pubk KeyFolder/publicKey00.pem KeyFolder/publicKey01.pem KeyFolder/publicKey02.pem KeyFolder/publicKey03.pem KeyFolder/publicKey04.pem KeyFolder/publicKey05.pem KeyFolder/publicKey06.pem KeyFolder/publicKey07.pem -prvk KeyFolder/privateKey00.pem KeyFolder/privateKey01.pem KeyFolder/privateKey02.pem KeyFolder/privateKey03.pem KeyFolder/privateKey04.pem KeyFolder/privateKey05.pem KeyFolder/privateKey06.pem KeyFolder/privateKey07.pem -pwd abc1 abc2 abc3 abc4 abc5 abc6 abc7 abc8
-```
-
-</span>
-
-Expected result on the screenshot:
-
-![](_htmresc/STM32MP_SigningTool.png "STM32MP SigningTool")
-
-**e.g. on STM32MP157C-EVAL:**
-
-STM32MP15 does not require to generate additional key. Use the following command line to sign a binary (replace *input* and *output* file names):
-
-<span style="color:blue;"> 
-
-```
-STM32MP_SigningTool_CLI -bin input.bin -o output_signed.stm32 -la 0x2ffc2500 -of 1 -ep 0x2ffc2500 --public-key key\publicKey.pem --private-key key\privateKey.pem -iv 0x0 -pwd "bootrom-dev"
-```
-
-</span>
-
-
-Expected result on the screenshot:
-
-![](_htmresc/STM32MP_SigningTool2.png "STM32MP SigningTool 2")
-
-You can then use the output binary by copying it on SDCARD or by loading the image in SYSRAM using STM32CubeProgrammer or STM32CubeMX.
-
 #### 3.1.3 SYSRAM loading
 
 STM352CubeProgrammer can be used to load a signed binary (from the binaries directory of the STM32DDRFW-UTIL firmware package or generated from a STM32CubeIDE signed project) into the SYSRAM of the board.
 
 To do so connect the host PC and the board using USB or UART serial links. Make sure the boot pin configuration is properly set for serial boot on your board. Then, in a command prompt, launch the proper command line.
-
-**e.g. for STM32MP135C-DK:**
-
-1. Boot pin is configured in “Forced USB boot for flashing”
-
-![](_htmresc/Forced_USB_boot_for_flashing.jpg "Forced USB boot for flashing")
-
-2. Launch the programmer to load DDR Tool (set the proper port configuration and input file)
-
-<span style="color:blue;"> 
-
-```
-STM32_Programmer_CLI.exe -c port=COM4 -w STM32MP135C-DK_DDR_UTILITIES_A7_signed.stm32 0x01 –-start 0x01
-```
-
-</span>
-
-Expected result on the screenshot:
-
-![](_htmresc/STM32Programmer.png "STM32Programmer")
-
-Once loaded, you can open a terminal and check that the DDR prompt is responding. Then you will be able to use the DDR Tool.
 
 ### 3.2 STM32CubeMX
 
@@ -550,29 +591,21 @@ Download the package then execute the installer and follow the instructions. You
 *C:\Program Files\STMicroelectronics\STM32Cube\STM32CubeMX*
 
 #### 3.2.2 Start new project
-The following paragraphs describe how to start and launch a new project based on STM32MP135C-DK for the example.
+The following paragraphs describe how to start and launch a new project.
 
 - Open STM32CubeMX then “Start My project from ST Board”
 
-![](_htmresc/Start_My_project_from_ST_Board.png "Start My project from ST Board")
-
 - Select your ST board model
 
-![](_htmresc/ST_board_model.png "ST board model")
 
 #### 3.2.3 DDR configuration
 
 - Once the project is opened, configure the DDR settings in “Pinout and configuration” tab
-
-![](_htmresc/DDR_configuration.png "DDR_configuration")
-
    - Select DDR in System Core
    - Then select the proper DDR type
    - And set the correct parameter settings
 
 - DDR frequency is set in “Clock and Configuration” tab
-
-![](_htmresc/Clock_and_Configuration.png "Clock and Configuration")
 
 STM32CubeMX will resolve the clock issues and set the correct PLL configuration that can also be found in the generated device tree.
 
@@ -581,12 +614,10 @@ STM32CubeMX will resolve the clock issues and set the correct PLL configuration 
 In case, you want to start a project with a new DDR model on a customized board, you can also generate directly the device tree containing all the DDR register definitions (See *§3.2.4 Device Tree generation*).
 
 #### 3.2.4 Device Tree generation
+
 -	In “Project Manager” tab, set project name and select the Toolchain/IDE STM32CubeIDE
-
-![](_htmresc/Project_manager.png "Project Manager")
-
 - Then click on “Generate code”
-- You will find all the definitions of DDR parameters in stm32mp13-mx.dtsi at the location defined in “Project Manager”
+- You will find all the definitions of DDR parameters at the location defined in “Project Manager”
 - Copy these definitions in the corresponding STM32CubeIDE project given as example to start your customized STM32CubeIDE project.
 
 #### 3.2.5 DDR Test Suite
@@ -599,26 +630,16 @@ If you want to start the DDR Test Suite on your board with an available STM32DDR
 
 - Run the project in Engineering mode or Boot from SD card (See *§2 How to use STM32DDRFW-UTIL firmware*).
 - In DDR Test Suite, make sur SYSRAM loading is unchecked.
-
-![](_htmresc/SYSRAM_loading_unchecked.png "SYSRAM_loading_unchecked")
-
 - Select the correct port com then connect the board. Target information is displayed when the tool is running properly.
-
-![](_htmresc/Target_information.png "Target information")
 
 ###### 3.2.5.1.2 Serial boot
 
 SYSRAM loading option in STM32CubeMX uses STM32CubeProgrammer to flash the board.
+
 - Connect your board using UART or USB link then set the right boot pin configuration (See *§3.1.3 SYSRAM loading*).
 - In DDR Test Suite, check SYSRAM loading box. Select the port used to load the binary file.
 - Select the DDR utilities binary file to be loaded (make sure you are using a signed binary with .stm32 extension)
-
-![](_htmresc/DDR_utilities_binary.png "DDR utilities binary")
-
 - Then click on “Connect” button to launch SYSRAM loading.
-
-![](_htmresc/Connect.png "Connect")
-
 - Target information is displayed when the tool is running properly.
 
 ##### 3.2.5.2 DDR tests
@@ -630,15 +651,11 @@ In the DDR interactive logs, the static parameters are displayed and “step 3�
 
 “Save Config File” button output formatted DDR registers in DDR_Config_file.txt (check logs for the file location if no project has been created). It calls the “save” command described in Command description table.
 
-![](_htmresc/Load_registers.png "Load_registers")
-
-- The tests described in *§1.3.4.1 Test description* can be executed in the DDR Test Suite of STM32CubeMX.
+The tests described in *§1.3.4.1 Test description* can be executed in the DDR Test Suite of STM32CubeMX.
 
 Select a test and click on “Run test” button.
 
-Test result is displayed in DDR interactive logs:
-
-![](_htmresc/Test_result.png "Test result")
+Test result is displayed in DDR interactive logs.
 
 ***Note:***
 

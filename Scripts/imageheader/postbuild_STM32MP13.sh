@@ -29,11 +29,11 @@ case "$(uname -s)" in
   Linux)
     #line for python
     echo Postbuild with python script
-    imgtool="${local_script_path}/Python27/Stm32ImageAddHeader.py"
+    imgtool="${local_script_path}/Python3/Stm32ImageAddHeader.py"
     cmd="python"
     ;;
   *)
-    #line for window executeable
+    #line for window executable
     echo Postbuild with windows executable
     imgtool="${local_script_path}/exe.win-amd64-2.7/Stm32ImageAddHeader.exe"
     cmd=""

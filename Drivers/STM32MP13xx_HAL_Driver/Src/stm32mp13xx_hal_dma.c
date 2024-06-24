@@ -117,8 +117,8 @@ typedef struct
 /* Private variables ---------------------------------------------------------*/
 /* Private constants ---------------------------------------------------------*/
 /** @addtogroup DMA_Private_Constants
- * @{
- */
+  * @{
+  */
 #define HAL_TIMEOUT_DMA_ABORT    (5U)  /* 5 ms */
 
 
@@ -132,7 +132,7 @@ typedef struct
   */
 static void DMA_SetConfig(DMA_HandleTypeDef *hdma, uint32_t SrcAddress, uint32_t DstAddress, uint32_t DataLength);
 static uint32_t DMA_CalcBaseAndBitshift(DMA_HandleTypeDef *hdma);
-static HAL_StatusTypeDef DMA_CheckFifoParam(DMA_HandleTypeDef *hdma);
+static HAL_StatusTypeDef DMA_CheckFifoParam(const DMA_HandleTypeDef *hdma);
 static void DMA_CalcDMAMUXChannelBaseAndMask(DMA_HandleTypeDef *hdma);
 static void DMA_CalcDMAMUXRequestGenBaseAndMask(DMA_HandleTypeDef *hdma);
 
@@ -193,16 +193,16 @@ HAL_StatusTypeDef HAL_DMA_Init(DMA_HandleTypeDef *hdma)
   assert_param(IS_DMA_MODE(hdma->Init.Mode));
   assert_param(IS_DMA_PRIORITY(hdma->Init.Priority));
 
-  if(IS_DMA_INSTANCE(hdma) != 0U) /* DMA1 or DMA2 instance */
+  if (IS_DMA_INSTANCE(hdma) != 0U) /* DMA1 or DMA2 instance */
   {
 
     assert_param(IS_DMA_REQUEST(hdma->Init.Request));
 #if defined (DMA3)
     if (IS_DMA3_INSTANCE(hdma) != 0U) /* DMA stream */
-	{
+    {
       assert_param(IS_DMA3_REQUEST(hdma->Init.Request));
-	}
-#endif
+    }
+#endif /* DMA3 */
     assert_param(IS_DMA_FIFO_MODE_STATE(hdma->Init.FIFOMode));
     /* Check the memory burst, peripheral burst and FIFO threshold parameters only
        when FIFO mode is enabled */
@@ -305,7 +305,7 @@ HAL_StatusTypeDef HAL_DMA_Init(DMA_HandleTypeDef *hdma)
     regs_dma = (DMA_Base_Registers *)DMA_CalcBaseAndBitshift(hdma);
 
     /* Clear all interrupt flags */
-     regs_dma->IFCR = 0x3FUL << (hdma->StreamIndex & 0x1FU);
+    regs_dma->IFCR = 0x3FUL << (hdma->StreamIndex & 0x1FU);
   }
   else
   {
@@ -404,7 +404,7 @@ HAL_StatusTypeDef HAL_DMA_DeInit(DMA_HandleTypeDef *hdma)
   ((DMA_Stream_TypeDef *)hdma->Instance)->FCR  = (uint32_t)0x00000021U;
 
   /* Get DMA steam Base Address */
-    regs_dma = (DMA_Base_Registers *)DMA_CalcBaseAndBitshift(hdma);
+  regs_dma = (DMA_Base_Registers *)DMA_CalcBaseAndBitshift(hdma);
 
   /* Clear all interrupt flags at correct offset within the register */
   regs_dma->IFCR = 0x3FUL << (hdma->StreamIndex & 0x1FU);
@@ -412,7 +412,7 @@ HAL_StatusTypeDef HAL_DMA_DeInit(DMA_HandleTypeDef *hdma)
      DMAmuxChannel, DMAmuxChannelStatus and DMAmuxChannelStatusMask */
   DMA_CalcDMAMUXChannelBaseAndMask(hdma);
 
-  if(hdma->DMAmuxChannel != 0U)
+  if (hdma->DMAmuxChannel != 0U)
   {
     /* Resett he DMAMUX channel that corresponds to the DMA stream */
     hdma->DMAmuxChannel->CCR = 0U;
@@ -546,7 +546,8 @@ HAL_StatusTypeDef HAL_DMA_Start(DMA_HandleTypeDef *hdma, uint32_t SrcAddress, ui
   * @param  DataLength: The length of data to be transferred from source to destination
   * @retval HAL status
   */
-HAL_StatusTypeDef HAL_DMA_Start_IT(DMA_HandleTypeDef *hdma, uint32_t SrcAddress, uint32_t DstAddress, uint32_t DataLength)
+HAL_StatusTypeDef HAL_DMA_Start_IT(DMA_HandleTypeDef *hdma, uint32_t SrcAddress, uint32_t DstAddress,
+                                   uint32_t DataLength)
 {
   HAL_StatusTypeDef status = HAL_OK;
 
@@ -577,7 +578,8 @@ HAL_StatusTypeDef HAL_DMA_Start_IT(DMA_HandleTypeDef *hdma, uint32_t SrcAddress,
     DMA_SetConfig(hdma, SrcAddress, DstAddress, DataLength);
 
     /* Enable Common interrupts*/
-    MODIFY_REG(((DMA_Stream_TypeDef *)hdma->Instance)->CR, (DMA_IT_TC | DMA_IT_TE | DMA_IT_DME | DMA_IT_HT), (DMA_IT_TC | DMA_IT_TE | DMA_IT_DME));
+    MODIFY_REG(((DMA_Stream_TypeDef *)hdma->Instance)->CR, (DMA_IT_TC | DMA_IT_TE | DMA_IT_DME | DMA_IT_HT),
+               (DMA_IT_TC | DMA_IT_TE | DMA_IT_DME));
     if (hdma->XferHalfCpltCallback != NULL)
     {
       /*Enable Half Transfer IT if corresponding Callback is set*/
@@ -591,7 +593,7 @@ HAL_StatusTypeDef HAL_DMA_Start_IT(DMA_HandleTypeDef *hdma, uint32_t SrcAddress,
       hdma->DMAmuxChannel->CCR |= DMAMUX_CxCR_SOIE;
     }
 
-    if(hdma->DMAmuxRequestGen != 0U)
+    if (hdma->DMAmuxRequestGen != 0U)
     {
       /* if using DMAMUX request generator, enable the DMAMUX request generator overrun IT*/
       /* enable the request gen overrun IT*/
@@ -691,7 +693,7 @@ HAL_StatusTypeDef HAL_DMA_Abort(DMA_HandleTypeDef *hdma)
     /* Clear the DMAMUX synchro overrun flag */
     hdma->DMAmuxChannelStatus->CFR = hdma->DMAmuxChannelStatusMask;
 
-    if(hdma->DMAmuxRequestGen != 0U)
+    if (hdma->DMAmuxRequestGen != 0U)
     {
       /* if using DMAMUX request generator, disable the DMAMUX request generator overrun IT*/
       /* disable the request gen overrun IT*/
@@ -747,11 +749,13 @@ HAL_StatusTypeDef HAL_DMA_Abort_IT(DMA_HandleTypeDef *hdma)
   * @param  CompleteLevel: Specifies the DMA level complete.
   * @note   The polling mode is kept in this version for legacy. it is recommended to use the IT model instead.
   *         This model could be used for debug purpose.
-  * @note   The HAL_DMA_PollForTransfer API cannot be used in circular and double buffering mode (automatic circular mode).
+  * @note   The HAL_DMA_PollForTransfer API cannot be used in circular and double
+  *         buffering mode (automatic circular mode).
   * @param  Timeout:       Timeout duration.
   * @retval HAL status
   */
-HAL_StatusTypeDef HAL_DMA_PollForTransfer(DMA_HandleTypeDef *hdma, HAL_DMA_LevelCompleteTypeDef CompleteLevel, uint32_t Timeout)
+HAL_StatusTypeDef HAL_DMA_PollForTransfer(DMA_HandleTypeDef *hdma, HAL_DMA_LevelCompleteTypeDef CompleteLevel,
+                                          uint32_t Timeout)
 {
   HAL_StatusTypeDef status = HAL_OK;
   uint32_t cpltlevel_mask;
@@ -787,22 +791,22 @@ HAL_StatusTypeDef HAL_DMA_PollForTransfer(DMA_HandleTypeDef *hdma, HAL_DMA_Level
   if (CompleteLevel == HAL_DMA_FULL_TRANSFER)
   {
     /* Transfer Complete flag */
-      cpltlevel_mask = DMA_FLAG_TCIF0_4 << (hdma->StreamIndex & 0x1FU);
+    cpltlevel_mask = DMA_FLAG_TCIF0_4 << (hdma->StreamIndex & 0x1FU);
   }
   else
   {
     /* Half Transfer Complete flag */
-      cpltlevel_mask = DMA_FLAG_HTIF0_4 << (hdma->StreamIndex & 0x1FU);
+    cpltlevel_mask = DMA_FLAG_HTIF0_4 << (hdma->StreamIndex & 0x1FU);
   }
 
   isr_reg  = &(((DMA_Base_Registers *)hdma->StreamBaseAddress)->ISR);
   ifcr_reg = &(((DMA_Base_Registers *)hdma->StreamBaseAddress)->IFCR);
 
-  while(((*isr_reg) & cpltlevel_mask) == 0U)
+  while (((*isr_reg) & cpltlevel_mask) == 0U)
   {
-    if(IS_DMA_INSTANCE(hdma) != 0U) /* DMA1 or DMA2 instance */
+    if (IS_DMA_INSTANCE(hdma) != 0U) /* DMA1 or DMA2 instance */
     {
-      if(((*isr_reg) & (DMA_FLAG_FEIF0_4 << (hdma->StreamIndex & 0x1FU))) != 0U)
+      if (((*isr_reg) & (DMA_FLAG_FEIF0_4 << (hdma->StreamIndex & 0x1FU))) != 0U)
       {
         /* Update error code */
         hdma->ErrorCode |= HAL_DMA_ERROR_FE;
@@ -811,7 +815,7 @@ HAL_StatusTypeDef HAL_DMA_PollForTransfer(DMA_HandleTypeDef *hdma, HAL_DMA_Level
         (*ifcr_reg) = DMA_FLAG_FEIF0_4 << (hdma->StreamIndex & 0x1FU);
       }
 
-      if(((*isr_reg) & (DMA_FLAG_DMEIF0_4 << (hdma->StreamIndex & 0x1FU))) != 0U)
+      if (((*isr_reg) & (DMA_FLAG_DMEIF0_4 << (hdma->StreamIndex & 0x1FU))) != 0U)
       {
         /* Update error code */
         hdma->ErrorCode |= HAL_DMA_ERROR_DME;
@@ -820,7 +824,7 @@ HAL_StatusTypeDef HAL_DMA_PollForTransfer(DMA_HandleTypeDef *hdma, HAL_DMA_Level
         (*ifcr_reg) = DMA_FLAG_DMEIF0_4 << (hdma->StreamIndex & 0x1FU);
       }
 
-      if(((*isr_reg) & (DMA_FLAG_TEIF0_4 << (hdma->StreamIndex & 0x1FU))) != 0U)
+      if (((*isr_reg) & (DMA_FLAG_TEIF0_4 << (hdma->StreamIndex & 0x1FU))) != 0U)
       {
         /* Update error code */
         hdma->ErrorCode |= HAL_DMA_ERROR_TE;
@@ -838,62 +842,63 @@ HAL_StatusTypeDef HAL_DMA_PollForTransfer(DMA_HandleTypeDef *hdma, HAL_DMA_Level
       }
     }
 
-    }
+  }
 
-    /* Check for the Timeout (Not applicable in circular mode)*/
-    if (Timeout != HAL_MAX_DELAY)
+  /* Check for the Timeout (Not applicable in circular mode)*/
+  if (Timeout != HAL_MAX_DELAY)
+  {
+    if (((HAL_GetTick() - tickstart) > Timeout) || (Timeout == 0U))
     {
-      if (((HAL_GetTick() - tickstart) > Timeout) || (Timeout == 0U))
-      {
-        /* Update error code */
-        hdma->ErrorCode = HAL_DMA_ERROR_TIMEOUT;
+      /* Update error code */
+      hdma->ErrorCode = HAL_DMA_ERROR_TIMEOUT;
 
-        /* if timeout then abort the current transfer */
-        /* No need to check return value: as in this case we will return HAL_ERROR with HAL_DMA_ERROR_TIMEOUT error code  */
-        (void) HAL_DMA_Abort(hdma);
-          /*
-            Note that the Abort function will
-              - Clear the transfer error flags
-              - Unlock
-              - Set the State
-          */
+      /* if timeout then abort the current transfer */
+      /* No need to check return value: as in this case we will return HAL_ERROR
+         with HAL_DMA_ERROR_TIMEOUT error code  */
+      (void) HAL_DMA_Abort(hdma);
+      /*
+        Note that the Abort function will
+          - Clear the transfer error flags
+          - Unlock
+          - Set the State
+      */
 
 
-        return HAL_ERROR;
-      }
+      return HAL_ERROR;
     }
+  }
 
-    /*Check for DMAMUX Request generator (if used) overrun status */
-    if(hdma->DMAmuxRequestGen != 0U)
+  /*Check for DMAMUX Request generator (if used) overrun status */
+  if (hdma->DMAmuxRequestGen != 0U)
+  {
+    /* if using DMAMUX request generator Check for DMAMUX request generator overrun */
+    if ((hdma->DMAmuxRequestGenStatus->RGSR & hdma->DMAmuxRequestGenStatusMask) != 0U)
     {
-      /* if using DMAMUX request generator Check for DMAMUX request generator overrun */
-      if ((hdma->DMAmuxRequestGenStatus->RGSR & hdma->DMAmuxRequestGenStatusMask) != 0U)
-      {
-        /* Clear the DMAMUX request generator overrun flag */
-        hdma->DMAmuxRequestGenStatus->RGCFR = hdma->DMAmuxRequestGenStatusMask;
-
-        /* Update error code */
-        hdma->ErrorCode |= HAL_DMA_ERROR_REQGEN;
-      }
-    }
-
-    /* Check for DMAMUX Synchronization overrun */
-    if ((hdma->DMAmuxChannelStatus->CSR & hdma->DMAmuxChannelStatusMask) != 0U)
-    {
-      /* Clear the DMAMUX synchro overrun flag */
-      hdma->DMAmuxChannelStatus->CFR = hdma->DMAmuxChannelStatusMask;
+      /* Clear the DMAMUX request generator overrun flag */
+      hdma->DMAmuxRequestGenStatus->RGCFR = hdma->DMAmuxRequestGenStatusMask;
 
       /* Update error code */
-      hdma->ErrorCode |= HAL_DMA_ERROR_SYNC;
+      hdma->ErrorCode |= HAL_DMA_ERROR_REQGEN;
     }
+  }
+
+  /* Check for DMAMUX Synchronization overrun */
+  if ((hdma->DMAmuxChannelStatus->CSR & hdma->DMAmuxChannelStatusMask) != 0U)
+  {
+    /* Clear the DMAMUX synchro overrun flag */
+    hdma->DMAmuxChannelStatus->CFR = hdma->DMAmuxChannelStatusMask;
+
+    /* Update error code */
+    hdma->ErrorCode |= HAL_DMA_ERROR_SYNC;
+  }
 
 
 
   /* Get the level transfer complete flag */
-  if(CompleteLevel == HAL_DMA_FULL_TRANSFER)
-    {
+  if (CompleteLevel == HAL_DMA_FULL_TRANSFER)
+  {
     /* Clear the half transfer and transfer complete flags */
-    if(IS_DMA_INSTANCE(hdma) != 0U) /* DMA1 or DMA2 instance */
+    if (IS_DMA_INSTANCE(hdma) != 0U) /* DMA1 or DMA2 instance */
     {
       (*ifcr_reg) = (DMA_FLAG_HTIF0_4 | DMA_FLAG_TCIF0_4) << (hdma->StreamIndex & 0x1FU);
     }
@@ -904,9 +909,9 @@ HAL_StatusTypeDef HAL_DMA_PollForTransfer(DMA_HandleTypeDef *hdma, HAL_DMA_Level
   else /*CompleteLevel = HAL_DMA_HALF_TRANSFER*/
   {
     /* Clear the half transfer and transfer complete flags */
-    if(IS_DMA_INSTANCE(hdma) != 0U) /* DMA1 or DMA2 instance */
+    if (IS_DMA_INSTANCE(hdma) != 0U) /* DMA1 or DMA2 instance */
     {
-    (*ifcr_reg) = (DMA_FLAG_HTIF0_4) << (hdma->StreamIndex & 0x1FU);
+      (*ifcr_reg) = (DMA_FLAG_HTIF0_4) << (hdma->StreamIndex & 0x1FU);
     }
   }
 
@@ -930,7 +935,7 @@ void HAL_DMA_IRQHandler(DMA_HandleTypeDef *hdma)
 
   tmpisr_dma = regs_dma->ISR;
 
-  if(IS_DMA_INSTANCE(hdma) != 0U)  /* DMA1 or DMA2 instance */
+  if (IS_DMA_INSTANCE(hdma) != 0U) /* DMA1 or DMA2 instance */
   {
     /* Transfer Error Interrupt management ***************************************/
     if ((tmpisr_dma & (DMA_FLAG_TEIF0_4 << (hdma->StreamIndex & 0x1FU))) != 0U)
@@ -1113,8 +1118,7 @@ void HAL_DMA_IRQHandler(DMA_HandleTypeDef *hdma)
           {
             break;
           }
-        }
-        while ((((DMA_Stream_TypeDef *)hdma->Instance)->CR & DMA_SxCR_EN) != 0U);
+        } while ((((DMA_Stream_TypeDef *)hdma->Instance)->CR & DMA_SxCR_EN) != 0U);
 
         if ((((DMA_Stream_TypeDef *)hdma->Instance)->CR & DMA_SxCR_EN) != 0U)
         {
@@ -1153,7 +1157,9 @@ void HAL_DMA_IRQHandler(DMA_HandleTypeDef *hdma)
   *                               a DMA_HandleTypeDef structure as parameter.
   * @retval HAL status
   */
-HAL_StatusTypeDef HAL_DMA_RegisterCallback(DMA_HandleTypeDef *hdma, HAL_DMA_CallbackIDTypeDef CallbackID, void (* pCallback)(DMA_HandleTypeDef *_hdma))
+HAL_StatusTypeDef HAL_DMA_RegisterCallback(DMA_HandleTypeDef *hdma,
+                                           HAL_DMA_CallbackIDTypeDef CallbackID,
+                                           void (* pCallback)(DMA_HandleTypeDef *_hdma))
 {
 
   HAL_StatusTypeDef status = HAL_OK;
@@ -1196,7 +1202,7 @@ HAL_StatusTypeDef HAL_DMA_RegisterCallback(DMA_HandleTypeDef *hdma, HAL_DMA_Call
         break;
 
       default:
-      status =  HAL_ERROR;
+        status =  HAL_ERROR;
         break;
     }
   }
@@ -1311,7 +1317,7 @@ HAL_StatusTypeDef HAL_DMA_UnRegisterCallback(DMA_HandleTypeDef *hdma, HAL_DMA_Ca
   *               the configuration information for the specified DMA Stream.
   * @retval HAL state
   */
-HAL_DMA_StateTypeDef HAL_DMA_GetState(DMA_HandleTypeDef *hdma)
+HAL_DMA_StateTypeDef HAL_DMA_GetState(const DMA_HandleTypeDef *hdma)
 {
   return hdma->State;
 }
@@ -1322,7 +1328,7 @@ HAL_DMA_StateTypeDef HAL_DMA_GetState(DMA_HandleTypeDef *hdma)
   *              the configuration information for the specified DMA Stream.
   * @retval DMA Error Code
   */
-uint32_t HAL_DMA_GetError(DMA_HandleTypeDef *hdma)
+uint32_t HAL_DMA_GetError(const DMA_HandleTypeDef *hdma)
 {
   return hdma->ErrorCode;
 }
@@ -1356,13 +1362,13 @@ static void DMA_SetConfig(DMA_HandleTypeDef *hdma, uint32_t SrcAddress, uint32_t
   /* Clear the DMAMUX synchro overrun flag */
   hdma->DMAmuxChannelStatus->CFR = hdma->DMAmuxChannelStatusMask;
 
-  if(hdma->DMAmuxRequestGen != 0U)
+  if (hdma->DMAmuxRequestGen != 0U)
   {
     /* Clear the DMAMUX request generator overrun flag */
     hdma->DMAmuxRequestGenStatus->RGCFR = hdma->DMAmuxRequestGenStatusMask;
   }
   /* Clear all interrupt flags at correct offset within the register */
-    regs_dma->IFCR = 0x3FUL << (hdma->StreamIndex & 0x1FU);
+  regs_dma->IFCR = 0x3FUL << (hdma->StreamIndex & 0x1FU);
 
   /* Clear DBM bit */
   ((DMA_Stream_TypeDef *)hdma->Instance)->CR &= (uint32_t)(~DMA_SxCR_DBM);
@@ -1424,7 +1430,7 @@ static uint32_t DMA_CalcBaseAndBitshift(DMA_HandleTypeDef *hdma)
   *                     the configuration information for the specified DMA Stream.
   * @retval HAL status
   */
-static HAL_StatusTypeDef DMA_CheckFifoParam(DMA_HandleTypeDef *hdma)
+static HAL_StatusTypeDef DMA_CheckFifoParam(const DMA_HandleTypeDef *hdma)
 {
   HAL_StatusTypeDef status = HAL_OK;
 
@@ -1540,11 +1546,11 @@ static void DMA_CalcDMAMUXChannelBaseAndMask(DMA_HandleTypeDef *hdma)
   if ((stream_baseaddress <= ((uint32_t)DMA3_Stream7)) && \
       (stream_baseaddress >= ((uint32_t)DMA3_Stream0)))
   {
-	  hdma->DMAmuxChannel = (DMAMUX_Channel_TypeDef *)((uint32_t)(((uint32_t)DMAMUX2_Channel0) + (stream_number * 4U)));
-	  hdma->DMAmuxChannelStatus = DMAMUX2_ChannelStatus;
-	  hdma->DMAmuxChannelStatusMask = 1UL << (stream_number & 0x1FU);
+    hdma->DMAmuxChannel = (DMAMUX_Channel_TypeDef *)((uint32_t)(((uint32_t)DMAMUX2_Channel0) + (stream_number * 4U)));
+    hdma->DMAmuxChannelStatus = DMAMUX2_ChannelStatus;
+    hdma->DMAmuxChannelStatusMask = 1UL << (stream_number & 0x1FU);
   }
-#endif
+#endif /* DMA3 */
 }
 
 /**
@@ -1561,20 +1567,22 @@ static void DMA_CalcDMAMUXRequestGenBaseAndMask(DMA_HandleTypeDef *hdma)
   if ((request >= DMA_REQUEST_GENERATOR0) && (request <= DMA_REQUEST_GENERATOR7))
   {
     if ((stream_baseaddress <= ((uint32_t)DMA2_Stream7)) && \
-      (stream_baseaddress >= ((uint32_t)DMA1_Stream0)))
+        (stream_baseaddress >= ((uint32_t)DMA1_Stream0)))
     {
       /*DMA1 and DMA2 Streams use DMAMUX1 request generator blocks*/
-      hdma->DMAmuxRequestGen = (DMAMUX_RequestGen_TypeDef *)((uint32_t)(((uint32_t)DMAMUX1_RequestGenerator0) + ((request - 1U) * 4U)));
+      hdma->DMAmuxRequestGen = (DMAMUX_RequestGen_TypeDef *)((uint32_t)(((uint32_t)DMAMUX1_RequestGenerator0) + \
+                                                                        ((request - 1U) * 4U)));
       hdma->DMAmuxRequestGenStatus = DMAMUX1_RequestGenStatus;
     }
 #if defined (DMA3)
     else
     {
       /* DMA3 streams use DMAMUX2 request generator blocks */
-      hdma->DMAmuxRequestGen = (DMAMUX_RequestGen_TypeDef *)((uint32_t)(((uint32_t)DMAMUX2_RequestGenerator0) + ((request - 1U) * 4U)));
+      hdma->DMAmuxRequestGen = (DMAMUX_RequestGen_TypeDef *)((uint32_t)(((uint32_t)DMAMUX2_RequestGenerator0) + \
+                                                                        ((request - 1U) * 4U)));
       hdma->DMAmuxRequestGenStatus = DMAMUX2_RequestGenStatus;
     }
-#endif
+#endif /* DMA3 */
     hdma->DMAmuxRequestGenStatusMask = 1UL << (request - 1U);
   }
 }

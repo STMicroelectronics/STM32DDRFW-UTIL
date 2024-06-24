@@ -29,20 +29,20 @@ extern "C" {
 #include "stm32mp13xx_hal_conf.h"
 
 /** @addtogroup STM32MP13xx_HAL_Driver
- * @{
- */
+  * @{
+  */
 
 /** @addtogroup HAL
- * @{
- */
+  * @{
+  */
 
 /* Exported types ------------------------------------------------------------*/
 /** @defgroup HAL_Exported_Types HAL Exported Types
   * @{
   */
 /** @defgroup HAL_Exported_Types_Group1 Tick Frequency
- * @{
- */
+  * @{
+  */
 typedef enum
 {
   HAL_TICK_FREQ_10HZ         = 100U,
@@ -51,28 +51,28 @@ typedef enum
   HAL_TICK_FREQ_DEFAULT      = HAL_TICK_FREQ_1KHZ
 } HAL_TickFreqTypeDef;
 /**
- * @}
- */
+  * @}
+  */
 
 /** @defgroup HAL_Exported_Types_Group2 HDP SW Signal
- * @{
- */
+  * @{
+  */
 
 /**
- * @brief  HDP SW Signal SET and Bit RESET enumeration
- */
+  * @brief  HDP SW Signal SET and Bit RESET enumeration
+  */
 typedef enum
 {
   HDP_SW_SIGNAL_RESET = 0,
   HDP_SW_SIGNAL_SET
 } HDP_SwSignalState;
 /**
- * @}
- */
+  * @}
+  */
 
 /**
-* @}
-*/
+  * @}
+  */
 
 /* Exported constants --------------------------------------------------------*/
 
@@ -128,12 +128,12 @@ typedef enum
 #define SYSCFG_ETH2_RGMII                   SYSCFG_PMCSETR_ETH2_SEL_0       /*!< Select the Reduced Gigabit Media Independent Interface */
 
 #define IS_SYSCFG_ETHERNET_CONFIG(CONFIG) (((CONFIG) == SYSCFG_ETH1_MII)       || \
-                                          ((CONFIG) == SYSCFG_ETH1_RMII)       || \
-                                          ((CONFIG) == SYSCFG_ETH1_RGMII)      || \
-                                          ((CONFIG) == SYSCFG_ETH2_MII)        || \
-                                          ((CONFIG) == SYSCFG_ETH2_RMII)       || \
-                                          ((CONFIG) == SYSCFG_ETH2_RGMII))
-#endif
+                                           ((CONFIG) == SYSCFG_ETH1_RMII)       || \
+                                           ((CONFIG) == SYSCFG_ETH1_RGMII)      || \
+                                           ((CONFIG) == SYSCFG_ETH2_MII)        || \
+                                           ((CONFIG) == SYSCFG_ETH2_RMII)       || \
+                                           ((CONFIG) == SYSCFG_ETH2_RGMII))
+#endif /* SYSCFG_DUAL_ETH_SUPPORT */
 
 /**
   * @}
@@ -147,7 +147,7 @@ typedef enum
 #define SYSCFG_REGISTER_CODE                SYSCFG_CMPCR_SW_CTRL    /*!< Code from the SYSCFG compensation cell code register */
 
 #define IS_SYSCFG_CODE_SELECT(SELECT) (((SELECT) == SYSCFG_CELL_CODE)|| \
-                                        ((SELECT) == SYSCFG_REGISTER_CODE))
+                                       ((SELECT) == SYSCFG_REGISTER_CODE))
 
 #define IS_SYSCFG_CODE_CONFIG(CONFIG) ((CONFIG) < (0x10U))
 
@@ -157,19 +157,22 @@ typedef enum
 
 
 /** @brief  Check SYSCFG Main Compensation Cell Ready flag is set or not.
-* @retval State of bit (1 or 0)
-*/
-#define __HAL_SYSCFG_MAIN_CMP_CELL_GET_FLAG() ((READ_BIT(SYSCFG->CMPCR, SYSCFG_CMPCR_READY) == (SYSCFG_CMPCR_READY)) ? 1U : 0U)
+  * @retval State of bit (1 or 0)
+  */
+#define __HAL_SYSCFG_MAIN_CMP_CELL_GET_FLAG() ((READ_BIT(SYSCFG->CMPCR, SYSCFG_CMPCR_READY)\
+                                                == (SYSCFG_CMPCR_READY)) ? 1U : 0U)
 
 /** @brief  Check SYSCFG SDMMC1 Compensation Cell Ready flag is set or not.
-* @retval State of bit (1 or 0)
-*/
-#define __HAL_SYSCFG_SD1_CMP_CELL_GET_FLAG() ((READ_BIT(SYSCFG->CMPSD1CR, SYSCFG_CMPSD1CR_READY) == (SYSCFG_CMPSD1CR_READY)) ? 1U : 0U)
+  * @retval State of bit (1 or 0)
+  */
+#define __HAL_SYSCFG_SD1_CMP_CELL_GET_FLAG() ((READ_BIT(SYSCFG->CMPSD1CR, SYSCFG_CMPSD1CR_READY)\
+                                               == (SYSCFG_CMPSD1CR_READY)) ? 1U : 0U)
 
 /** @brief  Check SYSCFG SDMMC2 Compensation Cell Ready flag is set or not.
-* @retval State of bit (1 or 0)
-*/
-#define __HAL_SYSCFG_SD2_CMP_CELL_GET_FLAG() ((READ_BIT(SYSCFG->CMPSD2CR, SYSCFG_CMPSD2CR_READY) == (SYSCFG_CMPSD2CR_READY)) ? 1U : 0U)
+  * @retval State of bit (1 or 0)
+  */
+#define __HAL_SYSCFG_SD2_CMP_CELL_GET_FLAG() ((READ_BIT(SYSCFG->CMPSD2CR, SYSCFG_CMPSD2CR_READY)\
+                                               == (SYSCFG_CMPSD2CR_READY)) ? 1U : 0U)
 
 /**
   * @brief  Get Main I/O compensation cell value for PMOS transistors
@@ -245,8 +248,8 @@ typedef enum
 #define HDP_SW_SIGNAL_7                 ((uint8_t)0x80U)  /* HDP Software signal 7 selected    */
 
 /**
- * @}
- */
+  * @}
+  */
 
 /**
   * @}
@@ -263,120 +266,120 @@ typedef enum
 #if defined(DBGMCU_APB4_FZ_DBG_IWDG2_STOP)
 #define __HAL_DBGMCU_FREEZE_IWDG2()           SET_BIT(DBGMCU->APB4FZ1, DBGMCU_APB4_FZ_DBG_IWDG2_STOP)
 #define __HAL_DBGMCU_UNFREEZE_IWDG2()         CLEAR_BIT(DBGMCU->APB4FZ1, DBGMCU_APB4_FZ_DBG_IWDG2_STOP)
-#endif
+#endif /* DBGMCU_APB4_FZ_DBG_IWDG2_STOP */
 
 #if defined(DBGMCU_APB1_FZ_DBG_TIM2_STOP)
 #define __HAL_DBGMCU_FREEZE_TIM2()           SET_BIT(DBGMCU->APB1FZ1, DBGMCU_APB1_FZ_DBG_TIM2_STOP)
 #define __HAL_DBGMCU_UNFREEZE_TIM2()         CLEAR_BIT(DBGMCU->APB1FZ1, DBGMCU_APB1_FZ_DBG_TIM2_STOP)
-#endif
+#endif /* DBGMCU_APB1_FZ_DBG_TIM2_STOP */
 #if defined(DBGMCU_APB1_FZ_DBG_TIM3_STOP)
 #define __HAL_DBGMCU_FREEZE_TIM3()           SET_BIT(DBGMCU->APB1FZ1, DBGMCU_APB1_FZ_DBG_TIM3_STOP)
 #define __HAL_DBGMCU_UNFREEZE_TIM3()         CLEAR_BIT(DBGMCU->APB1FZ1, DBGMCU_APB1_FZ_DBG_TIM3_STOP)
-#endif
+#endif /* DBGMCU_APB1_FZ_DBG_TIM3_STOP */
 #if defined(DBGMCU_APB1_FZ_DBG_TIM4_STOP)
 #define __HAL_DBGMCU_FREEZE_TIM4()           SET_BIT(DBGMCU->APB1FZ1, DBGMCU_APB1_FZ_DBG_TIM4_STOP)
 #define __HAL_DBGMCU_UNFREEZE_TIM4()         CLEAR_BIT(DBGMCU->APB1FZ1, DBGMCU_APB1_FZ_DBG_TIM4_STOP)
-#endif
+#endif /* DBGMCU_APB1_FZ_DBG_TIM3_STOP */
 #if defined(DBGMCU_APB1_FZ_DBG_TIM5_STOP)
 #define __HAL_DBGMCU_FREEZE_TIM5()           SET_BIT(DBGMCU->APB1FZ1, DBGMCU_APB1_FZ_DBG_TIM5_STOP)
 #define __HAL_DBGMCU_UNFREEZE_TIM5()         CLEAR_BIT(DBGMCU->APB1FZ1, DBGMCU_APB1_FZ_DBG_TIM5_STOP)
-#endif
+#endif /* DBGMCU_APB1_FZ_DBG_TIM5_STOP */
 #if defined(DBGMCU_APB1_FZ_DBG_TIM6_STOP)
 #define __HAL_DBGMCU_FREEZE_TIM6()           SET_BIT(DBGMCU->APB1FZ1, DBGMCU_APB1_FZ_DBG_TIM6_STOP)
 #define __HAL_DBGMCU_UNFREEZE_TIM6()         CLEAR_BIT(DBGMCU->APB1FZ1, DBGMCU_APB1_FZ_DBG_TIM6_STOP)
-#endif
+#endif /* DBGMCU_APB1_FZ_DBG_TIM6_STOP */
 #if defined(DBGMCU_APB1_FZ_DBG_TIM7_STOP)
 #define __HAL_DBGMCU_FREEZE_TIM7()           SET_BIT(DBGMCU->APB1FZ1, DBGMCU_APB1_FZ_DBG_TIM7_STOP)
 #define __HAL_DBGMCU_UNFREEZE_TIM7()         CLEAR_BIT(DBGMCU->APB1FZ1, DBGMCU_APB1_FZ_DBG_TIM7_STOP)
-#endif
+#endif /* DBGMCU_APB1_FZ_DBG_TIM7_STOP */
 #if defined(DBGMCU_APB1_FZ_DBG_LPTIM1_STOP)
 #define __HAL_DBGMCU_FREEZE_LPTIM1()           SET_BIT(DBGMCU->APB1FZ1, DBGMCU_APB1_FZ_DBG_LPTIM1_STOP)
 #define __HAL_DBGMCU_UNFREEZE_LPTIM1()         CLEAR_BIT(DBGMCU->APB1FZ1, DBGMCU_APB1_FZ_DBG_LPTIM1_STOP)
-#endif
+#endif /* DBGMCU_APB1_FZ_DBG_LPTIM1_STOP */
 #if defined(DBGMCU_APB1_FZ_DBG_I2C1_STOP)
 #define __HAL_DBGMCU_FREEZE_I2C1()           SET_BIT(DBGMCU->APB1FZ1, DBGMCU_APB1_FZ_DBG_I2C1_STOP)
 #define __HAL_DBGMCU_UNFREEZE_I2C1()         CLEAR_BIT(DBGMCU->APB1FZ1, DBGMCU_APB1_FZ_DBG_I2C1_STOP)
-#endif
+#endif /* DBGMCU_APB1_FZ_DBG_I2C1_STOP */
 #if defined(DBGMCU_APB1_FZ_DBG_I2C2_STOP)
 #define __HAL_DBGMCU_FREEZE_I2C2()           SET_BIT(DBGMCU->APB1FZ1, DBGMCU_APB1_FZ_DBG_I2C2_STOP)
 #define __HAL_DBGMCU_UNFREEZE_I2C2()         CLEAR_BIT(DBGMCU->APB1FZ1, DBGMCU_APB1_FZ_DBG_I2C2_STOP)
-#endif
+#endif /* DBGMCU_APB1_FZ_DBG_I2C2_STOP */
 
 #if defined(DBGMCU_APB2_FZ_DBG_TIM1_STOP)
 #define __HAL_DBGMCU_FREEZE_TIM1()           SET_BIT(DBGMCU->APB2FZ1, DBGMCU_APB2_FZ_DBG_TIM1_STOP)
 #define __HAL_DBGMCU_UNFREEZE_TIM1()         CLEAR_BIT(DBGMCU->APB2FZ1, DBGMCU_APB2_FZ_DBG_TIM1_STOP)
-#endif
+#endif /* DBGMCU_APB2_FZ_DBG_TIM1_STOP */
 #if defined(DBGMCU_APB2_FZ_DBG_TIM8_STOP)
 #define __HAL_DBGMCU_FREEZE_TIM8()           SET_BIT(DBGMCU->APB2FZ1, DBGMCU_APB2_FZ_DBG_TIM8_STOP)
 #define __HAL_DBGMCU_UNFREEZE_TIM8()         CLEAR_BIT(DBGMCU->APB2FZ1, DBGMCU_APB2_FZ_DBG_TIM8_STOP)
-#endif
+#endif /* DBGMCU_APB2_FZ_DBG_TIM8_STOP */
 #if defined(DBGMCU_APB2_FZ_DBG_FDCAN_STOP)
 #define __HAL_DBGMCU_FREEZE_FDCAN()           SET_BIT(DBGMCU->APB2FZ1, DBGMCU_APB2_FZ_DBG_FDCAN_STOP)
 #define __HAL_DBGMCU_UNFREEZE_FDCAN()         CLEAR_BIT(DBGMCU->APB2FZ1, DBGMCU_APB2_FZ_DBG_FDCAN_STOP)
-#endif
+#endif /* DBGMCU_APB2_FZ_DBG_FDCAN_STOP */
 
 #if defined(DBGMCU_APB3_FZ_DBG_LPTIM2_STOP)
 #define __HAL_DBGMCU_FREEZE_LPTIM2()           SET_BIT(DBGMCU->APB3FZ1, DBGMCU_APB3_FZ_DBG_LPTIM2_STOP)
 #define __HAL_DBGMCU_UNFREEZE_LPTIM2()         CLEAR_BIT(DBGMCU->APB3FZ1, DBGMCU_APB3_FZ_DBG_LPTIM2_STOP)
-#endif
+#endif /* DBGMCU_APB3_FZ_DBG_LPTIM2_STOP */
 #if defined(DBGMCU_APB3_FZ_DBG_LPTIM3_STOP)
 #define __HAL_DBGMCU_FREEZE_LPTIM3()           SET_BIT(DBGMCU->APB3FZ1, DBGMCU_APB3_FZ_DBG_LPTIM3_STOP)
 #define __HAL_DBGMCU_UNFREEZE_LPTIM3()         CLEAR_BIT(DBGMCU->APB3FZ1, DBGMCU_APB3_FZ_DBG_LPTIM3_STOP)
-#endif
+#endif /* DBGMCU_APB3_FZ_DBG_LPTIM3_STOP */
 #if defined(DBGMCU_APB3_FZ_DBG_LPTIM4_STOP)
 #define __HAL_DBGMCU_FREEZE_LPTIM4()           SET_BIT(DBGMCU->APB3FZ1, DBGMCU_APB3_FZ_DBG_LPTIM4_STOP)
 #define __HAL_DBGMCU_UNFREEZE_LPTIM4()         CLEAR_BIT(DBGMCU->APB3FZ1, DBGMCU_APB3_FZ_DBG_LPTIM4_STOP)
-#endif
+#endif /* DBGMCU_APB3_FZ_DBG_LPTIM4_STOP */
 #if defined(DBGMCU_APB3_FZ_DBG_LPTIM5_STOP)
 #define __HAL_DBGMCU_FREEZE_LPTIM5()           SET_BIT(DBGMCU->APB3FZ1, DBGMCU_APB3_FZ_DBG_LPTIM5_STOP)
 #define __HAL_DBGMCU_UNFREEZE_LPTIM5()         CLEAR_BIT(DBGMCU->APB3FZ1, DBGMCU_APB3_FZ_DBG_LPTIM5_STOP)
-#endif
+#endif /* DBGMCU_APB3_FZ_DBG_LPTIM5_STOP */
 
 #if defined(DBGMCU_APB5_FZ_DBG_IWDG1_STOP)
 #define __HAL_DBGMCU_FREEZE_IWDG1()           SET_BIT(DBGMCU->APB5FZ1, DBGMCU_APB5_FZ_DBG_IWDG1_STOP)
 #define __HAL_DBGMCU_UNFREEZE_IWDG1()         CLEAR_BIT(DBGMCU->APB5FZ1, DBGMCU_APB5_FZ_DBG_IWDG1_STOP)
-#endif
+#endif /* DBGMCU_APB5_FZ_DBG_IWDG1_STOP */
 #if defined(DBGMCU_APB5_FZ_DBG_RTC_STOP)
 #define __HAL_DBGMCU_FREEZE_RTC()           SET_BIT(DBGMCU->APB5FZ1, DBGMCU_APB5_FZ_DBG_RTC_STOP)
 #define __HAL_DBGMCU_UNFREEZE_RTC()         CLEAR_BIT(DBGMCU->APB5FZ1, DBGMCU_APB5_FZ_DBG_RTC_STOP)
-#endif
+#endif /* DBGMCU_APB5_FZ_DBG_RTC_STOP */
 
 #if defined(DBGMCU_APB6_FZ_DBG_I2C3_STOP)
 #define __HAL_DBGMCU_FREEZE_I2C3()           SET_BIT(DBGMCU->APB6FZ1, DBGMCU_APB6_FZ_DBG_I2C3_STOP)
 #define __HAL_DBGMCU_UNFREEZE_I2C3()         CLEAR_BIT(DBGMCU->APB6FZ1, DBGMCU_APB6_FZ_DBG_I2C3_STOP)
-#endif
+#endif /* DBGMCU_APB6_FZ_DBG_I2C3_STOP */
 #if defined(DBGMCU_APB6_FZ_DBG_I2C4_STOP)
 #define __HAL_DBGMCU_FREEZE_I2C4()           SET_BIT(DBGMCU->APB6FZ1, DBGMCU_APB6_FZ_DBG_I2C4_STOP)
 #define __HAL_DBGMCU_UNFREEZE_I2C4()         CLEAR_BIT(DBGMCU->APB6FZ1, DBGMCU_APB6_FZ_DBG_I2C4_STOP)
-#endif
+#endif /* DBGMCU_APB6_FZ_DBG_I2C4_STOP */
 #if defined(DBGMCU_APB6_FZ_DBG_I2C5_STOP)
 #define __HAL_DBGMCU_FREEZE_I2C5()           SET_BIT(DBGMCU->APB6FZ1, DBGMCU_APB6_FZ_DBG_I2C5_STOP)
 #define __HAL_DBGMCU_UNFREEZE_I2C5()         CLEAR_BIT(DBGMCU->APB6FZ1, DBGMCU_APB6_FZ_DBG_I2C5_STOP)
-#endif
+#endif /* DBGMCU_APB6_FZ_DBG_I2C5_STOP */
 #if defined(DBGMCU_APB6_FZ_DBG_TIM12_STOP)
 #define __HAL_DBGMCU_FREEZE_TIM12()           SET_BIT(DBGMCU->APB6FZ1, DBGMCU_APB6_FZ_DBG_TIM12_STOP)
 #define __HAL_DBGMCU_UNFREEZE_TIM12()         CLEAR_BIT(DBGMCU->APB6FZ1, DBGMCU_APB6_FZ_DBG_TIM12_STOP)
-#endif
+#endif /* DBGMCU_APB6_FZ_DBG_TIM12_STOP */
 #if defined(DBGMCU_APB6_FZ_DBG_TIM13_STOP)
 #define __HAL_DBGMCU_FREEZE_TIM13()           SET_BIT(DBGMCU->APB6FZ1, DBGMCU_APB6_FZ_DBG_TIM13_STOP)
 #define __HAL_DBGMCU_UNFREEZE_TIM13()         CLEAR_BIT(DBGMCU->APB6FZ1, DBGMCU_APB6_FZ_DBG_TIM13_STOP)
-#endif
+#endif /* DBGMCU_APB6_FZ_DBG_TIM13_STOP */
 #if defined(DBGMCU_APB6_FZ_DBG_TIM14_STOP)
 #define __HAL_DBGMCU_FREEZE_TIM14()           SET_BIT(DBGMCU->APB6FZ1, DBGMCU_APB6_FZ_DBG_TIM14_STOP)
 #define __HAL_DBGMCU_UNFREEZE_TIM14()         CLEAR_BIT(DBGMCU->APB6FZ1, DBGMCU_APB6_FZ_DBG_TIM14_STOP)
-#endif
+#endif /* DBGMCU_APB6_FZ_DBG_TIM14_STOP */
 #if defined(DBGMCU_APB6_FZ_DBG_TIM15_STOP)
 #define __HAL_DBGMCU_FREEZE_TIM15()           SET_BIT(DBGMCU->APB6FZ1, DBGMCU_APB6_FZ_DBG_TIM15_STOP)
 #define __HAL_DBGMCU_UNFREEZE_TIM15()         CLEAR_BIT(DBGMCU->APB6FZ1, DBGMCU_APB6_FZ_DBG_TIM15_STOP)
-#endif
+#endif /* DBGMCU_APB6_FZ_DBG_TIM15_STOP */
 #if defined(DBGMCU_APB6_FZ_DBG_TIM16_STOP)
 #define __HAL_DBGMCU_FREEZE_TIM16()           SET_BIT(DBGMCU->APB6FZ1, DBGMCU_APB6_FZ_DBG_TIM16_STOP)
 #define __HAL_DBGMCU_UNFREEZE_TIM16()         CLEAR_BIT(DBGMCU->APB6FZ1, DBGMCU_APB6_FZ_DBG_TIM16_STOP)
-#endif
+#endif /* DBGMCU_APB6_FZ_DBG_TIM16_STOP */
 #if defined(DBGMCU_APB6_FZ_DBG_TIM17_STOP)
 #define __HAL_DBGMCU_FREEZE_TIM17()           SET_BIT(DBGMCU->APB6FZ1, DBGMCU_APB6_FZ_DBG_TIM17_STOP)
 #define __HAL_DBGMCU_UNFREEZE_TIM17()         CLEAR_BIT(DBGMCU->APB6FZ1, DBGMCU_APB6_FZ_DBG_TIM17_STOP)
-#endif
+#endif /* DBGMCU_APB6_FZ_DBG_TIM17_STOP */
 
 /**
    * @}
@@ -401,7 +404,7 @@ typedef enum
   */
 
 /** @brief  This macros allows atomic write of HDP_GPOVAL register
-            It uses HDP_GPOSET and HDP_GPOCLR regsiters to toogle
+            It uses HDP_GPOSET and HDP_GPOCLR registers to toggle
   *
   * @param  __HDP_SW_Signal__: specifies the sw signal bit to be written.
   *          This parameter can be one of HDP_SW_SIGNAL_x(s) where x can be (0..7).
@@ -411,23 +414,23 @@ typedef enum
   *            @arg HDP_SW_SIGNAL_SET: to set the signal pin
   */
 #define __HAL_HDP_ATOMIC_WRITE_GPOVAL(__HDP_SW_Signal__, __HDP_SwSignalState__)      \
-                              do {                                                                 \
-                                  if ((__HDP_SwSignalState__) != HDP_SW_SIGNAL_RESET)                                         \
-                                  {                                                                \
-                                    WRITE_REG(HDP->HDP_GPOSET, (uint8_t)(__HDP_SW_Signal__));            \
-                                  }                                                                \
-                                  else                                                             \
-                                  {                                                                \
-                                    WRITE_REG(HDP->HDP_GPOCLR, (uint8_t)(__HDP_SW_Signal__));            \
-                                  }                                                                \
-                              } while(0)
+  do {                                                                 \
+    if ((__HDP_SwSignalState__) != HDP_SW_SIGNAL_RESET)                                         \
+    {                                                                \
+      WRITE_REG(HDP->HDP_GPOSET, (uint8_t)(__HDP_SW_Signal__));            \
+    }                                                                \
+    else                                                             \
+    {                                                                \
+      WRITE_REG(HDP->HDP_GPOCLR, (uint8_t)(__HDP_SW_Signal__));            \
+    }                                                                \
+  } while(0)
 
 /** @brief  This macros allows non-atomic write of HDP_GPOVAL register
   *
   * @param __GPOValue__: specifies the value to set in HDP_GPOVAL register
   *
   */
-#define __HAL_HDP_NON_ATOMIC_WRITE_GPOVAL(__GPOValue__)               WRITE_REG(HDP->HDP_GPOVAL, (uint8_t)(__GPOValue__))
+#define __HAL_HDP_NON_ATOMIC_WRITE_GPOVAL(__GPOValue__)              WRITE_REG(HDP->HDP_GPOVAL, (uint8_t)(__GPOValue__))
 
 /** @brief  This macros returns value of HDP_GPOVAL register
   *
@@ -442,17 +445,35 @@ typedef enum
 /** @addtogroup HDP0_MUX0_Config
   * @{
   */
-#define __HAL_HDP0_SELECT_PWR_PWRWAKE_SYS()                        MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX0, ((uint32_t) 0x00000000))
-#define __HAL_HDP0_SELECT_PWR_STOP_FORBIDDEN()                     MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX0, ((uint32_t) HDP_MUX_MUX0_0))
-#define __HAL_HDP0_SELECT_PWR_STDBY_WAKEUP()                       MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX0, ((uint32_t) HDP_MUX_MUX0_1))
-#define __HAL_HDP0_SELECT_PWR_ENCOMP_VDDCORE()                     MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX0, ((uint32_t) HDP_MUX_MUX0_1 | HDP_MUX_MUX0_0))
-#define __HAL_HDP0_SELECT_BSEC_OUT_SEC_NIDEN()                     MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX0, ((uint32_t) HDP_MUX_MUX0_2))
-#define __HAL_HDP0_SELECT_EXTI_SYS_WAKEUP()                        MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX0, ((uint32_t) HDP_MUX_MUX0_2 | HDP_MUX_MUX0_0))
-#define __HAL_HDP0_SELECT_DDRCTRL_IP_REQ()                         MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX0, ((uint32_t) HDP_MUX_MUX0_3))
-#define __HAL_HDP0_SELECT_PWR_DDR_RET_ENABLE_N()                   MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX0, ((uint32_t) HDP_MUX_MUX0_3 | HDP_MUX_MUX0_0))
-#define __HAL_HDP0_SELECT_DTS_CLK_PTAT()                           MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX0, ((uint32_t) HDP_MUX_MUX0_3 | HDP_MUX_MUX0_1))
-#define __HAL_HDP0_SELECT_SRAM3CTRL_TAMP_ERASE_ACT()               MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX0, ((uint32_t) HDP_MUX_MUX0_3 | HDP_MUX_MUX0_2))
-#define __HAL_HDP0_SELECT_GPOVAL_0()                               MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX0, ((uint32_t) HDP_MUX_MUX0_3 | HDP_MUX_MUX0_2 | HDP_MUX_MUX0_1 | HDP_MUX_MUX0_0))
+#define __HAL_HDP0_SELECT_PWR_PWRWAKE_SYS()                        MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX0, \
+                                                                              ((uint32_t) 0x00000000))
+#define __HAL_HDP0_SELECT_PWR_STOP_FORBIDDEN()                     MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX0, \
+                                                                              ((uint32_t) HDP_MUX_MUX0_0))
+#define __HAL_HDP0_SELECT_PWR_STDBY_WAKEUP()                       MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX0, \
+                                                                              ((uint32_t) HDP_MUX_MUX0_1))
+#define __HAL_HDP0_SELECT_PWR_ENCOMP_VDDCORE()                     MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX0, \
+                                                                              ((uint32_t) HDP_MUX_MUX0_1 | \
+                                                                               HDP_MUX_MUX0_0))
+#define __HAL_HDP0_SELECT_BSEC_OUT_SEC_NIDEN()                     MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX0, \
+                                                                              ((uint32_t) HDP_MUX_MUX0_2))
+#define __HAL_HDP0_SELECT_EXTI_SYS_WAKEUP()                        MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX0, \
+                                                                              ((uint32_t) HDP_MUX_MUX0_2 |\
+                                                                               HDP_MUX_MUX0_0))
+#define __HAL_HDP0_SELECT_DDRCTRL_IP_REQ()                         MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX0, \
+                                                                              ((uint32_t) HDP_MUX_MUX0_3))
+#define __HAL_HDP0_SELECT_PWR_DDR_RET_ENABLE_N()                   MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX0, \
+                                                                              ((uint32_t) HDP_MUX_MUX0_3 |\
+                                                                               HDP_MUX_MUX0_0))
+#define __HAL_HDP0_SELECT_DTS_CLK_PTAT()                           MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX0, \
+                                                                              ((uint32_t) HDP_MUX_MUX0_3 |\
+                                                                               HDP_MUX_MUX0_1))
+#define __HAL_HDP0_SELECT_SRAM3CTRL_TAMP_ERASE_ACT()               MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX0, \
+                                                                              ((uint32_t) HDP_MUX_MUX0_3 |\
+                                                                               HDP_MUX_MUX0_2))
+#define __HAL_HDP0_SELECT_GPOVAL_0()                               MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX0, \
+                                                                              ((uint32_t) HDP_MUX_MUX0_3 |\
+                                                                               HDP_MUX_MUX0_2 | HDP_MUX_MUX0_1 | \
+                                                                               HDP_MUX_MUX0_0))
 
 /**
   * @}
@@ -461,18 +482,40 @@ typedef enum
 /** @addtogroup HDP1_MUX1_Config
   * @{
   */
-#define __HAL_HDP1_SELECT_PWR_SEL_VTH_VDDCPU()                     MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX1, ((uint32_t) 0x00000000))
-#define __HAL_HDP1_SELECT_PWR_MPU_RAM_LOWSPEED()                   MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX1, ((uint32_t) HDP_MUX_MUX1_0))
-#define __HAL_HDP1_SELECT_CA7_nAXIERRIRQ()                         MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX1, ((uint32_t) HDP_MUX_MUX1_1))
-#define __HAL_HDP1_SELECT_PWR_OKIN_MR()                            MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX1, ((uint32_t) HDP_MUX_MUX1_1 | HDP_MUX_MUX1_0))
-#define __HAL_HDP1_SELECT_BSEC_OUT_SEC_DBGEN()                     MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX1, ((uint32_t) HDP_MUX_MUX1_2))
-#define __HAL_HDP1_SELECT_EXTI_C1_WAKEUP()                         MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX1, ((uint32_t) HDP_MUX_MUX1_2 | HDP_MUX_MUX1_0))
-#define __HAL_HDP1_SELECT_RCC_PWRDS_MPU()                          MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX1, ((uint32_t) HDP_MUX_MUX1_2 | HDP_MUX_MUX1_1))
-#define __HAL_HDP1_SELECT_DDRCTRL_DFI_CTRLUPD_REQ()                MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX1, ((uint32_t) HDP_MUX_MUX1_3))
-#define __HAL_HDP1_SELECT_DDRCTRL_CACTIVE_DDRC_ASR()               MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX1, ((uint32_t) HDP_MUX_MUX1_3 | HDP_MUX_MUX1_0))
-#define __HAL_HDP1_SELECT_SRAM3CTRL_HW_ERASE_ACT()                 MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX1, ((uint32_t) HDP_MUX_MUX1_3 | HDP_MUX_MUX1_2))
-#define __HAL_HDP1_SELECT_NIC400_S0_BREADY()                       MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX1, ((uint32_t) HDP_MUX_MUX1_3 | HDP_MUX_MUX1_2 | HDP_MUX_MUX1_0))
-#define __HAL_HDP1_SELECT_GPOVAL_1()                               MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX1, ((uint32_t) HDP_MUX_MUX1_3 | HDP_MUX_MUX1_2 | HDP_MUX_MUX1_1 | HDP_MUX_MUX1_0))
+#define __HAL_HDP1_SELECT_PWR_SEL_VTH_VDDCPU()                     MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX1, \
+                                                                              ((uint32_t) 0x00000000))
+#define __HAL_HDP1_SELECT_PWR_MPU_RAM_LOWSPEED()                   MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX1, \
+                                                                              ((uint32_t) HDP_MUX_MUX1_0))
+/* Changed macro __HAL_HDP1_SELECT_CA7_nAXIERRIRQ to __HAL_HDP1_SELECT_CA7_NAXIERRIRQ as per MCUAstyle Rule-12 */
+/* Only uppercase separated by an underscore should be used. Rule-12  */
+#define __HAL_HDP1_SELECT_CA7_NAXIERRIRQ()                         MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX1, \
+                                                                              ((uint32_t) HDP_MUX_MUX1_1))
+#define __HAL_HDP1_SELECT_PWR_OKIN_MR()                            MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX1, \
+                                                                              ((uint32_t) HDP_MUX_MUX1_1 |\
+                                                                               HDP_MUX_MUX1_0))
+#define __HAL_HDP1_SELECT_BSEC_OUT_SEC_DBGEN()                     MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX1, \
+                                                                              ((uint32_t) HDP_MUX_MUX1_2))
+#define __HAL_HDP1_SELECT_EXTI_C1_WAKEUP()                         MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX1, \
+                                                                              ((uint32_t) HDP_MUX_MUX1_2 |\
+                                                                               HDP_MUX_MUX1_0))
+#define __HAL_HDP1_SELECT_RCC_PWRDS_MPU()                          MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX1, \
+                                                                              ((uint32_t) HDP_MUX_MUX1_2 |\
+                                                                               HDP_MUX_MUX1_1))
+#define __HAL_HDP1_SELECT_DDRCTRL_DFI_CTRLUPD_REQ()                MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX1, \
+                                                                              ((uint32_t) HDP_MUX_MUX1_3))
+#define __HAL_HDP1_SELECT_DDRCTRL_CACTIVE_DDRC_ASR()               MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX1, \
+                                                                              ((uint32_t) HDP_MUX_MUX1_3 |\
+                                                                               HDP_MUX_MUX1_0))
+#define __HAL_HDP1_SELECT_SRAM3CTRL_HW_ERASE_ACT()                 MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX1, \
+                                                                              ((uint32_t) HDP_MUX_MUX1_3 |\
+                                                                               HDP_MUX_MUX1_2))
+#define __HAL_HDP1_SELECT_NIC400_S0_BREADY()                       MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX1, \
+                                                                              ((uint32_t) HDP_MUX_MUX1_3 |\
+                                                                               HDP_MUX_MUX1_2 | HDP_MUX_MUX1_0))
+#define __HAL_HDP1_SELECT_GPOVAL_1()                               MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX1, \
+                                                                              ((uint32_t) HDP_MUX_MUX1_3 |\
+                                                                               HDP_MUX_MUX1_2 | HDP_MUX_MUX1_1 \
+                                                                               | HDP_MUX_MUX1_0))
 
 /**
   * @}
@@ -481,17 +524,39 @@ typedef enum
 /** @addtogroup HDP2_MUX2_Config
   * @{
   */
-#define __HAL_HDP2_SELECT_PWR_PWRWAKE_MPU()                        MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX2, ((uint32_t) 0x00000000))
-#define __HAL_HDP2_SELECT_PWR_MPU_CLOCK_DISABLE_ACK()              MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX2, ((uint32_t) HDP_MUX_MUX2_0))
-#define __HAL_HDP2_SELECT_CA7_nDBGRESET_i()                        MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX2, ((uint32_t) HDP_MUX_MUX2_1))
-#define __HAL_HDP2_SELECT_BSEC_IN_RSTCORE_n()                      MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX2, ((uint32_t) HDP_MUX_MUX2_2))
-#define __HAL_HDP2_SELECT_BSEC_OUT_SEC_BSC_DIS()                   MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX2, ((uint32_t) HDP_MUX_MUX2_2 | HDP_MUX_MUX2_0))
-#define __HAL_HDP2_SELECT_DDRCTRL_DFI_INIT_COMPLETE()              MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX2, ((uint32_t) HDP_MUX_MUX2_3))
-#define __HAL_HDP2_SELECT_DDRCTRL_PERF_OP_IS_REFRESH()             MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX2, ((uint32_t) HDP_MUX_MUX2_3 | HDP_MUX_MUX2_0))
-#define __HAL_HDP2_SELECT_DDRCTRL_GSKP_DFI_LP_REQ()                MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX2, ((uint32_t) HDP_MUX_MUX2_3 | HDP_MUX_MUX2_1))
-#define __HAL_HDP2_SELECT_SRAM3CTRL_SW_ERASE_ACT()                 MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX2, ((uint32_t) HDP_MUX_MUX2_3 | HDP_MUX_MUX2_2))
-#define __HAL_HDP2_SELECT_NIC400_S0_BVALID()                       MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX2, ((uint32_t) HDP_MUX_MUX2_3 | HDP_MUX_MUX2_2 | HDP_MUX_MUX2_0))
-#define __HAL_HDP2_SELECT_GPOVAL_2()                               MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX2, ((uint32_t) HDP_MUX_MUX2_3 | HDP_MUX_MUX2_2 | HDP_MUX_MUX2_1 | HDP_MUX_MUX2_0))
+#define __HAL_HDP2_SELECT_PWR_PWRWAKE_MPU()                        MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX2, \
+                                                                              ((uint32_t) 0x00000000))
+#define __HAL_HDP2_SELECT_PWR_MPU_CLOCK_DISABLE_ACK()              MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX2, \
+                                                                              ((uint32_t) HDP_MUX_MUX2_0))
+/* Changed macro __HAL_HDP2_SELECT_CA7_nDBGRESET_i to __HAL_HDP2_SELECT_CA7_NDBGRESET_I as per MCUAstyle Rule-12 */
+/* Only uppercase separated by an underscore should be used. Rule-12  */
+#define __HAL_HDP2_SELECT_CA7_NDBGRESET_I()                        MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX2, \
+                                                                              ((uint32_t) HDP_MUX_MUX2_1))
+/* Changed macro __HAL_HDP2_SELECT_BSEC_IN_RSTCORE_n to __HAL_HDP2_SELECT_BSEC_IN_RSTCORE_N as per MCUAstyle Rule-12 */
+/* Only uppercase separated by an underscore should be used. Rule-12  */
+#define __HAL_HDP2_SELECT_BSEC_IN_RSTCORE_N()                      MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX2, \
+                                                                              ((uint32_t) HDP_MUX_MUX2_2))
+#define __HAL_HDP2_SELECT_BSEC_OUT_SEC_BSC_DIS()                   MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX2, \
+                                                                              ((uint32_t) HDP_MUX_MUX2_2 |\
+                                                                               HDP_MUX_MUX2_0))
+#define __HAL_HDP2_SELECT_DDRCTRL_DFI_INIT_COMPLETE()              MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX2, \
+                                                                              ((uint32_t) HDP_MUX_MUX2_3))
+#define __HAL_HDP2_SELECT_DDRCTRL_PERF_OP_IS_REFRESH()             MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX2, \
+                                                                              ((uint32_t) HDP_MUX_MUX2_3 |\
+                                                                               HDP_MUX_MUX2_0))
+#define __HAL_HDP2_SELECT_DDRCTRL_GSKP_DFI_LP_REQ()                MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX2, \
+                                                                              ((uint32_t) HDP_MUX_MUX2_3 |\
+                                                                               HDP_MUX_MUX2_1))
+#define __HAL_HDP2_SELECT_SRAM3CTRL_SW_ERASE_ACT()                 MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX2, \
+                                                                              ((uint32_t) HDP_MUX_MUX2_3 |\
+                                                                               HDP_MUX_MUX2_2))
+#define __HAL_HDP2_SELECT_NIC400_S0_BVALID()                       MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX2, \
+                                                                              ((uint32_t) HDP_MUX_MUX2_3 |\
+                                                                               HDP_MUX_MUX2_2 | HDP_MUX_MUX2_0))
+#define __HAL_HDP2_SELECT_GPOVAL_2()                               MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX2, \
+                                                                              ((uint32_t) HDP_MUX_MUX2_3 |\
+                                                                               HDP_MUX_MUX2_2 | HDP_MUX_MUX2_1 | \
+                                                                               HDP_MUX_MUX2_0))
 
 /**
   * @}
@@ -500,21 +565,51 @@ typedef enum
 /** @addtogroup HDP3_MUX3_Config
   * @{
   */
-#define __HAL_HDP3_SELECT_PWR_SEL_VTH_VDDCORE()                    MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX3, ((uint32_t) 0x00000000))
-#define __HAL_HDP3_SELECT_PWR_MPU_CLOCK_DISABLE_REQ()              MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX3, ((uint32_t) HDP_MUX_MUX3_0))
-#define __HAL_HDP3_SELECT_CA7_nPMUIRQ0()                           MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX3, ((uint32_t) HDP_MUX_MUX3_1))
-#define __HAL_HDP3_SELECT_CA7_nFIQOUT0()                           MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX3, ((uint32_t) HDP_MUX_MUX3_1 | HDP_MUX_MUX3_0))
-#define __HAL_HDP3_SELECT_BSEC_OUT_SEC_DFTLOCK()                   MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX3, ((uint32_t) HDP_MUX_MUX3_2))
-#define __HAL_HDP3_SELECT_BSEC_OUT_SEC_JTAG_DIS()                  MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX3, ((uint32_t) HDP_MUX_MUX3_2 | HDP_MUX_MUX3_0 ))
-#define __HAL_HDP3_SELECT_RCC_PWRDS_SYS()                          MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX3, ((uint32_t) HDP_MUX_MUX3_2 | HDP_MUX_MUX3_1))
-#define __HAL_HDP3_SELECT_SRAM3CTRL_TAMP_ERASE_REQ()               MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX3, ((uint32_t) HDP_MUX_MUX3_2 | HDP_MUX_MUX3_1 | HDP_MUX_MUX3_0))
-#define __HAL_HDP3_SELECT_DDRCTRL_STAT_DDRC_REG_SELREF_TYPE_0()    MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX3, ((uint32_t) HDP_MUX_MUX3_3))
-#define __HAL_HDP3_SELECT_DTS_VALOBUS1_0()                         MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX3, ((uint32_t) HDP_MUX_MUX3_3 | HDP_MUX_MUX3_1))
-#define __HAL_HDP3_SELECT_DTS_VALOBUS2_0()                         MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX3, ((uint32_t) HDP_MUX_MUX3_3 | HDP_MUX_MUX3_1 | HDP_MUX_MUX3_0))
-#define __HAL_HDP3_SELECT_TAMP_POTENTIAL_TAMP_ERFCFG()             MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX3, ((uint32_t) HDP_MUX_MUX3_3 | HDP_MUX_MUX3_2))
-#define __HAL_HDP3_SELECT_NIC400_S0_WREADY()                       MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX3, ((uint32_t) HDP_MUX_MUX3_3 | HDP_MUX_MUX3_2 | HDP_MUX_MUX3_0))
-#define __HAL_HDP3_SELECT_NIC400_S0_RREADY()                       MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX3, ((uint32_t) HDP_MUX_MUX3_3 | HDP_MUX_MUX3_2 | HDP_MUX_MUX3_1))
-#define __HAL_HDP3_SELECT_GPOVAL_3()                               MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX3, ((uint32_t) HDP_MUX_MUX3_3 | HDP_MUX_MUX3_2 | HDP_MUX_MUX3_1 | HDP_MUX_MUX3_0))
+#define __HAL_HDP3_SELECT_PWR_SEL_VTH_VDDCORE()                    MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX3, \
+                                                                              ((uint32_t) 0x00000000))
+#define __HAL_HDP3_SELECT_PWR_MPU_CLOCK_DISABLE_REQ()              MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX3, \
+                                                                              ((uint32_t) HDP_MUX_MUX3_0))
+/* Changed macro __HAL_HDP3_SELECT_CA7_nPMUIRQ0 to __HAL_HDP3_SELECT_CA7_NPMUIRQ0 as per MCUAstyle Rule-12 */
+/* Only uppercase separated by an underscore should be used. Rule-12  */
+#define __HAL_HDP3_SELECT_CA7_NPMUIRQ0()                           MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX3, \
+                                                                              ((uint32_t) HDP_MUX_MUX3_1))
+/* Changed macro __HAL_HDP3_SELECT_CA7_nFIQOUT0 to __HAL_HDP3_SELECT_CA7_NFIQOUT0 as per MCUAstyle Rule-12 */
+/* Only uppercase separated by an underscore should be used. Rule-12  */
+#define __HAL_HDP3_SELECT_CA7_NFIQOUT0()                           MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX3, \
+                                                                              ((uint32_t) HDP_MUX_MUX3_1 |\
+                                                                               HDP_MUX_MUX3_0))
+#define __HAL_HDP3_SELECT_BSEC_OUT_SEC_DFTLOCK()                   MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX3, \
+                                                                              ((uint32_t) HDP_MUX_MUX3_2))
+#define __HAL_HDP3_SELECT_BSEC_OUT_SEC_JTAG_DIS()                  MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX3, \
+                                                                              ((uint32_t) HDP_MUX_MUX3_2 |\
+                                                                               HDP_MUX_MUX3_0 ))
+#define __HAL_HDP3_SELECT_RCC_PWRDS_SYS()                          MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX3, \
+                                                                              ((uint32_t) HDP_MUX_MUX3_2 |\
+                                                                               HDP_MUX_MUX3_1))
+#define __HAL_HDP3_SELECT_SRAM3CTRL_TAMP_ERASE_REQ()               MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX3, \
+                                                                              ((uint32_t) HDP_MUX_MUX3_2 |\
+                                                                               HDP_MUX_MUX3_1 | HDP_MUX_MUX3_0))
+#define __HAL_HDP3_SELECT_DDRCTRL_STAT_DDRC_REG_SELREF_TYPE_0()    MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX3, \
+                                                                              ((uint32_t) HDP_MUX_MUX3_3))
+#define __HAL_HDP3_SELECT_DTS_VALOBUS1_0()                         MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX3, \
+                                                                              ((uint32_t) HDP_MUX_MUX3_3 |\
+                                                                               HDP_MUX_MUX3_1))
+#define __HAL_HDP3_SELECT_DTS_VALOBUS2_0()                         MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX3, \
+                                                                              ((uint32_t) HDP_MUX_MUX3_3 |\
+                                                                               HDP_MUX_MUX3_1 | HDP_MUX_MUX3_0))
+#define __HAL_HDP3_SELECT_TAMP_POTENTIAL_TAMP_ERFCFG()             MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX3, \
+                                                                              ((uint32_t) HDP_MUX_MUX3_3 |\
+                                                                               HDP_MUX_MUX3_2))
+#define __HAL_HDP3_SELECT_NIC400_S0_WREADY()                       MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX3, \
+                                                                              ((uint32_t) HDP_MUX_MUX3_3 |\
+                                                                               HDP_MUX_MUX3_2 | HDP_MUX_MUX3_0))
+#define __HAL_HDP3_SELECT_NIC400_S0_RREADY()                       MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX3, \
+                                                                              ((uint32_t) HDP_MUX_MUX3_3 |\
+                                                                               HDP_MUX_MUX3_2 | HDP_MUX_MUX3_1))
+#define __HAL_HDP3_SELECT_GPOVAL_3()                               MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX3, \
+                                                                              ((uint32_t) HDP_MUX_MUX3_3 |\
+                                                                               HDP_MUX_MUX3_2 | HDP_MUX_MUX3_1 | \
+                                                                               HDP_MUX_MUX3_0))
 
 /**
   * @}
@@ -523,21 +618,56 @@ typedef enum
 /** @addtogroup HDP4_MUX4_Config
   * @{
   */
-#define __HAL_HDP4_SELECT_PWR_STOP2_ACTIVE()                       MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX4, ((uint32_t) HDP_MUX_MUX4_0))
-#define __HAL_HDP4_SELECT_CA7_nl2RESET_i()                         MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX4, ((uint32_t) HDP_MUX_MUX4_1))
-#define __HAL_HDP4_SELECT_CA7_nPORESET_VARM_i()                    MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX4, ((uint32_t) HDP_MUX_MUX4_1 | HDP_MUX_MUX4_0))
-#define __HAL_HDP4_SELECT_BSEC_OUT_SEC_DFTEN()                     MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX4, ((uint32_t) HDP_MUX_MUX4_2))
-#define __HAL_HDP4_SELECT_BSEC_OUT_SEC_DBGSWENABLE()               MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX4, ((uint32_t) HDP_MUX_MUX4_2 | HDP_MUX_MUX4_0))
-#define __HAL_HDP4_SELECT_ETH1_OUT_PMT_INTR_0()                    MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX4, ((uint32_t) HDP_MUX_MUX4_2 | HDP_MUX_MUX4_1))
-#define __HAL_HDP4_SELECT_ETH2_OUT_PMT_INTR_0()                    MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX4, ((uint32_t) HDP_MUX_MUX4_2 | HDP_MUX_MUX4_1 | HDP_MUX_MUX4_0))
-#define __HAL_HDP4_SELECT_DDRCTRL_STAT_DDRC_REG_SELREF_TYPE_1()    MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX4, ((uint32_t) HDP_MUX_MUX4_3))
-#define __HAL_HDP4_SELECT_DDRCTRL_CACTIVE_0()                      MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX4, ((uint32_t) HDP_MUX_MUX4_3 | HDP_MUX_MUX4_0))
-#define __HAL_HDP4_SELECT_DTS_VALOBUS1_1()                         MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX4, ((uint32_t) HDP_MUX_MUX4_3 | HDP_MUX_MUX4_1))
-#define __HAL_HDP4_SELECT_DTS_VALOBUS2_1()                         MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX4, ((uint32_t) HDP_MUX_MUX4_3 | HDP_MUX_MUX4_1 | HDP_MUX_MUX4_0))
-#define __HAL_HDP4_SELECT_TAMP_nRESET_SRAM_ERFCFG()                MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX4, ((uint32_t) HDP_MUX_MUX4_3 | HDP_MUX_MUX4_2))
-#define __HAL_HDP4_SELECT_NIC400_S0_WLAST()                        MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX4, ((uint32_t) HDP_MUX_MUX4_3 | HDP_MUX_MUX4_2 | HDP_MUX_MUX4_0))
-#define __HAL_HDP4_SELECT_NIC400_S0_RLAST()                        MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX4, ((uint32_t) HDP_MUX_MUX4_3 | HDP_MUX_MUX4_2 | HDP_MUX_MUX4_1))
-#define __HAL_HDP4_SELECT_GPOVAL_4()                               MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX4, ((uint32_t) HDP_MUX_MUX4_3 | HDP_MUX_MUX4_2 | HDP_MUX_MUX4_1 | HDP_MUX_MUX4_0))
+#define __HAL_HDP4_SELECT_PWR_STOP2_ACTIVE()                       MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX4, \
+                                                                              ((uint32_t) HDP_MUX_MUX4_0))
+/* Changed macro __HAL_HDP4_SELECT_CA7_nl2RESET_i to __HAL_HDP4_SELECT_CA7_N12RESET_I as per MCUAstyle Rule-12 */
+/* Only uppercase separated by an underscore should be used. Rule-12  */
+#define __HAL_HDP4_SELECT_CA7_N12RESET_I()                         MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX4, \
+                                                                              ((uint32_t) HDP_MUX_MUX4_1))
+/* Changed macro __HAL_HDP4_SELECT_CA7_nPORESET_VARM_i to __HAL_HDP4_SELECT_CA7_NPORESET_VARM_I as per
+   MCUAstyle Rule-12 */
+/* Only uppercase separated by an underscore should be used. Rule-12  */
+#define __HAL_HDP4_SELECT_CA7_NPORESET_VARM_I()                    MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX4, \
+                                                                              ((uint32_t) HDP_MUX_MUX4_1 |\
+                                                                               HDP_MUX_MUX4_0))
+#define __HAL_HDP4_SELECT_BSEC_OUT_SEC_DFTEN()                     MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX4, \
+                                                                              ((uint32_t) HDP_MUX_MUX4_2))
+#define __HAL_HDP4_SELECT_BSEC_OUT_SEC_DBGSWENABLE()               MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX4, \
+                                                                              ((uint32_t) HDP_MUX_MUX4_2 |\
+                                                                               HDP_MUX_MUX4_0))
+#define __HAL_HDP4_SELECT_ETH1_OUT_PMT_INTR_0()                    MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX4, \
+                                                                              ((uint32_t) HDP_MUX_MUX4_2 |\
+                                                                               HDP_MUX_MUX4_1))
+#define __HAL_HDP4_SELECT_ETH2_OUT_PMT_INTR_0()                    MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX4, \
+                                                                              ((uint32_t) HDP_MUX_MUX4_2 |\
+                                                                               HDP_MUX_MUX4_1 | HDP_MUX_MUX4_0))
+#define __HAL_HDP4_SELECT_DDRCTRL_STAT_DDRC_REG_SELREF_TYPE_1()    MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX4, \
+                                                                              ((uint32_t) HDP_MUX_MUX4_3))
+#define __HAL_HDP4_SELECT_DDRCTRL_CACTIVE_0()                      MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX4, \
+                                                                              ((uint32_t) HDP_MUX_MUX4_3 |\
+                                                                               HDP_MUX_MUX4_0))
+#define __HAL_HDP4_SELECT_DTS_VALOBUS1_1()                         MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX4, \
+                                                                              ((uint32_t) HDP_MUX_MUX4_3 |\
+                                                                               HDP_MUX_MUX4_1))
+#define __HAL_HDP4_SELECT_DTS_VALOBUS2_1()                         MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX4, \
+                                                                              ((uint32_t) HDP_MUX_MUX4_3 |\
+                                                                               HDP_MUX_MUX4_1 | HDP_MUX_MUX4_0))
+/* Changed macro __HAL_HDP4_SELECT_TAMP_nRESET_SRAM_ERFCFG to __HAL_HDP4_SELECT_TAMP_NRESET_SRAM_ERFCFG as per
+   MCUAstyle Rule-12 */
+/* Only uppercase separated by an underscore should be used. Rule-12  */
+#define __HAL_HDP4_SELECT_TAMP_NRESET_SRAM_ERFCFG()                MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX4, \
+                                                                              ((uint32_t) HDP_MUX_MUX4_3 |\
+                                                                               HDP_MUX_MUX4_2))
+#define __HAL_HDP4_SELECT_NIC400_S0_WLAST()                        MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX4, \
+                                                                              ((uint32_t) HDP_MUX_MUX4_3 |\
+                                                                               HDP_MUX_MUX4_2 | HDP_MUX_MUX4_0))
+#define __HAL_HDP4_SELECT_NIC400_S0_RLAST()                        MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX4, \
+                                                                              ((uint32_t) HDP_MUX_MUX4_3 |\
+                                                                               HDP_MUX_MUX4_2 | HDP_MUX_MUX4_1))
+#define __HAL_HDP4_SELECT_GPOVAL_4()                               MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX4, \
+                                                                              ((uint32_t) HDP_MUX_MUX4_3 |\
+                                                                               HDP_MUX_MUX4_2 | HDP_MUX_MUX4_1 | \
+                                                                               HDP_MUX_MUX4_0))
 
 /**
   * @}
@@ -546,22 +676,59 @@ typedef enum
 /** @addtogroup HDP5_MUX5_Config
   * @{
   */
-#define __HAL_HDP5_SELECT_CA7_STANDBYWFIL2()                       MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX5, ((uint32_t) 0x00000000))
-#define __HAL_HDP5_SELECT_PWR_VTH_VDDCORE_ACK()                    MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX5, ((uint32_t) HDP_MUX_MUX5_0))
-#define __HAL_HDP5_SELECT_CA7_nCORERESET_i()                       MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX5, ((uint32_t) HDP_MUX_MUX5_1))
-#define __HAL_HDP5_SELECT_CA7_nIRQOUT0()                           MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX5, ((uint32_t) HDP_MUX_MUX5_1 | HDP_MUX_MUX5_0))
-#define __HAL_HDP5_SELECT_BSEC_IN_PWROK()                          MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX5, ((uint32_t) HDP_MUX_MUX5_2))
-#define __HAL_HDP5_SELECT_BSEC_OUT_SEC_DEVICEEN()                  MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX5, ((uint32_t) HDP_MUX_MUX5_2 | HDP_MUX_MUX5_0))
-#define __HAL_HDP5_SELECT_ETH1_OUT_LPI_INTR_0()                    MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX5, ((uint32_t) HDP_MUX_MUX5_2 | HDP_MUX_MUX5_1))
-#define __HAL_HDP5_SELECT_ETH2_OUT_LPI_INTR_0()                    MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX5, ((uint32_t) HDP_MUX_MUX5_2 | HDP_MUX_MUX5_1 | HDP_MUX_MUX5_0))
-#define __HAL_HDP5_SELECT_DDRCTRL_CACTIVE_DDRC()                   MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX5, ((uint32_t) HDP_MUX_MUX5_3))
-#define __HAL_HDP5_SELECT_DDRCTRL_WR_CREDIT_CNT_4_0()              MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX5, ((uint32_t) HDP_MUX_MUX5_3 | HDP_MUX_MUX5_0))
-#define __HAL_HDP5_SELECT_DTS_VALOBUS1_2()                         MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX5, ((uint32_t) HDP_MUX_MUX5_3 | HDP_MUX_MUX5_1))
-#define __HAL_HDP5_SELECT_DTS_VALOBUS2_2()                         MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX5, ((uint32_t) HDP_MUX_MUX5_3 | HDP_MUX_MUX5_1 | HDP_MUX_MUX5_0))
-#define __HAL_HDP5_SELECT_PKA_iTAMP_OUT()                          MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX5, ((uint32_t) HDP_MUX_MUX5_3 | HDP_MUX_MUX5_2))
-#define __HAL_HDP5_SELECT_NIC400_S0_WVALID()                       MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX5, ((uint32_t) HDP_MUX_MUX5_3 | HDP_MUX_MUX5_2 | HDP_MUX_MUX5_0))
-#define __HAL_HDP5_SELECT_NIC400_S0_RVALID()                       MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX5, ((uint32_t) HDP_MUX_MUX5_3 | HDP_MUX_MUX5_2 | HDP_MUX_MUX5_1))
-#define __HAL_HDP5_SELECT_GPOVAL_5()                               MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX5, ((uint32_t) HDP_MUX_MUX5_3 | HDP_MUX_MUX5_2 | HDP_MUX_MUX5_1 | HDP_MUX_MUX5_0))
+#define __HAL_HDP5_SELECT_CA7_STANDBYWFIL2()                       MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX5, \
+                                                                              ((uint32_t) 0x00000000))
+#define __HAL_HDP5_SELECT_PWR_VTH_VDDCORE_ACK()                    MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX5, \
+                                                                              ((uint32_t) HDP_MUX_MUX5_0))
+/* Changed macro __HAL_HDP5_SELECT_CA7_nCORERESET_i to __HAL_HDP5_SELECT_CA7_NCORERESET_I as per
+   MCUAstyle Rule-12 */
+/* Only uppercase separated by an underscore should be used. Rule-12  */
+#define __HAL_HDP5_SELECT_CA7_NCORERESET_I()                       MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX5, \
+                                                                              ((uint32_t) HDP_MUX_MUX5_1))
+/* Changed macro __HAL_HDP5_SELECT_CA7_nIRQOUT0 to __HAL_HDP5_SELECT_CA7_NIRQOUT0 as per
+   MCUAstyle Rule-12 */
+/* Only uppercase separated by an underscore should be used. Rule-12  */
+#define __HAL_HDP5_SELECT_CA7_NIRQOUT0()                           MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX5, \
+                                                                              ((uint32_t) HDP_MUX_MUX5_1 |\
+                                                                               HDP_MUX_MUX5_0))
+#define __HAL_HDP5_SELECT_BSEC_IN_PWROK()                          MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX5, \
+                                                                              ((uint32_t) HDP_MUX_MUX5_2))
+#define __HAL_HDP5_SELECT_BSEC_OUT_SEC_DEVICEEN()                  MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX5, \
+                                                                              ((uint32_t) HDP_MUX_MUX5_2 |\
+                                                                               HDP_MUX_MUX5_0))
+#define __HAL_HDP5_SELECT_ETH1_OUT_LPI_INTR_0()                    MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX5, \
+                                                                              ((uint32_t) HDP_MUX_MUX5_2 |\
+                                                                               HDP_MUX_MUX5_1))
+#define __HAL_HDP5_SELECT_ETH2_OUT_LPI_INTR_0()                    MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX5, \
+                                                                              ((uint32_t) HDP_MUX_MUX5_2 |\
+                                                                               HDP_MUX_MUX5_1 | HDP_MUX_MUX5_0))
+#define __HAL_HDP5_SELECT_DDRCTRL_CACTIVE_DDRC()                   MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX5, \
+                                                                              ((uint32_t) HDP_MUX_MUX5_3))
+#define __HAL_HDP5_SELECT_DDRCTRL_WR_CREDIT_CNT_4_0()              MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX5, \
+                                                                              ((uint32_t) HDP_MUX_MUX5_3 |\
+                                                                               HDP_MUX_MUX5_0))
+#define __HAL_HDP5_SELECT_DTS_VALOBUS1_2()                         MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX5, \
+                                                                              ((uint32_t) HDP_MUX_MUX5_3 |\
+                                                                               HDP_MUX_MUX5_1))
+#define __HAL_HDP5_SELECT_DTS_VALOBUS2_2()                         MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX5, \
+                                                                              ((uint32_t) HDP_MUX_MUX5_3 |\
+                                                                               HDP_MUX_MUX5_1 | HDP_MUX_MUX5_0))
+/* Changed macro __HAL_HDP5_SELECT_PKA_iTAMP_OUT to __HAL_HDP5_SELECT_PKA_ITAMP_OUT as per
+   MCUAstyle Rule-12 */
+/* Only uppercase separated by an underscore should be used. Rule-12  */
+#define __HAL_HDP5_SELECT_PKA_ITAMP_OUT()                          MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX5, \
+                                                                              ((uint32_t) HDP_MUX_MUX5_3 |\
+                                                                               HDP_MUX_MUX5_2))
+#define __HAL_HDP5_SELECT_NIC400_S0_WVALID()                       MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX5, \
+                                                                              ((uint32_t) HDP_MUX_MUX5_3 |\
+                                                                               HDP_MUX_MUX5_2 | HDP_MUX_MUX5_0))
+#define __HAL_HDP5_SELECT_NIC400_S0_RVALID()                       MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX5, \
+                                                                              ((uint32_t) HDP_MUX_MUX5_3 |\
+                                                                               HDP_MUX_MUX5_2 | HDP_MUX_MUX5_1))
+#define __HAL_HDP5_SELECT_GPOVAL_5()                               MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX5, \
+                                                                              ((uint32_t) HDP_MUX_MUX5_3 |\
+                                                                               HDP_MUX_MUX5_2 | HDP_MUX_MUX5_1 | \
+                                                                               HDP_MUX_MUX5_0))
 /**
   * @}
   */
@@ -569,21 +736,47 @@ typedef enum
 /** @addtogroup HDP6_MUX6_Config
   * @{
   */
-#define __HAL_HDP6_SELECT_CA7_STANDBYWFE0()                        MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX6, ((uint32_t) 0x00000000))
-#define __HAL_HDP6_SELECT_PWR_VTH_VDDCPU_ACK()                     MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX6, ((uint32_t) HDP_MUX_MUX6_0))
-#define __HAL_HDP6_SELECT_CA7_EVENTO()                             MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX6, ((uint32_t) HDP_MUX_MUX6_1))
-#define __HAL_HDP6_SELECT_BSEC_IN_TAMPER_DET()                     MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX6, ((uint32_t) HDP_MUX_MUX6_2))
-#define __HAL_HDP6_SELECT_BSEC_OUT_SEC_SPNIDEN()                   MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX6, ((uint32_t) HDP_MUX_MUX6_2 | HDP_MUX_MUX6_0))
-#define __HAL_HDP6_SELECT_ETH1_OUT_MAC_SPEED_O1()                  MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX6, ((uint32_t) HDP_MUX_MUX6_2 | HDP_MUX_MUX6_1))
-#define __HAL_HDP6_SELECT_ETH2_OUT_MAC_SPEED_O1()                  MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX6, ((uint32_t) HDP_MUX_MUX6_2 | HDP_MUX_MUX6_1 | HDP_MUX_MUX6_0))
-#define __HAL_HDP6_SELECT_DDRCTRL_CSYSACK_DDRC()                   MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX6, ((uint32_t) HDP_MUX_MUX6_3))
-#define __HAL_HDP6_SELECT_DDRCTRL_LPR_CREDIT_CNT_4_0()             MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX6, ((uint32_t) HDP_MUX_MUX6_3 | HDP_MUX_MUX6_0))
-#define __HAL_HDP6_SELECT_DTS_VALOBUS1_3()                         MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX6, ((uint32_t) HDP_MUX_MUX6_3 | HDP_MUX_MUX6_1))
-#define __HAL_HDP6_SELECT_DTS_VALOBUS2_3()                         MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX6, ((uint32_t) HDP_MUX_MUX6_3 | HDP_MUX_MUX6_1 | HDP_MUX_MUX6_0))
-#define __HAL_HDP6_SELECT_SAES_TAMPER_OUT()                        MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX6, ((uint32_t) HDP_MUX_MUX6_3 | HDP_MUX_MUX6_2))
-#define __HAL_HDP6_SELECT_NIC400_S0_AWREADY()                      MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX6, ((uint32_t) HDP_MUX_MUX6_3 | HDP_MUX_MUX6_2 | HDP_MUX_MUX6_0))
-#define __HAL_HDP6_SELECT_NIC400_S0_ARREADY()                      MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX6, ((uint32_t) HDP_MUX_MUX6_3 | HDP_MUX_MUX6_2 | HDP_MUX_MUX6_1))
-#define __HAL_HDP6_SELECT_GPOVAL_6()                               MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX6, ((uint32_t) HDP_MUX_MUX6_3 | HDP_MUX_MUX6_2 | HDP_MUX_MUX6_1 | HDP_MUX_MUX6_0))
+#define __HAL_HDP6_SELECT_CA7_STANDBYWFE0()                        MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX6, \
+                                                                              ((uint32_t) 0x00000000))
+#define __HAL_HDP6_SELECT_PWR_VTH_VDDCPU_ACK()                     MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX6, \
+                                                                              ((uint32_t) HDP_MUX_MUX6_0))
+#define __HAL_HDP6_SELECT_CA7_EVENTO()                             MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX6, \
+                                                                              ((uint32_t) HDP_MUX_MUX6_1))
+#define __HAL_HDP6_SELECT_BSEC_IN_TAMPER_DET()                     MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX6, \
+                                                                              ((uint32_t) HDP_MUX_MUX6_2))
+#define __HAL_HDP6_SELECT_BSEC_OUT_SEC_SPNIDEN()                   MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX6, \
+                                                                              ((uint32_t) HDP_MUX_MUX6_2 |\
+                                                                               HDP_MUX_MUX6_0))
+#define __HAL_HDP6_SELECT_ETH1_OUT_MAC_SPEED_O1()                  MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX6, \
+                                                                              ((uint32_t) HDP_MUX_MUX6_2 |\
+                                                                               HDP_MUX_MUX6_1))
+#define __HAL_HDP6_SELECT_ETH2_OUT_MAC_SPEED_O1()                  MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX6, \
+                                                                              ((uint32_t) HDP_MUX_MUX6_2 |\
+                                                                               HDP_MUX_MUX6_1 | HDP_MUX_MUX6_0))
+#define __HAL_HDP6_SELECT_DDRCTRL_CSYSACK_DDRC()                   MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX6, \
+                                                                              ((uint32_t) HDP_MUX_MUX6_3))
+#define __HAL_HDP6_SELECT_DDRCTRL_LPR_CREDIT_CNT_4_0()             MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX6, \
+                                                                              ((uint32_t) HDP_MUX_MUX6_3 |\
+                                                                               HDP_MUX_MUX6_0))
+#define __HAL_HDP6_SELECT_DTS_VALOBUS1_3()                         MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX6, \
+                                                                              ((uint32_t) HDP_MUX_MUX6_3 |\
+                                                                               HDP_MUX_MUX6_1))
+#define __HAL_HDP6_SELECT_DTS_VALOBUS2_3()                         MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX6, \
+                                                                              ((uint32_t) HDP_MUX_MUX6_3 |\
+                                                                               HDP_MUX_MUX6_1 | HDP_MUX_MUX6_0))
+#define __HAL_HDP6_SELECT_SAES_TAMPER_OUT()                        MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX6, \
+                                                                              ((uint32_t) HDP_MUX_MUX6_3 |\
+                                                                               HDP_MUX_MUX6_2))
+#define __HAL_HDP6_SELECT_NIC400_S0_AWREADY()                      MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX6, \
+                                                                              ((uint32_t) HDP_MUX_MUX6_3 |\
+                                                                               HDP_MUX_MUX6_2 | HDP_MUX_MUX6_0))
+#define __HAL_HDP6_SELECT_NIC400_S0_ARREADY()                      MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX6, \
+                                                                              ((uint32_t) HDP_MUX_MUX6_3 |\
+                                                                               HDP_MUX_MUX6_2 | HDP_MUX_MUX6_1))
+#define __HAL_HDP6_SELECT_GPOVAL_6()                               MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX6, \
+                                                                              ((uint32_t) HDP_MUX_MUX6_3 |\
+                                                                               HDP_MUX_MUX6_2 | HDP_MUX_MUX6_1 | \
+                                                                               HDP_MUX_MUX6_0))
 
 /**
   * @}
@@ -592,22 +785,50 @@ typedef enum
 /** @addtogroup HDP7_MUX7_Config
   * @{
   */
-#define __HAL_HDP7_SELECT_CA7_STANDBYWFI0()                        MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX7, ((uint32_t) 0x00000000))
-#define __HAL_HDP7_SELECT_PWR_RCC_VCPU_RDY()                       MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX7, ((uint32_t) HDP_MUX_MUX7_0))
-#define __HAL_HDP7_SELECT_CA7_EVENTI()                             MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX7, ((uint32_t) HDP_MUX_MUX7_1))
-#define __HAL_HDP7_SELECT_CA7_DBGACK0()                            MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX7, ((uint32_t) HDP_MUX_MUX7_1 | HDP_MUX_MUX7_0))
-#define __HAL_HDP7_SELECT_BSEC_OUT_FUSE_OK()                       MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX7, ((uint32_t) HDP_MUX_MUX7_2))
-#define __HAL_HDP7_SELECT_BSEC_OUT_SEC_SPIDEN()                    MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX7, ((uint32_t) HDP_MUX_MUX7_2 | HDP_MUX_MUX7_0))
-#define __HAL_HDP7_SELECT_ETH1_OUT_MAC_SPEED_O0()                  MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX7, ((uint32_t) HDP_MUX_MUX7_2 | HDP_MUX_MUX7_1))
-#define __HAL_HDP7_SELECT_ETH2_OUT_MAC_SPEED_O0()                  MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX7, ((uint32_t) HDP_MUX_MUX7_2 | HDP_MUX_MUX7_1 | HDP_MUX_MUX7_0))
-#define __HAL_HDP7_SELECT_DDRCTRL_CSYSREQ_DDRC()                   MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX7, ((uint32_t) HDP_MUX_MUX7_3))
-#define __HAL_HDP7_SELECT_DDRCTRL_HPR_CREDIT_CNT_4_0()             MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX7, ((uint32_t) HDP_MUX_MUX7_3 | HDP_MUX_MUX7_0))
-#define __HAL_HDP7_SELECT_DTS_VALOBUS1_4()                         MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX7, ((uint32_t) HDP_MUX_MUX7_3 | HDP_MUX_MUX7_1))
-#define __HAL_HDP7_SELECT_DTS_VALOBUS2_4()                         MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX7, ((uint32_t) HDP_MUX_MUX7_3 | HDP_MUX_MUX7_1 | HDP_MUX_MUX7_0))
-#define __HAL_HDP7_SELECT_RNG_TAMPER_OUT()                         MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX7, ((uint32_t) HDP_MUX_MUX7_3 | HDP_MUX_MUX7_2))
-#define __HAL_HDP7_SELECT_NIC400_S0_AWAVALID()                     MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX7, ((uint32_t) HDP_MUX_MUX7_3 | HDP_MUX_MUX7_2 | HDP_MUX_MUX7_0))
-#define __HAL_HDP7_SELECT_NIC400_S0_ARAVALID()                     MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX7, ((uint32_t) HDP_MUX_MUX7_3 | HDP_MUX_MUX7_2 | HDP_MUX_MUX7_1))
-#define __HAL_HDP7_SELECT_GPOVAL_7()                               MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX7, ((uint32_t) HDP_MUX_MUX7_3 | HDP_MUX_MUX7_2 | HDP_MUX_MUX7_1 | HDP_MUX_MUX7_0))
+#define __HAL_HDP7_SELECT_CA7_STANDBYWFI0()                        MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX7, \
+                                                                              ((uint32_t) 0x00000000))
+#define __HAL_HDP7_SELECT_PWR_RCC_VCPU_RDY()                       MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX7, \
+                                                                              ((uint32_t) HDP_MUX_MUX7_0))
+#define __HAL_HDP7_SELECT_CA7_EVENTI()                             MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX7, \
+                                                                              ((uint32_t) HDP_MUX_MUX7_1))
+#define __HAL_HDP7_SELECT_CA7_DBGACK0()                            MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX7, \
+                                                                              ((uint32_t) HDP_MUX_MUX7_1 |\
+                                                                               HDP_MUX_MUX7_0))
+#define __HAL_HDP7_SELECT_BSEC_OUT_FUSE_OK()                       MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX7, \
+                                                                              ((uint32_t) HDP_MUX_MUX7_2))
+#define __HAL_HDP7_SELECT_BSEC_OUT_SEC_SPIDEN()                    MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX7, \
+                                                                              ((uint32_t) HDP_MUX_MUX7_2 |\
+                                                                               HDP_MUX_MUX7_0))
+#define __HAL_HDP7_SELECT_ETH1_OUT_MAC_SPEED_O0()                  MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX7, \
+                                                                              ((uint32_t) HDP_MUX_MUX7_2 |\
+                                                                               HDP_MUX_MUX7_1))
+#define __HAL_HDP7_SELECT_ETH2_OUT_MAC_SPEED_O0()                  MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX7, \
+                                                                              ((uint32_t) HDP_MUX_MUX7_2 |\
+                                                                               HDP_MUX_MUX7_1 | HDP_MUX_MUX7_0))
+#define __HAL_HDP7_SELECT_DDRCTRL_CSYSREQ_DDRC()                   MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX7, \
+                                                                              ((uint32_t) HDP_MUX_MUX7_3))
+#define __HAL_HDP7_SELECT_DDRCTRL_HPR_CREDIT_CNT_4_0()             MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX7, \
+                                                                              ((uint32_t) HDP_MUX_MUX7_3 |\
+                                                                               HDP_MUX_MUX7_0))
+#define __HAL_HDP7_SELECT_DTS_VALOBUS1_4()                         MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX7, \
+                                                                              ((uint32_t) HDP_MUX_MUX7_3 |\
+                                                                               HDP_MUX_MUX7_1))
+#define __HAL_HDP7_SELECT_DTS_VALOBUS2_4()                         MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX7, \
+                                                                              ((uint32_t) HDP_MUX_MUX7_3 |\
+                                                                               HDP_MUX_MUX7_1 | HDP_MUX_MUX7_0))
+#define __HAL_HDP7_SELECT_RNG_TAMPER_OUT()                         MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX7, \
+                                                                              ((uint32_t) HDP_MUX_MUX7_3 |\
+                                                                               HDP_MUX_MUX7_2))
+#define __HAL_HDP7_SELECT_NIC400_S0_AWAVALID()                     MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX7, \
+                                                                              ((uint32_t) HDP_MUX_MUX7_3 |\
+                                                                               HDP_MUX_MUX7_2 | HDP_MUX_MUX7_0))
+#define __HAL_HDP7_SELECT_NIC400_S0_ARAVALID()                     MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX7, \
+                                                                              ((uint32_t) HDP_MUX_MUX7_3 |\
+                                                                               HDP_MUX_MUX7_2 | HDP_MUX_MUX7_1))
+#define __HAL_HDP7_SELECT_GPOVAL_7()                               MODIFY_REG(HDP->HDP_MUX, HDP_MUX_MUX7, \
+                                                                              ((uint32_t) HDP_MUX_MUX7_3 |\
+                                                                               HDP_MUX_MUX7_2 | HDP_MUX_MUX7_1 | \
+                                                                               HDP_MUX_MUX7_0))
 /**
   * @}
   */
@@ -632,7 +853,6 @@ typedef enum
 /** @addtogroup HAL_Exported_Variables
   * @{
   */
-extern __IO uint32_t uwTick;
 extern uint32_t uwTickPrio;
 extern HAL_TickFreqTypeDef uwTickFreq;
 /**
@@ -667,7 +887,6 @@ void HAL_Delay(uint32_t Delay);
 uint32_t HAL_GetTick(void);
 uint32_t HAL_GetTickPrio(void);
 HAL_StatusTypeDef HAL_SetTickFreq(HAL_TickFreqTypeDef Freq);
-HAL_TickFreqTypeDef HAL_GetTickFreq(void);
 void HAL_SuspendTick(void);
 void HAL_ResumeTick(void);
 uint32_t HAL_GetHalVersion(void);
@@ -700,20 +919,20 @@ HAL_StatusTypeDef HAL_SYSCFG_EnableVREFBUF(void);
 void HAL_SYSCFG_DisableVREFBUF(void);
 
 /**
- * @}
- */
+  * @}
+  */
 
 /**
- * @}
- */
+  * @}
+  */
 
 /**
- * @}
- */
+  * @}
+  */
 
 /**
- * @}
- */
+  * @}
+  */
 
 #ifdef __cplusplus
 }

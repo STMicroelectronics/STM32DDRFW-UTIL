@@ -48,12 +48,12 @@ def display_array( name, offset, data ):
 
 class Stm32Image:
 
-    def __init__(self, entry=0, loadaddr=0, _binary_type=0):
+    def __init__(self, header_major_ver=0, header_minor_ver=0, entry=0, loadaddr=0, _binary_type=0):
         self.magic_number = b'STM\x32'                             # Magic number
         self.image_signature = b'\x00' * 64                        # Image Signature
         self.checksum = 0                                          # Image Checksum
-        self.header_major_ver = 2
-        self.header_minor_ver = 0
+        self.header_major_ver = header_major_ver
+        self.header_minor_ver = header_minor_ver
         self.image_length = 0                                      # Image Length
         self.image_entry_point = entry                             # Image Entry  Point
         self.load_address = loadaddr                               # Load address
@@ -173,6 +173,7 @@ def main():
     parser = argparse.ArgumentParser(description="Script that sign binaries with ST header")
     parser.add_argument("input_file", help="the input filename")
     parser.add_argument("output_file", help="the output filename")
+    parser.add_argument("-hv", "--header_version", action="store", help=" Header version : 1.0 (STM32MP15xx), 2.0 (STM32MP13xx and after)")
     parser.add_argument("-ep", "--entry_point", action="store", help="entry point address in hexadecimal")
     parser.add_argument("-la", "--load_addr", action="store", help="load address in hexadecimal")
     parser.add_argument("-bt", "--binary_type", action="store", help="binary type : U-boot, tf-a, CM33 in hexadecimal")
@@ -183,6 +184,14 @@ def main():
 
     print("Input file  : %s" % args.input_file)
     print("Output file : %s" % args.output_file)
+
+    if args.header_version:
+        header_version_split = args.header_version.split(".")
+        header_major_ver = int(header_version_split[0], 8)
+        header_minor_ver = int(header_version_split[1], 8)
+    else:
+        header_major_ver = 2
+        header_minor_ver = 0
 
     if args.entry_point:
         entry_point = int(args.entry_point, 16)
@@ -201,7 +210,7 @@ def main():
 
 
     # Class object creation:
-    stm32im = Stm32Image(entry_point, load_addr, binary_type)
+    stm32im = Stm32Image(header_major_ver, header_minor_ver, entry_point, load_addr, binary_type)
 
     ret = stm32im.generate(args.input_file, args.output_file)
     if ret != 0:

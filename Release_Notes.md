@@ -11,20 +11,31 @@ Purpose
 <span style="font-weight: bold;">The STM32DDRFW-UTIL is the firmware
 package for DDR configuration and test.</span>
 
-This firmware contains a minimal set of drivers based on STM32CubeMP1xx
-Firmware package:
+This firmware contains a minimal set of drivers based on STM32CubeMP1xx and STM32CubeMP2xx Firmware packages:
 
 -   HAL drivers
 -   CMSIS Device
 -   Cortex-A CMSIS Core
--   BSP for STM32MP1 Series MPUs
+-   BSP for STM32MP1 and STM32MP2 Series MPUs
 -   imageheader
+-   resourcemanager (STM32MP2 only)
 
 The DDR\_Tool directory includes STM32CubeIDE Projects for all ST
 supported boards
 
 Update history
 ==============
+
+**V1.1.0 / 24-June-2024**
+
+This is the **V1.1.0 release of STM32DDRFW-UTIL** (V5.1.0 global release).
+
+-   First release with STM32MP13/15/25 support.
+-   Support of following boards:
+    -   STM32MP135C-DK
+    -   STM32MP157C-DK2 and STM32MP157C-EV1
+    -   STM32MP257F-DK and STM32MP257F-EV1 (aarch64)
+-   Rebase all elements.
 
 **V1.0.1 / 16-June-2023**
 

@@ -20,7 +20,7 @@
 CompilerPath="${1}"
 elf_file_basename="${2}"
 
-debug=1
+debug=0
 
 local_script_path=$(dirname $0)
 local_script_path=$(readlink -f ${local_script_path})
@@ -29,11 +29,11 @@ case "$(uname -s)" in
   Linux)
     #line for python
     echo Postbuild with python script
-    imgtool="${local_script_path}/Python27/Stm32ImageAddHeader.py"
+    imgtool="${local_script_path}/Python3/Stm32ImageAddHeader.py"
     cmd="python"
     ;;
   *)
-    #line for window executeable
+    #line for window executable
     echo Postbuild with windows executable
     imgtool="${local_script_path}/exe.win-amd64-2.7/Stm32ImageAddHeader.exe"
     cmd=""
@@ -54,7 +54,7 @@ if [ ${debug} -ne 0 ] ; then
 fi
 
 # elf_entry_point is in format 0x%x so Reformat to 0x%08X and process entry-point address
-formatted_ep_addr=$(printf "%08x" $(($elf_entry_point & 0xfffffffe)))
+formatted_ep_addr=$(printf "%08x" $((elf_entry_point)))
 if [ ${debug} -ne 0 ] ; then
   echo "<D> formatted_ep_addr           =<$formatted_ep_addr>"
 fi
@@ -62,7 +62,7 @@ fi
 ${objcopy_path} -O binary ${elf_file_basename}.elf ${elf_file_basename}_postbuild.bin
 
 
-command="${cmd} ${imgtool} ${elf_file_basename}_postbuild.bin ${elf_file_basename}.stm32 -hv 1.0 -bt 10 -ep ${formatted_ep_addr} -la ${formatted_ep_addr}"
+command="${cmd} ${imgtool} ${elf_file_basename}_postbuild.bin ${elf_file_basename}.stm32 -hv 1.0 -bt 10 -ep ${formatted_ep_addr}"
 ${command}
 ret=$?
 

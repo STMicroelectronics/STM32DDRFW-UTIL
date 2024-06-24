@@ -55,8 +55,8 @@
   */
 
 /** @defgroup RCCEx_Exported_Functions_Group1 Extended Peripheral Control functions
- *  @brief  Extended Peripheral Control functions
- *
+  *  @brief  Extended Peripheral Control functions
+  *
 @verbatim
  ===============================================================================
                 ##### Extended Peripheral Control functions  #####
@@ -80,7 +80,7 @@
   * @retval HAL status
   */
 
-HAL_StatusTypeDef RCCEx_PLL2_Config(RCC_PLLInitTypeDef *pll2)
+HAL_StatusTypeDef RCCEx_PLL2_Config(const RCC_PLLInitTypeDef *pll2)
 {
   uint32_t tickstart;
 
@@ -89,7 +89,7 @@ HAL_StatusTypeDef RCCEx_PLL2_Config(RCC_PLLInitTypeDef *pll2)
   if ((pll2->PLLState) != RCC_PLL_NONE)
   {
     /* Check if the PLL is used as system clock or not (MPU, MLAHB, AXISS)*/
-    if (!__IS_PLL2_IN_USE()) /* If not used then */
+    if (__IS_PLL2_IN_USE() == 0U) /* If not used then */
     {
       if ((pll2->PLLState) == RCC_PLL_ON)
       {
@@ -146,7 +146,7 @@ HAL_StatusTypeDef RCCEx_PLL2_Config(RCC_PLLInitTypeDef *pll2)
         -Fractional Division factor (FRACNx)*/
 
         /* Do not change pll src if already in use */
-        if (__IS_PLL1_IN_USE())
+        if (__IS_PLL1_IN_USE() == 1U)
         {
           if (pll2->PLLSource != __HAL_RCC_GET_PLL12_SOURCE())
           {
@@ -169,19 +169,19 @@ HAL_StatusTypeDef RCCEx_PLL2_Config(RCC_PLLInitTypeDef *pll2)
 
 
         /* Configure the Fractional Divider */
-        __HAL_RCC_PLL2FRACV_DISABLE(); //Set FRACLE to ‘0’
+        __HAL_RCC_PLL2FRACV_DISABLE(); /* Set FRACLE to 0 */
         /* In integer or clock spreading mode the application shall ensure that a 0 is loaded into the SDM */
         if ((pll2->PLLMODE == RCC_PLL_SPREAD_SPECTRUM) || (pll2->PLLMODE == RCC_PLL_INTEGER))
         {
           /* Do not use the fractional divider */
-          __HAL_RCC_PLL2FRACV_CONFIG(0U); //Set FRACV to '0'
+          __HAL_RCC_PLL2FRACV_CONFIG(0U); /* Set FRACV to 0 */
         }
         else
         {
           /* Configure PLL  PLL2FRACV  in fractional mode*/
           __HAL_RCC_PLL2FRACV_CONFIG(pll2->PLLFRACV);
         }
-        __HAL_RCC_PLL2FRACV_ENABLE(); //Set FRACLE to ‘1’
+        __HAL_RCC_PLL2FRACV_ENABLE(); /* Set FRACLE to 1 */
 
 
         /* Configure the Spread Control */
@@ -257,7 +257,7 @@ HAL_StatusTypeDef RCCEx_PLL2_Config(RCC_PLLInitTypeDef *pll2)
   *
   * @retval HAL status
   */
-HAL_StatusTypeDef RCCEx_PLL3_Config(RCC_PLLInitTypeDef *pll3)
+HAL_StatusTypeDef RCCEx_PLL3_Config(const RCC_PLLInitTypeDef *pll3)
 {
 
   uint32_t tickstart;
@@ -267,7 +267,7 @@ HAL_StatusTypeDef RCCEx_PLL3_Config(RCC_PLLInitTypeDef *pll3)
   if ((pll3->PLLState) != RCC_PLL_NONE)
   {
     /* Check if the PLL is used as system clock or not (MPU, AXISS)*/
-    if (!__IS_PLL3_IN_USE()) /* If not used then*/
+    if (__IS_PLL3_IN_USE() == 0U) /* If not used then*/
     {
       if ((pll3->PLLState) == RCC_PLL_ON)
       {
@@ -341,19 +341,19 @@ HAL_StatusTypeDef RCCEx_PLL3_Config(RCC_PLLInitTypeDef *pll3)
           pll3->PLLR);
 
         /* Configure the Fractional Divider */
-        __HAL_RCC_PLL3FRACV_DISABLE(); //Set FRACLE to ‘0’
+        __HAL_RCC_PLL3FRACV_DISABLE(); /* Set FRACLE to 0 */
         /* In integer or clock spreading mode the application shall ensure that a 0 is loaded into the SDM */
         if ((pll3->PLLMODE == RCC_PLL_SPREAD_SPECTRUM) || (pll3->PLLMODE == RCC_PLL_INTEGER))
         {
           /* Do not use the fractional divider */
-          __HAL_RCC_PLL3FRACV_CONFIG(0); //Set FRACV to '0'
+          __HAL_RCC_PLL3FRACV_CONFIG(0); /* Set FRACV to 0 */
         }
         else
         {
           /* Configure PLL  PLL3FRACV  in fractional mode*/
           __HAL_RCC_PLL3FRACV_CONFIG(pll3->PLLFRACV);
         }
-        __HAL_RCC_PLL3FRACV_ENABLE(); //Set FRACLE to ‘1’
+        __HAL_RCC_PLL3FRACV_ENABLE(); /* Set FRACLE to 1 */
 
 
         /* Configure the Spread Control */
@@ -427,7 +427,7 @@ HAL_StatusTypeDef RCCEx_PLL3_Config(RCC_PLLInitTypeDef *pll3)
   *
   * @retval HAL status
   */
-HAL_StatusTypeDef RCCEx_PLL4_Config(RCC_PLLInitTypeDef *pll4)
+HAL_StatusTypeDef RCCEx_PLL4_Config(const RCC_PLLInitTypeDef *pll4)
 {
 
   uint32_t tickstart;
@@ -509,19 +509,19 @@ HAL_StatusTypeDef RCCEx_PLL4_Config(RCC_PLLInitTypeDef *pll4)
         pll4->PLLR);
 
       /* Configure the Fractional Divider */
-      __HAL_RCC_PLL4FRACV_DISABLE(); //Set FRACLE to ‘0’
+      __HAL_RCC_PLL4FRACV_DISABLE(); /* Set FRACLE to 0 */
       /* In integer or clock spreading mode the application shall ensure that a 0 is loaded into the SDM */
       if ((pll4->PLLMODE == RCC_PLL_SPREAD_SPECTRUM) || (pll4->PLLMODE == RCC_PLL_INTEGER))
       {
         /* Do not use the fractional divider */
-        __HAL_RCC_PLL4FRACV_CONFIG(0); //Set FRACV to '0'
+        __HAL_RCC_PLL4FRACV_CONFIG(0); /* Set FRACV to 0 */
       }
       else
       {
         /* Configure PLL  PLL4FRACV  in fractional mode*/
         __HAL_RCC_PLL4FRACV_CONFIG(pll4->PLLFRACV);
       }
-      __HAL_RCC_PLL4FRACV_ENABLE(); //Set FRACLE to ‘1’
+      __HAL_RCC_PLL4FRACV_ENABLE(); /* Set FRACLE to 1 */
 
       /* Configure the Spread Control */
       if (pll4->PLLMODE == RCC_PLL_SPREAD_SPECTRUM)
@@ -636,10 +636,11 @@ HAL_StatusTypeDef RCCEx_PLL4_Config(RCC_PLLInitTypeDef *pll4)
   *
   * @retval HAL status
   */
-HAL_StatusTypeDef HAL_RCCEx_PeriphCLKConfig(RCC_PeriphCLKInitTypeDef
+HAL_StatusTypeDef HAL_RCCEx_PeriphCLKConfig(const RCC_PeriphCLKInitTypeDef
                                             *PeriphClkInit)
 {
-  uint32_t tmpreg = 0U, RESERVED_BDCR_MASK = 0U;
+  uint32_t tmpreg;
+  uint32_t RESERVED_BDCR_MASK;
   uint32_t tickstart;
   HAL_StatusTypeDef ret = HAL_OK;      /* Intermediate status */
   HAL_StatusTypeDef status = HAL_OK;   /* Final status */
@@ -783,6 +784,9 @@ HAL_StatusTypeDef HAL_RCCEx_PeriphCLKConfig(RCC_PeriphCLKInitTypeDef
         __HAL_RCC_PLL3CLKOUT_ENABLE(RCC_PLL3_DIVR);
 
         break;
+
+      default:
+        break;
     }
 
     /* Set the source of SAI1 clock*/
@@ -832,6 +836,9 @@ HAL_StatusTypeDef HAL_RCCEx_PeriphCLKConfig(RCC_PeriphCLKInitTypeDef
         /* Enable SAI Clock output generated on PLL3 */
         __HAL_RCC_PLL3CLKOUT_ENABLE(RCC_PLL3_DIVR);
 
+        break;
+
+      default:
         break;
     }
 
@@ -884,6 +891,9 @@ HAL_StatusTypeDef HAL_RCCEx_PeriphCLKConfig(RCC_PeriphCLKInitTypeDef
 
         break;
 
+      default:
+        break;
+
     }
 
     /* Set the source of SPI1 clock*/
@@ -933,6 +943,9 @@ HAL_StatusTypeDef HAL_RCCEx_PeriphCLKConfig(RCC_PeriphCLKInitTypeDef
         /* Enable SPI Clock output generated on PLL3 . */
         __HAL_RCC_PLL3CLKOUT_ENABLE(RCC_PLL3_DIVR);
 
+        break;
+
+      default:
         break;
     }
 
@@ -1038,6 +1051,9 @@ HAL_StatusTypeDef HAL_RCCEx_PeriphCLKConfig(RCC_PeriphCLKInitTypeDef
         /* Enable USART Clock output generated on PLL4 . */
         __HAL_RCC_PLL4CLKOUT_ENABLE(RCC_PLL4_DIVQ);
 
+        break;
+
+      default:
         break;
     }
 
@@ -1147,6 +1163,9 @@ HAL_StatusTypeDef HAL_RCCEx_PeriphCLKConfig(RCC_PeriphCLKInitTypeDef
         __HAL_RCC_PLL4CLKOUT_ENABLE(RCC_PLL4_DIVQ);
 
         break;
+
+      default:
+        break;
     }
 
     /* Set the source of USART1 clock*/
@@ -1185,6 +1204,10 @@ HAL_StatusTypeDef HAL_RCCEx_PeriphCLKConfig(RCC_PeriphCLKInitTypeDef
         __HAL_RCC_PLL4CLKOUT_ENABLE(RCC_PLL4_DIVP);
 
         break;
+
+      default:
+        break;
+
     }
 
     /* Set the source of SDMMC1 clock*/
@@ -1222,6 +1245,9 @@ HAL_StatusTypeDef HAL_RCCEx_PeriphCLKConfig(RCC_PeriphCLKInitTypeDef
         /* Enable SDMMC2 Clock output generated on PLL4 . */
         __HAL_RCC_PLL4CLKOUT_ENABLE(RCC_PLL4_DIVP);
 
+        break;
+
+      default:
         break;
     }
 
@@ -1261,6 +1287,10 @@ HAL_StatusTypeDef HAL_RCCEx_PeriphCLKConfig(RCC_PeriphCLKInitTypeDef
         __HAL_RCC_PLL3CLKOUT_ENABLE(RCC_PLL3_DIVQ);
 
         break;
+
+      default:
+        break;
+
     }
 
     /* Set the source of ETH1 clock*/
@@ -1298,6 +1328,10 @@ HAL_StatusTypeDef HAL_RCCEx_PeriphCLKConfig(RCC_PeriphCLKInitTypeDef
         /* Enable ETH2 Clock output generated on PLL3 . */
         __HAL_RCC_PLL3CLKOUT_ENABLE(RCC_PLL3_DIVQ);
 
+        break;
+
+
+      default:
         break;
     }
 
@@ -1337,6 +1371,10 @@ HAL_StatusTypeDef HAL_RCCEx_PeriphCLKConfig(RCC_PeriphCLKInitTypeDef
         __HAL_RCC_PLL4CLKOUT_ENABLE(RCC_PLL4_DIVP);
 
         break;
+
+      default:
+        break;
+
     }
 
     /* Set the source of QSPI clock*/
@@ -1374,6 +1412,9 @@ HAL_StatusTypeDef HAL_RCCEx_PeriphCLKConfig(RCC_PeriphCLKInitTypeDef
         /* Enable FMC Clock output generated on PLL4 . */
         __HAL_RCC_PLL4CLKOUT_ENABLE(RCC_PLL4_DIVP);
 
+        break;
+
+      default:
         break;
     }
 
@@ -1425,6 +1466,10 @@ HAL_StatusTypeDef HAL_RCCEx_PeriphCLKConfig(RCC_PeriphCLKInitTypeDef
         __HAL_RCC_PLL4CLKOUT_ENABLE(RCC_PLL4_DIVR);
 
         break;
+
+      default:
+        break;
+
     }
 
     /* Set the source of FDCAN clock*/
@@ -1462,6 +1507,9 @@ HAL_StatusTypeDef HAL_RCCEx_PeriphCLKConfig(RCC_PeriphCLKInitTypeDef
         /* Enable SPDIF Clock output generated on PLL3 . */
         __HAL_RCC_PLL3CLKOUT_ENABLE(RCC_PLL3_DIVQ);
 
+        break;
+
+      default:
         break;
     }
 
@@ -1575,6 +1623,10 @@ HAL_StatusTypeDef HAL_RCCEx_PeriphCLKConfig(RCC_PeriphCLKInitTypeDef
         __HAL_RCC_PLL4CLKOUT_ENABLE(RCC_PLL4_DIVP);
 
         break;
+
+      default:
+        break;
+
     }
 
     /* Set the source of DCMIPP clock*/
@@ -1637,6 +1689,10 @@ HAL_StatusTypeDef HAL_RCCEx_PeriphCLKConfig(RCC_PeriphCLKInitTypeDef
         __HAL_RCC_PLL3CLKOUT_ENABLE(RCC_PLL3_DIVQ);
 
         break;
+
+      default:
+        break;
+
     }
 
     /* Set the source of ADC1 clock*/
@@ -1674,6 +1730,10 @@ HAL_StatusTypeDef HAL_RCCEx_PeriphCLKConfig(RCC_PeriphCLKInitTypeDef
         __HAL_RCC_PLL3CLKOUT_ENABLE(RCC_PLL3_DIVQ);
 
         break;
+
+      default:
+        break;
+
     }
 
     /* Set the source of ADC2 clock*/
@@ -1711,6 +1771,9 @@ HAL_StatusTypeDef HAL_RCCEx_PeriphCLKConfig(RCC_PeriphCLKInitTypeDef
         /* Enable clock output generated on PLL4 . */
         __HAL_RCC_PLL4CLKOUT_ENABLE(RCC_PLL4_DIVP);
 
+        break;
+
+      default:
         break;
     }
 
@@ -1794,6 +1857,9 @@ HAL_StatusTypeDef HAL_RCCEx_PeriphCLKConfig(RCC_PeriphCLKInitTypeDef
         __HAL_RCC_PLL4CLKOUT_ENABLE(RCC_PLL4_DIVP);
 
         break;
+
+      default:
+        break;
     }
 
     /* Set the source of LPTIM1 clock*/
@@ -1870,7 +1936,7 @@ HAL_StatusTypeDef HAL_RCCEx_PeriphCLKConfig(RCC_PeriphCLKInitTypeDef
     }
     else
     {
-      // Enable write access to Backup domain failed
+      /* Enable write access to Backup domain failed*/
       /* return the error */
       return ret;
     }
@@ -1922,7 +1988,7 @@ HAL_StatusTypeDef HAL_RCCEx_PeriphCLKConfig(RCC_PeriphCLKInitTypeDef
     }
   }
 
-  return HAL_OK;
+  return status;
 }
 
 
@@ -2019,7 +2085,7 @@ void HAL_RCCEx_GetPeriphCLKConfig(RCC_PeriphCLKInitTypeDef  *PeriphClkInit)
 #if defined(RCC_PERIPHCLK_DCMIPP)
   /* Get the DCMIPP clock source ---------------------------------------------*/
   PeriphClkInit->DcmippClockSelection   = __HAL_RCC_GET_DCMIPP_SOURCE();
-#endif
+#endif /* RCC_PERIPHCLK_DCMIPP */
 #if defined(RCC_PERIPHCLK_SAES)
   /* Get the SAES clock source ----------------------------------------------*/
   PeriphClkInit->SaesClockSelection     = __HAL_RCC_GET_SAES_SOURCE();
@@ -2084,7 +2150,8 @@ void HAL_RCCEx_DisableLSECSS(void)
   */
 uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint64_t PeriphClk)
 {
-  uint32_t frequency = 0, clksource = 0;
+  uint32_t frequency = 0;
+  uint32_t clksource;
 
   PLL2_ClocksTypeDef pll2_clocks;
   PLL3_ClocksTypeDef pll3_clocks;
@@ -2125,9 +2192,12 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint64_t PeriphClk)
         case RCC_I2C12CLKSOURCE_CSI:
           frequency = CSI_VALUE;
           break;
+
+        default:
+          break;
       }
-    }
       break; /* RCC_PERIPHCLK_I2C12 */
+    }
 
     case RCC_PERIPHCLK_I2C3:
     {
@@ -2156,8 +2226,8 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint64_t PeriphClk)
           frequency = 0U;
           break;
       }
-    }
       break; /* RCC_PERIPHCLK_I2C3 */
+    }
 
     case RCC_PERIPHCLK_I2C4:
     {
@@ -2186,8 +2256,8 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint64_t PeriphClk)
           frequency = 0U;
           break;
       }
-    }
       break; /* RCC_PERIPHCLK_I2C4 */
+    }
 
     case RCC_PERIPHCLK_I2C5:
     {
@@ -2216,8 +2286,8 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint64_t PeriphClk)
           frequency = 0U;
           break;
       }
-    }
       break; /* RCC_PERIPHCLK_I2C5 */
+    }
 
     case RCC_PERIPHCLK_LPTIM1:
     {
@@ -2255,8 +2325,8 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint64_t PeriphClk)
           frequency = 0U;
           break;
       }
-    }
       break; /* RCC_PERIPHCLK_LPTIM1 */
+    }
 
 
     case RCC_PERIPHCLK_SPDIFRX:
@@ -2283,8 +2353,8 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint64_t PeriphClk)
           frequency = 0U;
           break;
       }
-    }
       break; /* RCC_PERIPHCLK_SPDIFRX */
+    }
 
     case RCC_PERIPHCLK_SPI23:
     {
@@ -2319,8 +2389,8 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint64_t PeriphClk)
           frequency = 0U;
           break;
       }
-    }
       break; /* RCC_PERIPHCLK_SPI23 */
+    }
 
     case RCC_PERIPHCLK_USART2:
     {
@@ -2358,8 +2428,8 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint64_t PeriphClk)
           frequency = 0U;
           break;
       }
+      break;/*RCC_PERIPHCLK_USART2*/
     }
-    break;//RCC_PERIPHCLK_USART2
 
     case RCC_PERIPHCLK_UART4:
     {
@@ -2392,8 +2462,8 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint64_t PeriphClk)
           frequency = 0U;
           break;
       }
+      break;/* RCC_PERIPHCLK_UART4 */
     }
-    break;//RCC_PERIPHCLK_UART4
 
     case RCC_PERIPHCLK_UART35:
     {
@@ -2426,8 +2496,8 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint64_t PeriphClk)
           frequency = 0U;
           break;
       }
-    }
       break; /* RCC_PERIPHCLK_USART35 */
+    }
 
 
     case RCC_PERIPHCLK_UART78:
@@ -2461,15 +2531,15 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint64_t PeriphClk)
           frequency = 0U;
           break;
       }
-    }
       break; /*RCC_PERIPHCLK_UART78 */
+    }
 
 
     case RCC_PERIPHCLK_DFSDM1:
     {
       frequency = HAL_RCC_GetMLHCLKFreq();
+      break;/* RCC_PERIPHCLK_DFSDM1 */
     }
-    break;//RCC_PERIPHCLK_DFSDM1
 
     case RCC_PERIPHCLK_FDCAN:
     {
@@ -2500,8 +2570,8 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint64_t PeriphClk)
           frequency = 0U;
           break;
       }
+      break;/* RCC_PERIPHCLK_FDCAN */
     }
-    break;//RCC_PERIPHCLK_FDCAN
 
     case RCC_PERIPHCLK_SAI1:
     {
@@ -2536,8 +2606,8 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint64_t PeriphClk)
           frequency = 0U;
           break;
       }
+      break;/* RCC_PERIPHCLK_SAI1 */
     }
-    break;//RCC_PERIPHCLK_SAI1
 
     case RCC_PERIPHCLK_SAI2:
     {
@@ -2569,15 +2639,15 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint64_t PeriphClk)
           break;
 
         case RCC_SAI2CLKSOURCE_SPDIF:
-          frequency = 0U; //SAI2 manage this SPDIF_CKSYMB_VALUE
+          frequency = 0U; /* SAI2 manage this SPDIF_CKSYMB_VALUE */
           break;
 
         default:
           frequency = 0U;
           break;
       }
+      break;/* RCC_PERIPHCLK_SAI2 */
     }
-    break;//RCC_PERIPHCLK_SAI2
 
     case RCC_PERIPHCLK_SPI1:
     {
@@ -2587,7 +2657,7 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint64_t PeriphClk)
       {
         case RCC_SPI1CLKSOURCE_PLL4:
           HAL_RCC_GetPLL4ClockFreq(&pll4_clocks);
-          frequency = pll4_clocks.PLL4_Q_Frequency;
+          frequency = pll4_clocks.PLL4_P_Frequency;
           break;
 
         case RCC_SPI1CLKSOURCE_PLL3_Q:
@@ -2612,8 +2682,8 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint64_t PeriphClk)
           frequency = 0U;
           break;
       }
+      break;/* RCC_PERIPHCLK_SPI1 */
     }
-    break;//RCC_PERIPHCLK_SPI1
 
     case RCC_PERIPHCLK_SPI4:
     {
@@ -2650,8 +2720,8 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint64_t PeriphClk)
           frequency = 0U;
           break;
       }
-    }
       break; /* RCC_PERIPHCLK_SPI4 */
+    }
 
     case RCC_PERIPHCLK_SPI5:
     {
@@ -2684,8 +2754,8 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint64_t PeriphClk)
           frequency = 0U;
           break;
       }
-    }
       break; /* RCC_PERIPHCLK_SPI5 */
+    }
 
     case RCC_PERIPHCLK_USART6:
     {
@@ -2718,8 +2788,8 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint64_t PeriphClk)
           frequency = 0U;
           break;
       }
+      break;/* RCC_PERIPHCLK_USART6 */
     }
-    break;//RCC_PERIPHCLK_USART6
 
     case RCC_PERIPHCLK_LPTIM2:
     {
@@ -2752,8 +2822,8 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint64_t PeriphClk)
           frequency = 0U;
           break;
       }
-    }
       break; /* RCC_PERIPHCLK_LPTIM2 */
+    }
 
     case RCC_PERIPHCLK_LPTIM3:
     {
@@ -2786,8 +2856,8 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint64_t PeriphClk)
           frequency = 0U;
           break;
       }
-    }
       break; /* RCC_PERIPHCLK_LPTIM3 */
+    }
 
     case RCC_PERIPHCLK_LPTIM45:
     {
@@ -2825,31 +2895,31 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint64_t PeriphClk)
           frequency = 0U;
           break;
       }
-    }
       break; /* RCC_PERIPHCLK_LPTIM45 */
+    }
 
 #if defined(RCC_PERIPHCLK_TEMP)
     case RCC_PERIPHCLK_TEMP:
     {
       frequency = LSE_VALUE;
     }
-    break;//RCC_PERIPHCLK_TEMP
+      break;/* RCC_PERIPHCLK_TEMP */
 #endif /* RCC_PERIPHCLK_TEMP */
 
 #if defined(RCC_PERIPHCLK_DTS)
     case RCC_PERIPHCLK_DTS:
     {
       frequency = LSE_VALUE;
+      break;/* RCC_PERIPHCLK_DTS */
     }
-    break;//RCC_PERIPHCLK_DTS
 #endif /* RCC_PERIPHCLK_DTS */
 
     case RCC_PERIPHCLK_LTDC:
     {
       HAL_RCC_GetPLL4ClockFreq(&pll4_clocks);
       frequency = pll4_clocks.PLL4_Q_Frequency;
+      break;/* RCC_PERIPHCLK_LTDC */
     }
-    break;//RCC_PERIPHCLK_LTDC
 
 
     case RCC_PERIPHCLK_USBPHY:
@@ -2868,30 +2938,31 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint64_t PeriphClk)
           break;
 
         case RCC_USBPHYCLKSOURCE_HSE2:
-          frequency = (HSE_VALUE / 2);
+          frequency = (HSE_VALUE / 2U);
           break;
 
         default:
           frequency = 0U;
           break;
       }
+      break;/* RCC_PERIPHCLK_USBPHY */
     }
-    break;//RCC_PERIPHCLK_USBPHY
 
 
     case RCC_PERIPHCLK_IWDG2:
     {
       frequency = LSI_VALUE;
+      break;/* RCC_PERIPHCLK_IWDG2 */
+
     }
-    break;//RCC_PERIPHCLK_IWDG2
 
 
     case RCC_PERIPHCLK_DDRPHYC:
     {
       HAL_RCC_GetPLL2ClockFreq(&pll2_clocks);
       frequency = pll2_clocks.PLL2_R_Frequency;
+      break;/*RCC_PERIPHCLK_DDRPHYC */
     }
-    break;//RCC_PERIPHCLK_DDRPHYC
 
 
     case RCC_PERIPHCLK_RTC:
@@ -2915,16 +2986,18 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint64_t PeriphClk)
         case RCC_RTCCLKSOURCE_HSE_DIV:
           frequency = (HSE_VALUE / __HAL_RCC_GET_RTC_HSEDIV());
           break;
+        default:
+          break;
       }
+      break;/* RCC_PERIPHCLK_RTC */
     }
-    break;//RCC_PERIPHCLK_RTC
 
 
     case RCC_PERIPHCLK_IWDG1:
     {
       frequency = LSI_VALUE;
+      break;/* RCC_PERIPHCLK_IWDG1 */
     }
-    break;//RCC_PERIPHCLK_IWDG1
 
     case RCC_PERIPHCLK_USART1:
     {
@@ -2962,8 +3035,8 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint64_t PeriphClk)
           frequency = 0U;
           break;
       }
+      break;/* RCC_PERIPHCLK_USART1 */
     }
-    break;//RCC_PERIPHCLK_USART1
 
     case RCC_PERIPHCLK_STGEN:
     {
@@ -2983,8 +3056,8 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint64_t PeriphClk)
           frequency = 0U;
           break;
       }
+      break;/* RCC_PERIPHCLK_STGEN */
     }
-    break;//RCC_PERIPHCLK_STGEN
 
 #if defined(RCC_PERIPHCLK_DCMIPP)
     case RCC_PERIPHCLK_DCMIPP:
@@ -3015,8 +3088,8 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint64_t PeriphClk)
           frequency = 0U;
           break;
       }
+      break;/* RCC_PERIPHCLK_DCMIPP */
     }
-    break;//RCC_PERIPHCLK_DCMIPP
 #endif /* RCC_PERIPHCLK_DCMIPP */
 
 #if defined(RCC_PERIPHCLK_SAES)
@@ -3047,8 +3120,8 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint64_t PeriphClk)
           frequency = 0U;
           break;
       }
+      break;/* RCC_PERIPHCLK_SAES */
     }
-    break;//RCC_PERIPHCLK_SAES
 #endif /* RCC_PERIPHCLK_SAES */
 
     case RCC_PERIPHCLK_QSPI:
@@ -3079,8 +3152,8 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint64_t PeriphClk)
           frequency = 0U;
           break;
       }
+      break;/* RCC_PERIPHCLK_QSPI */
     }
-    break;//RCC_PERIPHCLK_QSPI
 
     case RCC_PERIPHCLK_ETH1:
     {
@@ -3102,8 +3175,8 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint64_t PeriphClk)
           frequency = 0U;
           break;
       }
+      break;/* RCC_PERIPHCLK_ETH1 */
     }
-    break;//RCC_PERIPHCLK_ETH1
 
     case RCC_PERIPHCLK_ETH2:
     {
@@ -3125,8 +3198,8 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint64_t PeriphClk)
           frequency = 0U;
           break;
       }
+      break;/* RCC_PERIPHCLK_ETH2 */
     }
-    break;//RCC_PERIPHCLK_ETH2
 
     case RCC_PERIPHCLK_FMC:
     {
@@ -3152,9 +3225,11 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint64_t PeriphClk)
           frequency = RCC_GetCKPERFreq();
           break;
 
+        default:
+          break;
       }
+      break;/* RCC_PERIPHCLK_FMC */
     }
-    break;//RCC_PERIPHCLK_FMC
 
     case RCC_PERIPHCLK_USBO:
     {
@@ -3170,9 +3245,12 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint64_t PeriphClk)
         case RCC_USBOCLKSOURCE_PHY:
           frequency = USB_PHY_VALUE;
           break;
+
+        default:
+          break;
       }
+      break;/* RCC_PERIPHCLK_USBO */
     }
-    break;//RCC_PERIPHCLK_USBO
 
     case RCC_PERIPHCLK_ADC1:
     {
@@ -3198,8 +3276,9 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint64_t PeriphClk)
           frequency = 0U;
           break;
       }
-    }
       break; /* RCC_PERIPHCLK_ADC1 */
+
+    }
 
     case RCC_PERIPHCLK_ADC2:
     {
@@ -3225,8 +3304,8 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint64_t PeriphClk)
           frequency = 0U;
           break;
       }
-    }
       break; /* RCC_PERIPHCLK_ADC2 */
+    }
 
     case RCC_PERIPHCLK_RNG1:
     {
@@ -3246,9 +3325,12 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint64_t PeriphClk)
         case RCC_RNG1CLKSOURCE_LSI:
           frequency = LSI_VALUE;
           break;
+
+        default:
+          break;
       }
+      break;/* RCC_PERIPHCLK_RNG1 */
     }
-    break;//RCC_PERIPHCLK_RNG1
 
     case RCC_PERIPHCLK_SDMMC1:
     {
@@ -3278,8 +3360,8 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint64_t PeriphClk)
           frequency = 0U;
           break;
       }
-    }
       break; /* RCC_PERIPHCLK_SDMMC1 */
+    }
 
     case RCC_PERIPHCLK_SDMMC2:
     {
@@ -3309,8 +3391,8 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint64_t PeriphClk)
           frequency = 0U;
           break;
       }
-    }
       break; /* RCC_PERIPHCLK_SDMMC2 */
+    }
 
     case RCC_PERIPHCLK_TIMG1:
     {
@@ -3330,6 +3412,8 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint64_t PeriphClk)
           case RCC_APB1_DIV16:
             frequency /= 4U;
             break;
+          default:
+            break;
         }
       }
       else
@@ -3348,10 +3432,12 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint64_t PeriphClk)
           case RCC_APB1_DIV16:
             frequency /= 8U;
             break;
+          default:
+            break;
         }
       }
+      break;
     }
-    break;
 
 
     case RCC_PERIPHCLK_TIMG2:
@@ -3372,6 +3458,8 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint64_t PeriphClk)
           case RCC_APB2_DIV16:
             frequency /= 4U;
             break;
+          default:
+            break;
         }
       }
       else
@@ -3390,13 +3478,17 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint64_t PeriphClk)
           case RCC_APB2_DIV16:
             frequency /= 8U;
             break;
+          default:
+            break;
         }
       }
+      break;
     }
-    break;
 
+
+    default:
+      break;
   }
-
   return (frequency);
 }
 

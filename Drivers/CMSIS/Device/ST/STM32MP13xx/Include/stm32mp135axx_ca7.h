@@ -79,8 +79,8 @@
    HypervisorTimer_IRQn             = 26,     /*!< Hypervisor Timer Interrupt                                           */
    VirtualTimer_IRQn                = 27,     /*!< Virtual Timer Interrupt                                              */
    Legacy_nFIQ_IRQn                 = 28,     /*!< Legacy nFIQ Interrupt                                                */
-   SecurePhysicalTimer_IRQn         = 29,     /*!< Secure Physical Timer Interrupt                                      */
-   NonSecurePhysicalTimer_IRQn      = 30,     /*!< Non-Secure Physical Timer Interrupt                                  */
+   SecurePhyTimer_IRQn              = 29,     /*!< Secure Physical Timer Interrupt                                      */
+   NonSecurePhyTimer_IRQn           = 30,     /*!< Non-Secure Physical Timer Interrupt                                  */
    Legacy_nIRQ_IRQn                 = 31,     /*!< Legacy nIRQ Interrupt                                                */
    /******  STM32 specific Interrupt Numbers ****************************************************************************/
    RESERVED_32                      = 32,     /*!< RESERVED interrupt                                                   */
@@ -258,7 +258,7 @@
 #define __FPU_PRESENT                 1U      /*!< Set to 1 if FPU is present                  */
 #define __GIC_PRESENT                 1U      /*!< Set to 1 if GIC is present                  */
 #define __TIM_PRESENT                 1U      /*!< Set to 1 if TIM is present                  */
-#define __L2C_PRESENT                 0U      /*!< Set to 1 if L2C is present (external cache) */
+#define __L2C_PRESENT                 0U      /*!< Set to 1 if L2C is present (only for A9)    */
 
 #define GIC_BASE             0xA0021000
 #define GIC_DISTRIBUTOR_BASE GIC_BASE
@@ -346,6 +346,8 @@ typedef struct
 /*                      DCMIPP Camera Interface (DCMIPP)                      */
 /*                                                                            */
 /******************************************************************************/
+
+#define DCMIPP_NUM_OF_PIPES               (0x1U)
 /*****************  Bit definition for DCMIPP_IPGR1 register  *****************/
 #define DCMIPP_IPGR1_MEMORYPAGE_Pos       (0U)
 #define DCMIPP_IPGR1_MEMORYPAGE_Msk       (0x7UL << DCMIPP_IPGR1_MEMORYPAGE_Pos)         /*!< 0x00000007 */
@@ -1865,7 +1867,7 @@ typedef struct
   uint32_t       RESERVED0[169];  /*!< Reserved, 0x144 -> 0x144                                                  */
   __IO uint32_t  HWCFGR2;         /*!< DMAMUX Configuration register 2,                    Address offset: 0x3EC */
   __IO uint32_t  HWCFGR1;         /*!< DMAMUX Configuration register 1,                    Address offset: 0x3F0 */
-  __IO uint32_t  VERR;            /*!< DMAMUX Verion Register,                             Address offset: 0x3F4 */
+  __IO uint32_t  VERR;            /*!< DMAMUX Version Register,                             Address offset: 0x3F4 */
   __IO uint32_t  IPDR;            /*!< DMAMUX Identification register,                     Address offset: 0x3F8 */
   __IO uint32_t  SIDR;            /*!< DMAMUX Size Identification register,                Address offset: 0x3FC */
 
@@ -1880,7 +1882,7 @@ typedef struct
   uint32_t RESERVED1;      /*!< Reserved,                                                         0x004 */
   __IO uint32_t  SGISR0;  /*!< MDMA Secure Global Interrupt/Status Register 0,   Address offset: 0x008 */
   uint32_t RESERVED2[250]; /*!< Reserved,                                                  0x10 - 0x3F0 */
-  __IO uint32_t  VERR;    /*!< MDMA Verion Register,                             Address offset: 0x3F4 */
+  __IO uint32_t  VERR;    /*!< MDMA Version Register,                             Address offset: 0x3F4 */
   __IO uint32_t  IPDR;    /*!< MDMA Identification register,                     Address offset: 0x3F8 */
   __IO uint32_t  SIDR;    /*!< MDMA Size Identification register,                Address offset: 0x3FC */
 }MDMA_TypeDef;
@@ -2512,7 +2514,6 @@ typedef struct
   __IO uint32_t REG_TOP_HIGHO;      /*!< Region 0 top address high register,  Address offset: 0x10C */
   __IO uint32_t REG_ATTRIBUTESO;    /*!< Region 0 attribute register,         Address offset: 0x110 */
   __IO uint32_t REG_ID_ACCESSO;     /*!< Region 0 ID access register,         Address offset: 0x114 */
-  /* @TODO : TypeDef to be compleated if needed*/
 } TZC_TypeDef;
 
 
@@ -3621,16 +3622,8 @@ typedef struct
 #define DFSDM1_Channel1_BASE  (DFSDM1_BASE + 0x20UL)
 #define DFSDM1_Channel2_BASE  (DFSDM1_BASE + 0x40UL)
 #define DFSDM1_Channel3_BASE  (DFSDM1_BASE + 0x60UL)
-#define DFSDM1_Channel4_BASE  (DFSDM1_BASE + 0x80UL)
-#define DFSDM1_Channel5_BASE  (DFSDM1_BASE + 0xA0UL)
-#define DFSDM1_Channel6_BASE  (DFSDM1_BASE + 0xC0UL)
-#define DFSDM1_Channel7_BASE  (DFSDM1_BASE + 0xE0UL)
 #define DFSDM1_Filter0_BASE   (DFSDM1_BASE + 0x100UL)
 #define DFSDM1_Filter1_BASE   (DFSDM1_BASE + 0x180UL)
-#define DFSDM1_Filter2_BASE   (DFSDM1_BASE + 0x200UL)
-#define DFSDM1_Filter3_BASE   (DFSDM1_BASE + 0x280UL)
-#define DFSDM1_Filter4_BASE   (DFSDM1_BASE + 0x300UL)
-#define DFSDM1_Filter5_BASE   (DFSDM1_BASE + 0x380UL)
 #define FDCAN1_BASE           (APB2_PERIPH_BASE + 0xE000UL)
 #define FDCAN2_BASE           (APB2_PERIPH_BASE + 0xF000UL)
 #define TTFDCAN1_BASE         (APB2_PERIPH_BASE + 0xE100UL)
@@ -3945,16 +3938,8 @@ typedef struct
 #define DFSDM1_Channel1     ((DFSDM_Channel_TypeDef *) DFSDM1_Channel1_BASE)
 #define DFSDM1_Channel2     ((DFSDM_Channel_TypeDef *) DFSDM1_Channel2_BASE)
 #define DFSDM1_Channel3     ((DFSDM_Channel_TypeDef *) DFSDM1_Channel3_BASE)
-#define DFSDM1_Channel4     ((DFSDM_Channel_TypeDef *) DFSDM1_Channel4_BASE)
-#define DFSDM1_Channel5     ((DFSDM_Channel_TypeDef *) DFSDM1_Channel5_BASE)
-#define DFSDM1_Channel6     ((DFSDM_Channel_TypeDef *) DFSDM1_Channel6_BASE)
-#define DFSDM1_Channel7     ((DFSDM_Channel_TypeDef *) DFSDM1_Channel7_BASE)
 #define DFSDM1_Filter0      ((DFSDM_Filter_TypeDef *) DFSDM1_Filter0_BASE)
 #define DFSDM1_Filter1      ((DFSDM_Filter_TypeDef *) DFSDM1_Filter1_BASE)
-#define DFSDM1_Filter2      ((DFSDM_Filter_TypeDef *) DFSDM1_Filter2_BASE)
-#define DFSDM1_Filter3      ((DFSDM_Filter_TypeDef *) DFSDM1_Filter3_BASE)
-#define DFSDM1_Filter4      ((DFSDM_Filter_TypeDef *) DFSDM1_Filter4_BASE)
-#define DFSDM1_Filter5      ((DFSDM_Filter_TypeDef *) DFSDM1_Filter5_BASE)
 
 #define RCC                 ((RCC_TypeDef *) RCC_BASE)
 
@@ -4638,7 +4623,7 @@ typedef struct
 /********************  Bit definition for ADC_SQR1 register  ********************/
 #define ADC_SQR1_L_Pos                    (0U)
 #define ADC_SQR1_L_Msk                    (0xFUL << ADC_SQR1_L_Pos)             /*!< 0x0000000F */
-#define ADC_SQR1_L                        ADC_SQR1_L_Msk                       /*!< ADC regular channel sequence lenght */
+#define ADC_SQR1_L                        ADC_SQR1_L_Msk                       /*!< ADC regular channel sequence length */
 #define ADC_SQR1_L_0                      (0x1UL << ADC_SQR1_L_Pos)             /*!< 0x00000001 */
 #define ADC_SQR1_L_1                      (0x2UL << ADC_SQR1_L_Pos)             /*!< 0x00000002 */
 #define ADC_SQR1_L_2                      (0x4UL << ADC_SQR1_L_Pos)             /*!< 0x00000004 */
@@ -11341,7 +11326,7 @@ typedef struct
 #define DFSDM_HWCFGR_NBT      DFSDM_HWCFGR_NBT_Msk                     /*!< Number of implemented transceivers */
 #define DFSDM_HWCFGR_NBF_Pos  (8U)
 #define DFSDM_HWCFGR_NBF_Msk  (0xFFUL << DFSDM_HWCFGR_NBF_Pos)          /*!< 0x0000FF00 */
-#define DFSDM_HWCFGR_NBF      DFSDM_HWCFGR_NBF_Msk                     /*!< NNumber of implemented filters */
+#define DFSDM_HWCFGR_NBF      DFSDM_HWCFGR_NBF_Msk                     /*!< Number of implemented filters */
 
 /**********************  Bit definition for DFSDM_VERR register  *****************/
 #define DFSDM_VERR_MINREV_Pos      (0U)
@@ -13782,9 +13767,6 @@ typedef struct
 #define ETH_MACTSCR_TSENMACADDR_Pos         (18U)
 #define ETH_MACTSCR_TSENMACADDR_Msk         (0x1UL << ETH_MACTSCR_TSENMACADDR_Pos)               /*!< 0x00040000 */
 #define ETH_MACTSCR_TSENMACADDR             ETH_MACTSCR_TSENMACADDR_Msk                         /*!< Enable MAC Address for PTP Packet Filtering */
-#define ETH_MACTSCR_CSC_Pos                 (19U)
-#define ETH_MACTSCR_CSC_Msk                 (0x1UL << ETH_MACTSCR_CSC_Pos)                       /*!< 0x00080000 */
-#define ETH_MACTSCR_CSC                     ETH_MACTSCR_CSC_Msk                                 /*!< Enable checksum correction during OST for PTP over UDP/IPv4 packets */
 #define ETH_MACTSCR_TXTSSTSM_Pos            (24U)
 #define ETH_MACTSCR_TXTSSTSM_Msk            (0x1UL << ETH_MACTSCR_TXTSSTSM_Pos)                  /*!< 0x01000000 */
 #define ETH_MACTSCR_TXTSSTSM                ETH_MACTSCR_TXTSSTSM_Msk                            /*!< Transmit Timestamp Status Mode */
@@ -13793,17 +13775,6 @@ typedef struct
 #define ETH_MACTSCR_AV8021ASMEN             ETH_MACTSCR_AV8021ASMEN_Msk                         /*!< AV 802.1AS Mode Enable */
 
 /**************  Bit definition for ETH_MACSSIR register  **************/
-#define ETH_MACSSIR_SNSINC_Pos              (8U)
-#define ETH_MACSSIR_SNSINC_Msk              (0xFFUL << ETH_MACSSIR_SNSINC_Pos)                   /*!< 0x0000FF00 */
-#define ETH_MACSSIR_SNSINC                  ETH_MACSSIR_SNSINC_Msk                              /*!< Sub-nanosecond Increment Value */
-#define ETH_MACSSIR_SNSINC_0                (0x1UL << ETH_MACSSIR_SNSINC_Pos)                  /*!< 0x00000100 */
-#define ETH_MACSSIR_SNSINC_1                (0x2UL << ETH_MACSSIR_SNSINC_Pos)                  /*!< 0x00000200 */
-#define ETH_MACSSIR_SNSINC_2                (0x4UL << ETH_MACSSIR_SNSINC_Pos)                  /*!< 0x00000400 */
-#define ETH_MACSSIR_SNSINC_3                (0x8UL << ETH_MACSSIR_SNSINC_Pos)                  /*!< 0x00000800 */
-#define ETH_MACSSIR_SNSINC_4                (0x10UL << ETH_MACSSIR_SNSINC_Pos)                 /*!< 0x00001000 */
-#define ETH_MACSSIR_SNSINC_5                (0x20UL << ETH_MACSSIR_SNSINC_Pos)                 /*!< 0x00002000 */
-#define ETH_MACSSIR_SNSINC_6                (0x40UL << ETH_MACSSIR_SNSINC_Pos)                 /*!< 0x00004000 */
-#define ETH_MACSSIR_SNSINC_7                (0x80UL << ETH_MACSSIR_SNSINC_Pos)                 /*!< 0x00008000 */
 #define ETH_MACSSIR_SSINC_Pos               (16U)
 #define ETH_MACSSIR_SSINC_Msk               (0xFFUL << ETH_MACSSIR_SSINC_Pos)                    /*!< 0x00FF0000 */
 #define ETH_MACSSIR_SSINC                   ETH_MACSSIR_SSINC_Msk                               /*!< Sub-second Increment Value */
@@ -18970,12 +18941,10 @@ typedef struct
 #define FMC_CSQAR2_ADDC5_Pos          (0U)
 #define FMC_CSQAR2_ADDC5_Msk          (0xFFU << FMC_CSQAR2_ADDC5_Pos)        /*!< 0x000000FF */
 #define FMC_CSQAR2_ADDC5              FMC_CSQAR2_ADDC5_Msk                   /*!< Address Cycle 5 */
-#define FMC_CSQAR2_NANDCEN0_Pos       (10U)
-#define FMC_CSQAR2_NANDCEN0_Msk       (0x1U << FMC_CSQAR2_NANDCEN0_Pos)      /*!< 0x00000400 */
-#define FMC_CSQAR2_NANDCEN0           FMC_CSQAR2_NANDCEN0_Msk                /*!< NAND Flash chip enable number */
-#define FMC_CSQAR2_NANDCEN1_Pos       (11U)
-#define FMC_CSQAR2_NANDCEN1_Msk       (0x1U << FMC_CSQAR2_NANDCEN1_Pos)      /*!< 0x00000800 */
-#define FMC_CSQAR2_NANDCEN1           FMC_CSQAR2_NANDCEN1_Msk                /*!< NAND Flash chip enable number */
+#define FMC_CSQAR2_NANDCEN_Pos        (10U)
+#define FMC_CSQAR2_NANDCEN_Msk        (0x3U << FMC_CSQAR2_NANDCEN_Pos)       /*!< 0x00000C00 */
+#define FMC_CSQAR2_NANDCEN_0          (0x0U << FMC_CSQAR2_NANDCEN_Pos)       /*!< NCE1 chip enable */
+#define FMC_CSQAR2_NANDCEN_1          (0x1U << FMC_CSQAR2_NANDCEN_Pos)       /*!< NCE2 chip enable */
 #define FMC_CSQAR2_SAO_Pos            (16U)
 #define FMC_CSQAR2_SAO_Msk            (0xFFFFU << FMC_CSQAR2_SAO_Pos)        /*!< 0xFFFF0000 */
 #define FMC_CSQAR2_SAO                FMC_CSQAR2_SAO_Msk                     /*!< Spare Area Address Offset. */
@@ -21618,7 +21587,7 @@ typedef struct
 #define LTDC_LxBFCR_BF1                  LTDC_LxBFCR_BF1_Msk  /*!< blending factor 1These bits select the blending factor F1.- 000: reserved- 001: reserved- 010: reserved- 011: reserved- 100: constant alpha- 101: reserved- 110: pixel alpha x constant alpha- 111: reserved */
 #define LTDC_LxBFCR_BOR_Pos              (16U)
 #define LTDC_LxBFCR_BOR_Msk              (0xfUL << LTDC_LxBFCR_BOR_Pos)
-#define LTDC_LxBFCR_BOR                  LTDC_LxBFCR_BOR_Msk  /*!< blending orderThese bits select the blending orderBOR.BOR= 0000 is for the most background layer (usually hidden behind others)BOR= 1111 is for the most foreground layer (always visible, never hidden by any other).In case of inconsistency, like two layers at same order, the blending engine reverses to BOR[LayerID] = LayerID-1, so that Layer3 is in foreground and Layer1 is in background.Note: if the Layer3 is set as secure, to garantee it is on the foreground, it should be configured with BOR(Layer3)=1111. */
+#define LTDC_LxBFCR_BOR                  LTDC_LxBFCR_BOR_Msk  /*!< blending orderThese bits select the blending orderBOR.BOR= 0000 is for the most background layer (usually hidden behind others)BOR= 1111 is for the most foreground layer (always visible, never hidden by any other).In case of inconsistency, like two layers at same order, the blending engine reverses to BOR[LayerID] = LayerID-1, so that Layer3 is in foreground and Layer1 is in background.Note: if the Layer3 is set as secure, to guarantee it is on the foreground, it should be configured with BOR(Layer3)=1111. */
 
 /* Bit fields for LTDC_LxBLCR register */
 #define LTDC_LxBLCR_BL_Pos               (0U)
@@ -21643,13 +21612,13 @@ typedef struct
 #define LTDC_LxPCR_YF                    LTDC_LxPCR_YF_Msk  /*!< Y Component FirstDefines if the byte 0 of a word (in LSB) contains the Y component.- 0: Y component disabled (thus Cr or Cb component is on byte 0)- 1: Y component enabled (thus Y component is on byte 0) */
 #define LTDC_LxPCR_CBF_Pos               (7U)
 #define LTDC_LxPCR_CBF_Msk               (0x1UL << LTDC_LxPCR_CBF_Pos)
-#define LTDC_LxPCR_CBF                   LTDC_LxPCR_CBF_Msk  /*!< Cb Component FirstDefines if the byte 0&amp;1 of a word (in LSB) contains the Cb component. The setting impacts only for TBD interleaved and semi-planar modes, as it has no meaning in full-planar mode)- 0: Cb disabled (thus Cr component is on byte 0&amp;1)- 1: Cb enabled (thus Cb component is on byte 0&amp;1) */
+#define LTDC_LxPCR_CBF                   LTDC_LxPCR_CBF_Msk  /*!< Cb Component FirstDefines if the byte 0&amp;1 of a word (in LSB) contains the Cb component. The setting impacts only for interleaved and semi-planar modes, as it has no meaning in full-planar mode)- 0: Cb disabled (thus Cr component is on byte 0&amp;1)- 1: Cb enabled (thus Cb component is on byte 0&amp;1) */
 #define LTDC_LxPCR_OF_Pos                (8U)
 #define LTDC_LxPCR_OF_Msk                (0x1UL << LTDC_LxPCR_OF_Pos)
 #define LTDC_LxPCR_OF                    LTDC_LxPCR_OF_Msk  /*!< Odd Pixel FirstDefines if the byte 0 of a word (in LSB) contains the Odd pixel.- 0: odd pixel disabled (thus even pixel on byte 0)- 1: odd pixel enabled (thus odd pixel on byte 0) */
 #define LTDC_LxPCR_YREN_Pos              (9U)
 #define LTDC_LxPCR_YREN_Msk              (0x1UL << LTDC_LxPCR_YREN_Pos)
-#define LTDC_LxPCR_YREN                  LTDC_LxPCR_YREN_Msk  /*!< Y Rescale EnableWhen enabled, incoming Y values in range 16..235 are re-scaled to range 0..255, as required e.g. for ITU-R BT.601 conversion: TBD for Y2R and Y2B values.- 0: rescaling disabled.- 1: rescaling enabled. */
+#define LTDC_LxPCR_YREN                  LTDC_LxPCR_YREN_Msk  /*!< Y Rescale EnableWhen enabled, incoming Y values in range 16..235 are re-scaled to range 0..255, as required e.g. for ITU-R BT.601 conversion: For Y2R and Y2B values.- 0: rescaling disabled.- 1: rescaling enabled. */
 
 /* Bit fields for LTDC_LxCFBAR register */
 #define LTDC_LxCFBAR_CFBADD_Pos          (0U)
@@ -21939,7 +21908,7 @@ typedef struct
 #define MDMA_CISR_TCIF            MDMA_CISR_TCIF_Msk                           /*!< Channel x buffer transfer complete interrupt flag */
 #define MDMA_CISR_CRQA_Pos        (16U)
 #define MDMA_CISR_CRQA_Msk        (0x1UL << MDMA_CISR_CRQA_Pos)                 /*!< 0x00010000 */
-#define MDMA_CISR_CRQA            MDMA_CISR_CRQA_Msk                           /*!< Channel x ReQest Active flag */
+#define MDMA_CISR_CRQA            MDMA_CISR_CRQA_Msk                           /*!< Channel x Request Active flag */
 
 /********************  Bit definition for MDMA_CxIFCR register  ****************/
 #define MDMA_CIFCR_CTEIF_Pos      (0U)
@@ -22004,16 +21973,16 @@ typedef struct
 #define MDMA_CCR_PL_1             (0x2UL << MDMA_CCR_PL_Pos)                    /*!< 0x00000080 */
 #define MDMA_CCR_SM_Pos           (8U)
 #define MDMA_CCR_SM_Msk           (0x1UL << MDMA_CCR_SM_Pos)                    /*!< 0x00000100 */
-#define MDMA_CCR_SM               MDMA_CCR_SM_Msk                              /*!< Secure Mode Eanble */
+#define MDMA_CCR_SM               MDMA_CCR_SM_Msk                              /*!< Secure Mode Enable */
 #define MDMA_CCR_BEX_Pos          (12U)
 #define MDMA_CCR_BEX_Msk          (0x1UL << MDMA_CCR_BEX_Pos)                   /*!< 0x00001000 */
-#define MDMA_CCR_BEX              MDMA_CCR_BEX_Msk                             /*!< Byte Endianess eXchange */
+#define MDMA_CCR_BEX              MDMA_CCR_BEX_Msk                             /*!< Byte Endianness eXchange */
 #define MDMA_CCR_HEX_Pos          (13U)
 #define MDMA_CCR_HEX_Msk          (0x1UL << MDMA_CCR_HEX_Pos)                   /*!< 0x00002000 */
-#define MDMA_CCR_HEX              MDMA_CCR_HEX_Msk                             /*!< Half word Endianess eXchange */
+#define MDMA_CCR_HEX              MDMA_CCR_HEX_Msk                             /*!< Half word Endianness eXchange */
 #define MDMA_CCR_WEX_Pos          (14U)
 #define MDMA_CCR_WEX_Msk          (0x1UL << MDMA_CCR_WEX_Pos)                   /*!< 0x00004000 */
-#define MDMA_CCR_WEX              MDMA_CCR_WEX_Msk                             /*!< Word Endianess eXchange */
+#define MDMA_CCR_WEX              MDMA_CCR_WEX_Msk                             /*!< Word Endianness eXchange */
 #define MDMA_CCR_SWRQ_Pos         (16U)
 #define MDMA_CCR_SWRQ_Msk         (0x1UL << MDMA_CCR_SWRQ_Pos)                  /*!< 0x00010000 */
 #define MDMA_CCR_SWRQ             MDMA_CCR_SWRQ_Msk                            /*!< SW ReQuest */
@@ -22069,7 +22038,7 @@ typedef struct
 #define MDMA_CTCR_PKE             MDMA_CTCR_PKE_Msk                            /*!< PacK Enable */
 #define MDMA_CTCR_PAM_Pos         (26U)
 #define MDMA_CTCR_PAM_Msk         (0x3UL << MDMA_CTCR_PAM_Pos)                  /*!< 0x0C000000 */
-#define MDMA_CTCR_PAM             MDMA_CTCR_PAM_Msk                            /*!< Padding/Alignement Mode */
+#define MDMA_CTCR_PAM             MDMA_CTCR_PAM_Msk                            /*!< Padding/Alignment Mode */
 #define MDMA_CTCR_PAM_0           (0x1UL << MDMA_CTCR_PAM_Pos)                  /*!< 0x4000000 */
 #define MDMA_CTCR_PAM_1           (0x2UL << MDMA_CTCR_PAM_Pos)                  /*!< 0x8000000 */
 #define MDMA_CTCR_TRGM_Pos        (28U)
@@ -28202,9 +28171,9 @@ typedef struct
 #define TAMP_SECCFGR_BKPWSEC_5              (0x20UL << TAMP_SECCFGR_BKPWSEC_Pos)  /*!< 0x00200000 */
 #define TAMP_SECCFGR_BKPWSEC_6              (0x40UL << TAMP_SECCFGR_BKPWSEC_Pos)  /*!< 0x00400000 */
 #define TAMP_SECCFGR_BKPWSEC_7              (0x80UL << TAMP_SECCFGR_BKPWSEC_Pos)  /*!< 0x00800000 */
-#define TAMP_SECCFGR_SMKLOCK_Pos            (30U)
-#define TAMP_SECCFGR_SMKLOCK_Msk            (0x1UL << TAMP_SECCFGR_SMKLOCK_Pos)   /*!< 0x40000000 */
-#define TAMP_SECCFGR_SMKLOCK                TAMP_SECCFGR_SMKLOCK_Msk
+#define TAMP_SECCFGR_BHKLOCK_Pos            (30U)
+#define TAMP_SECCFGR_BHKLOCK_Msk            (0x1UL << TAMP_SECCFGR_BHKLOCK_Pos)   /*!< 0x40000000 */
+#define TAMP_SECCFGR_BHKLOCK                TAMP_SECCFGR_BHKLOCK_Msk
 #define TAMP_SECCFGR_TAMPSEC_Pos            (31U)
 #define TAMP_SECCFGR_TAMPSEC_Msk            (0x1UL << TAMP_SECCFGR_TAMPSEC_Pos)   /*!< 0x80000000 */
 #define TAMP_SECCFGR_TAMPSEC                TAMP_SECCFGR_TAMPSEC_Msk
@@ -29416,7 +29385,7 @@ typedef struct
 
 #define LCD_FCR_PON_Pos             (4U)
 #define LCD_FCR_PON_Msk             (0x7UL << LCD_FCR_PON_Pos)                  /*!< 0x00000070 */
-#define LCD_FCR_PON                 LCD_FCR_PON_Msk                            /*!< PON[2:0] bits (Puls ON Duration) */
+#define LCD_FCR_PON                 LCD_FCR_PON_Msk                            /*!< PON[2:0] bits (Pulse ON Duration) */
 #define LCD_FCR_PON_0               (0x1UL << LCD_FCR_PON_Pos)                  /*!< 0x00000010 */
 #define LCD_FCR_PON_1               (0x2UL << LCD_FCR_PON_Pos)                  /*!< 0x00000020 */
 #define LCD_FCR_PON_2               (0x4UL << LCD_FCR_PON_Pos)                  /*!< 0x00000040 */
@@ -33140,7 +33109,7 @@ typedef struct
 /*******************  Bit definition for SWPMI_RDR register  ********************/
 #define SWPMI_RDR_RD_Pos         (0U)
 #define SWPMI_RDR_RD_Msk         (0xFFFFFFFFUL << SWPMI_RDR_RD_Pos)             /*!< 0xFFFFFFFF */
-#define SWPMI_RDR_RD             SWPMI_RDR_RD_Msk                              /*!<Recive Data Register           */
+#define SWPMI_RDR_RD             SWPMI_RDR_RD_Msk                              /*!<Receive Data Register           */
 
 
 /*******************  Bit definition for SWPMI_OR register  ********************/
@@ -34900,23 +34869,17 @@ typedef struct
 
 /******************************* CRC Instances ********************************/
 #define IS_CRC_ALL_INSTANCE(INSTANCE) (((INSTANCE) == CRC1))
+/******************************* DCMIPP Instances *****************************/
+#define IS_DCMIPP_ALL_INSTANCE(INSTANCE) (((INSTANCE) == DCMIPP))
 
 /****************************** DFSDM Instances *******************************/
 #define IS_DFSDM_FILTER_ALL_INSTANCE(INSTANCE) (((INSTANCE) == DFSDM1_Filter0) || \
-                                         ((INSTANCE) == DFSDM1_Filter1) || \
-                                         ((INSTANCE) == DFSDM1_Filter2) || \
-                                         ((INSTANCE) == DFSDM1_Filter3) || \
-                                         ((INSTANCE) == DFSDM1_Filter4) || \
-                                         ((INSTANCE) == DFSDM1_Filter5))
+                                         ((INSTANCE) == DFSDM1_Filter1))
 
 #define IS_DFSDM_CHANNEL_ALL_INSTANCE(INSTANCE) (((INSTANCE) == DFSDM1_Channel0) || \
                                                  ((INSTANCE) == DFSDM1_Channel1) || \
                                                  ((INSTANCE) == DFSDM1_Channel2) || \
-                                                 ((INSTANCE) == DFSDM1_Channel3) || \
-                                                 ((INSTANCE) == DFSDM1_Channel4) || \
-                                                 ((INSTANCE) == DFSDM1_Channel5) || \
-                                                 ((INSTANCE) == DFSDM1_Channel6) || \
-                                                 ((INSTANCE) == DFSDM1_Channel7))
+                                                 ((INSTANCE) == DFSDM1_Channel3))
 
 /******************************** DMA Instances *******************************/
 #define IS_DMA_STREAM_ALL_INSTANCE(INSTANCE) (((INSTANCE) == DMA1_Stream0) || \
@@ -35187,7 +35150,7 @@ typedef struct
                                             ((INSTANCE) == TIM16)  || \
                                             ((INSTANCE) == TIM17))
 
-/***************** TIM Instances : external trigger reamp input availabe *******/
+/***************** TIM Instances : external trigger reamp input available *******/
 #define IS_TIM_ETR_INSTANCE(INSTANCE)     (((INSTANCE) == TIM1)   || \
                                            ((INSTANCE) == TIM2)   || \
                                            ((INSTANCE) == TIM3)   || \
@@ -35195,7 +35158,7 @@ typedef struct
                                            ((INSTANCE) == TIM5)   || \
                                            ((INSTANCE) == TIM8))
 
-/***************** TIM Instances : external trigger reamp input availabe *******/
+/***************** TIM Instances : external trigger reamp input available *******/
 #define IS_TIM_ETRSEL_INSTANCE(INSTANCE)     (((INSTANCE) == TIM1)   || \
                                               ((INSTANCE) == TIM2)   || \
                                               ((INSTANCE) == TIM3)   || \

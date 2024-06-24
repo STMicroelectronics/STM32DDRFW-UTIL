@@ -251,7 +251,7 @@ nvm_rank_ldo5:
 
 /*
  * [7]	OTP_SWOFF_BY_BOOST_OVP:
- 0 -> SWOUT will not turnoff bu boost OVP
+ 0 -> SWOUT will not turnoff by boost OVP
  1 -> SWOUT will be turnoff by BOOST OVP
 
  [6]	reserved
@@ -785,7 +785,7 @@ static regul_struct regulators_table[] = {
   * @}
   */
 
-/** @defgroup STM32MP13XX_DISCO_STPMU_Private_Functions Private Functionss
+/** @defgroup STM32MP13XX_DISCO_STPMU_Private_Functions Private Functions
   * @{
   */
 

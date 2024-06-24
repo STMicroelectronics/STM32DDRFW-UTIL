@@ -960,84 +960,87 @@ typedef struct
   __IO uint32_t MACQ0TXFCR;       /*!< Tx Queue 0 flow control register                           Address offset: 0x0070 */
        uint32_t RESERVED4[7];     /*!< Reserved                                                   Address offset: 0x0074-0x008C */
   __IO uint32_t MACRXFCR;         /*!< Rx flow control register                                   Address offset: 0x0090 */
-       uint32_t RESERVED5;        /*!< Reserved                                                   Address offset: 0x0094 */
-  __IO uint32_t MACTXQPMR;        /*!< Tx queue priority mapping 0 register                       Address offset: 0x0098 */
-       uint32_t RESERVED6;        /*!< Reserved                                                   Address offset: 0x009C */
+       uint32_t MACRXQCR;         /*!< Rx Queue control register                                  Address offset: 0x0094 */
+  __IO uint32_t RESERVED5[2];     /*!< Reserved                                                   Address offset: 0x0098-0x009C */
   __IO uint32_t MACRXQC0R;        /*!< Rx queue control 0 register                                Address offset: 0x00A0 */
   __IO uint32_t MACRXQC1R;        /*!< Rx queue control 1 register                                Address offset: 0x00A4 */
   __IO uint32_t MACRXQC2R;        /*!< Rx queue control 2 register                                Address offset: 0x00A8 */
-       uint32_t RESERVED7;        /*!< Reserved                                                   Address offset: 0x00AC */
+       uint32_t RESERVED6;        /*!< Reserved                                                   Address offset: 0x00AC */
   __IO uint32_t MACISR;           /*!< Interrupt status register                                  Address offset: 0x00B0 */
   __IO uint32_t MACIER;           /*!< Interrupt enable register                                  Address offset: 0x00B4 */
   __IO uint32_t MACRXTXSR;        /*!< Rx Tx status register                                      Address offset: 0x00B8 */
-       uint32_t RESERVED8;        /*!< Reserved                                                   Address offset: 0x00BC */
+       uint32_t RESERVED7;        /*!< Reserved                                                   Address offset: 0x00BC */
   __IO uint32_t MACPCSR;          /*!< PMT control status register                                Address offset: 0x00C0 */
   __IO uint32_t MACRWKPFR;        /*!< Remote wakeup packet filter register                       Address offset: 0x00C4 */
-       uint32_t RESERVED9[2];     /*!< Reserved                                                   Address offset: 0x00C8-0x00CC */
+       uint32_t RESERVED8[2];     /*!< Reserved                                                   Address offset: 0x00C8-0x00CC */
   __IO uint32_t MACLCSR;          /*!< LPI control status register                                Address offset: 0x00D0 */
   __IO uint32_t MACLTCR;          /*!< LPI timers control register                                Address offset: 0x00D4 */
   __IO uint32_t MACLETR;          /*!< LPI entry timer register                                   Address offset: 0x00D8 */
   __IO uint32_t MAC1USTCR;        /*!< microsecond-tick counter register                          Address offset: 0x00DC */
-       uint32_t RESERVED10[6];    /*!< Reserved                                                   Address offset: 0x00E0-0x00F4 */
+       uint32_t RESERVED9[6];     /*!< Reserved                                                   Address offset: 0x00E0-0x00F4 */
   __IO uint32_t MACPHYCSR;        /*!< PHYIF control status register                              Address offset: 0x00F8 */
-       uint32_t RESERVED11[5];    /*!< Reserved                                                   Address offset: 0x00FC-0x010C */
+       uint32_t RESERVED10[5];    /*!< Reserved                                                   Address offset: 0x00FC-0x010C */
   __IO uint32_t MACVR;            /*!< Version register                                           Address offset: 0x0110 */
   __IO uint32_t MACDR;            /*!< Debug register                                             Address offset: 0x0114 */
-       uint32_t RESERVED12[2];    /*!< Reserved                                                   Address offset: 0x0118-0x011C */
+       uint32_t RESERVED11;       /*!< Reserved                                                   Address offset: 0x0118 */
+  __IO uint32_t MACHWF0R;         /*!< HW feature 0 register                                      Address offset: 0x011C */
   __IO uint32_t MACHWF1R;         /*!< HW feature 1 register                                      Address offset: 0x0120 */
   __IO uint32_t MACHWF2R;         /*!< HW feature 2 register                                      Address offset: 0x0124 */
-       uint32_t RESERVED13[54];   /*!< Reserved                                                   Address offset: 0x0128-0x01FC */
+  __IO uint32_t MACHWF3R;         /*!< HW feature 3 register                                      Address offset: 0x0128 */
+       uint32_t RESERVED12[53];   /*!< Reserved                                                   Address offset: 0x012C-0x01FC */
   __IO uint32_t MACMDIOAR;        /*!< MDIO address register                                      Address offset: 0x0200 */
   __IO uint32_t MACMDIODR;        /*!< MDIO data register                                         Address offset: 0x0204 */
-       uint32_t RESERVED14[62];   /*!< Reserved                                                   Address offset: 0x0208-0x02FC */
-  __IO uint32_t MACA0HR;          /*!< Address 0 high register                                    Address offset: 0x0300 */
-  __IO uint32_t MACA0LR;          /*!< Address 0 low register                                     Address offset: 0x0304 */
-  __IO uint32_t MACA1HR;          /*!< Address 1 high register                                    Address offset: 0x0308 */
-  __IO uint32_t MACA1LR;          /*!< Address 1 low register                                     Address offset: 0x030C */
-  __IO uint32_t MACA2HR;          /*!< Address 2 high register                                    Address offset: 0x0310 */
-  __IO uint32_t MACA2LR;          /*!< Address 2 low register                                     Address offset: 0x0314 */
-  __IO uint32_t MACA3HR;          /*!< Address 3 high register                                    Address offset: 0x0318 */
-  __IO uint32_t MACA3LR;          /*!< Address 3 low register                                     Address offset: 0x031C */
-       uint32_t RESERVED15[248];  /*!< Reserved                                                   Address offset: 0x0320-0x06FC */
+       uint32_t RESERVED13[2];    /*!< Reserved                                                   Address offset: 0x0208-0x020C */
+  __IO uint32_t MACARPAR;         /*!< ARP address register                                       Address offset: 0x0210 */
+       uint32_t RESERVED14[7];    /*!< Reserved                                                   Address offset: 0x0214-0x022C */
+  __IO uint32_t MACCSRSWCR;       /*!< CSR software control register                              Address offset: 0x0230 */
+       uint32_t RESERVED15[51];   /*!< Reserved                                                   Address offset: 0x0234-0x02FC */
+  __IO uint32_t MACA0HR;          /*!< MAC Address 0 high register                                Address offset: 0x0300 */
+  __IO uint32_t MACA0LR;          /*!< MAC Address 0 low register                                 Address offset: 0x0304 */
+  __IO uint32_t MACA1HR;          /*!< MAC Address 1 high register                                Address offset: 0x0308 */
+  __IO uint32_t MACA1LR;          /*!< MAC Address 1 low register                                 Address offset: 0x030C */
+  __IO uint32_t MACA2HR;          /*!< MAC Address 2 high register                                Address offset: 0x0310 */
+  __IO uint32_t MACA2LR;          /*!< MAC Address 2 low register                                 Address offset: 0x0314 */
+  __IO uint32_t MACA3HR;          /*!< MAC Address 3 high register                                Address offset: 0x0318 */
+  __IO uint32_t MACA3LR;          /*!< MAC Address 3 low register                                 Address offset: 0x031C */
+       uint32_t RESERVED16[248];  /*!< Reserved                                                   Address offset: 0x0320-0x06FC */
   __IO uint32_t MMCCR;            /*!< MMC control register                                       Address offset: 0x0700 */
   __IO uint32_t MMCRXIR;          /*!< MMC Rx interrupt register                                  Address offset: 0x704 */
   __IO uint32_t MMCTXIR;          /*!< MMC Tx interrupt register                                  Address offset: 0x708 */
   __IO uint32_t MMCRXIMR;         /*!< MMC Rx interrupt mask register                             Address offset: 0x70C */
-  __IO uint32_t MMCTXIMR;         /*!< MMC Tx interrupt mask register                      Address offset: 0x710 */
-       uint32_t RESERVED16[14];   /*!< Reserved                                                    Address offset: 0x0714-0x0748 */
-  __IO uint32_t MMCTXSCGPR;       /*!< Tx single collision good packets register      Address offset: 0x74C */
-  __IO uint32_t MMCTXMCGPR;       /*!< Tx multiple collision good packets register  Address offset: 0x750 */
-       uint32_t RESERVED16_1[5];  /*!< Reserved                                                   Address offset: 0x0754-0x0764 */
-  __IO uint32_t MMCTXPCGR;        /*!< Tx packet count good register                     Address offset: 0x768 */
-       uint32_t RESERVED16_2[10]; /*!< Reserved                                                  Address offset: 0x076C-0x0790 */
-  __IO uint32_t MMCRXCRCEPR;      /*!< Rx CRC error packets register                   Address offset: 0x794 */
-  __IO uint32_t MMCRXAEPR;        /*!< Rx alignment error packets register         Address offset: 0x798 */
-       uint32_t RESERVED16_3[10]; /*!< Reserved                                                  Address offset: 0x079C-0x07C0 */
-  __IO uint32_t MMCRXUPGR;        /*!< Rx unicast packets good register               Address offset: 0x7C4 */
-       uint32_t RESERVED16_4[9];  /*!< Reserved                                                   Address offset: 0x07C8-0x07E8 */
-  __IO uint32_t MMCTXLPIMSTR;     /*!< Tx LPI microsecond timer register                     Address offset: 0x7EC */
-  __IO uint32_t MMCTXLPITCR;      /*!< Tx LPI transition counter register                    Address offset: 0x7F0 */
-  __IO uint32_t MMCRXLPIMSTR;     /*!< Rx LPI microsecond counter register                   Address offset: 0x7F4 */
-  __IO uint32_t MMCRXLPITCR;  /*!< Rx LPI transition counter register                    Address offset: 0x7F8 */
-       uint32_t RESERVED16_5[65];  /*!< Reserved                                                  Address offset: 0x07FC-0x08FC */
+  __IO uint32_t MMCTXIMR;         /*!< MMC Tx interrupt mask register                             Address offset: 0x710 */
+       uint32_t RESERVED17[14];   /*!< Reserved                                                   Address offset: 0x0714-0x0748 */
+  __IO uint32_t MMCTXSCGPR;       /*!< Tx single collision good packets register                  Address offset: 0x74C */
+  __IO uint32_t MMCTXMCGPR;       /*!< Tx multiple collision good packets register                Address offset: 0x750 */
+       uint32_t RESERVED18[5];    /*!< Reserved                                                   Address offset: 0x0754-0x0764 */
+  __IO uint32_t MMCTXPCGR;        /*!< Tx packet count good register                              Address offset: 0x768 */
+       uint32_t RESERVED19[10];   /*!< Reserved                                                   Address offset: 0x076C-0x0790 */
+  __IO uint32_t MMCRXCRCEPR;      /*!< Rx CRC error packets register                              Address offset: 0x794 */
+  __IO uint32_t MMCRXAEPR;        /*!< Rx alignment error packets register                        Address offset: 0x798 */
+       uint32_t RESERVED20[10];   /*!< Reserved                                                   Address offset: 0x079C-0x07C0 */
+  __IO uint32_t MMCRXUPGR;        /*!< Rx unicast packets good register                           Address offset: 0x7C4 */
+       uint32_t RESERVED21[9];    /*!< Reserved                                                   Address offset: 0x07C8-0x07E8 */
+  __IO uint32_t MMCTXLPIMSTR;     /*!< Tx LPI microsecond timer register                          Address offset: 0x7EC */
+  __IO uint32_t MMCTXLPITCR;      /*!< Tx LPI transition counter register                         Address offset: 0x7F0 */
+  __IO uint32_t MMCRXLPIMSTR;     /*!< Rx LPI microsecond counter register                        Address offset: 0x7F4 */
+  __IO uint32_t MMCRXLPITCR;      /*!< Rx LPI transition counter register                         Address offset: 0x7F8 */
+       uint32_t RESERVED22[65];   /*!< Reserved                                                   Address offset: 0x07FC-0x08FC */
   __IO uint32_t MACL3L4C0R;       /*!< L3 and L4 control 0 register                               Address offset: 0x0900 */
   __IO uint32_t MACL4A0R;         /*!< Layer4 address filter 0 register                           Address offset: 0x0904 */
-       uint32_t RESERVED17[2];    /*!< Reserved                                                   Address offset: 0x0908-0x090C */
+       uint32_t RESERVED23[2];    /*!< Reserved                                                   Address offset: 0x0908-0x090C */
   __IO uint32_t MACL3A00R;        /*!< Layer 3 Address 0 filter 0 register                        Address offset: 0x0910 */
   __IO uint32_t MACL3A10R;        /*!< Layer3 address 1 filter 0 register                         Address offset: 0x0914 */
   __IO uint32_t MACL3A20;         /*!< Layer3 Address 2 filter 0 register                         Address offset: 0x0918 */
   __IO uint32_t MACL3A30;         /*!< Layer3 Address 3 filter 0 register                         Address offset: 0x091C */
-       uint32_t RESERVED18[4];    /*!< Reserved                                                   Address offset: 0x0920-0x092C */
+       uint32_t RESERVED24[4];    /*!< Reserved                                                   Address offset: 0x0920-0x092C */
   __IO uint32_t MACL3L4C1R;       /*!< L3 and L4 control 1 register                               Address offset: 0x0930 */
   __IO uint32_t MACL4A1R;         /*!< Layer 4 address filter 1 register                          Address offset: 0x0934 */
-       uint32_t RESERVED19[2];    /*!< Reserved                                                   Address offset: 0x0938-0x093C */
+       uint32_t RESERVED25[2];    /*!< Reserved                                                   Address offset: 0x0938-0x093C */
   __IO uint32_t MACL3A01R;        /*!< Layer3 address 0 filter 1 Register                         Address offset: 0x0940 */
   __IO uint32_t MACL3A11R;        /*!< Layer3 address 1 filter 1 register                         Address offset: 0x0944 */
   __IO uint32_t MACL3A21R;        /*!< Layer3 address 2 filter 1 Register                         Address offset: 0x0948 */
   __IO uint32_t MACL3A31R;        /*!< Layer3 address 3 filter 1 register                         Address offset: 0x094C */
-       uint32_t RESERVED20[100];  /*!< Reserved                                                   Address offset: 0x0950-0x0ADC */
-  __IO uint32_t MACARPAR;         /*!< ARP address register                                       Address offset: 0x0AE0 */
-       uint32_t RESERVED21[7];    /*!< Reserved                                                   Address offset: 0x0AE4-0x0AFC */
+       uint32_t RESERVED26[108];  /*!< Reserved                                                   Address offset: 0x0950-0x0AFC */
   __IO uint32_t MACTSCR;          /*!< Timestamp control Register                                 Address offset: 0x0B00 */
   __IO uint32_t MACSSIR;          /*!< Sub-second increment register                              Address offset: 0x0B04 */
   __IO uint32_t MACSTSR;          /*!< System time seconds register                               Address offset: 0x0B08 */
@@ -1045,44 +1048,45 @@ typedef struct
   __IO uint32_t MACSTSUR;         /*!< System time seconds update register                        Address offset: 0x0B10 */
   __IO uint32_t MACSTNUR;         /*!< System time nanoseconds update register                    Address offset: 0x0B14 */
   __IO uint32_t MACTSAR;          /*!< Timestamp addend register                                  Address offset: 0x0B18 */
-       uint32_t RESERVED22;       /*!< Reserved                                                   Address offset: 0x0B1C */
+       uint32_t RESERVED27;       /*!< Reserved                                                   Address offset: 0x0B1C */
   __IO uint32_t MACTSSR;          /*!< Timestamp status register                                  Address offset: 0x0B20 */
-       uint32_t RESERVED23[3];    /*!< Reserved                                                   Address offset: 0x0B24-0x0B2C */
+       uint32_t RESERVED28[3];    /*!< Reserved                                                   Address offset: 0x0B24-0x0B2C */
   __IO uint32_t MACTXTSSNR;       /*!< Tx timestamp status nanoseconds register                   Address offset: 0x0B30 */
   __IO uint32_t MACTXTSSSR;       /*!< Tx timestamp status seconds register                       Address offset: 0x0B34 */
-       uint32_t RESERVED24[2];    /*!< Reserved                                                   Address offset: 0x0B38-0x0B3C */
+       uint32_t RESERVED29[2];    /*!< Reserved                                                   Address offset: 0x0B38-0x0B3C */
   __IO uint32_t MACACR;           /*!< Auxiliary control register                                 Address offset: 0x0B40 */
-       uint32_t RESERVED25;       /*!< Reserved                                                   Address offset: 0x0B44 */
+       uint32_t RESERVED30;       /*!< Reserved                                                   Address offset: 0x0B44 */
   __IO uint32_t MACATSNR;         /*!< Auxiliary timestamp nanoseconds register                   Address offset: 0x0B48 */
   __IO uint32_t MACATSSR;         /*!< Auxiliary timestamp seconds register                       Address offset: 0x0B4C */
   __IO uint32_t MACTSIACR;        /*!< Timestamp Ingress asymmetric correction register           Address offset: 0x0B50 */
   __IO uint32_t MACTSEACR;        /*!< Timestamp Egress asymmetric correction register            Address offset: 0x0B54 */
   __IO uint32_t MACTSICNR;        /*!< Timestamp Ingress correction nanosecond register           Address offset: 0x0B58 */
   __IO uint32_t MACTSECNR;        /*!< Timestamp Egress correction nanosecond register            Address offset: 0x0B5C */
-       uint32_t RESERVED26[4];    /*!< Reserved                                                   Address offset: 0x0B60-0x0B6C */
+       uint32_t RESERVED31[4];    /*!< Reserved                                                   Address offset: 0x0B60-0x0B6C */
   __IO uint32_t MACPPSCR;         /*!< PPS control register [alternate]                           Address offset: 0x0B70 */
-       uint32_t RESERVED27[3];    /*!< Reserved                                                   Address offset: 0x0B74-0x0B7C */
+       uint32_t RESERVED32[3];    /*!< Reserved                                                   Address offset: 0x0B74-0x0B7C */
   __IO uint32_t MACPPSTTSR;       /*!< PPS target time seconds register                           Address offset: 0x0B80 */
   __IO uint32_t MACPPSTTNR;       /*!< PPS target time nanoseconds register                       Address offset: 0x0B84 */
   __IO uint32_t MACPPSIR;         /*!< PPS interval register                                      Address offset: 0x0B88 */
   __IO uint32_t MACPPSWR;         /*!< PPS width register                                         Address offset: 0x0B8C */
-       uint32_t RESERVED28[12];   /*!< Reserved                                                   Address offset: 0x0B90-0x0BBC */
+       uint32_t RESERVED33[12];   /*!< Reserved                                                   Address offset: 0x0B90-0x0BBC */
   __IO uint32_t MACPOCR;          /*!< PTP Offload control register                               Address offset: 0x0BC0 */
   __IO uint32_t MACSPI0R;         /*!< PTP Source Port Identity 0 Register                        Address offset: 0x0BC4 */
   __IO uint32_t MACSPI1R;         /*!< PTP Source port identity 1 register                        Address offset: 0x0BC8 */
   __IO uint32_t MACSPI2R;         /*!< PTP Source port identity 2 register                        Address offset: 0x0BCC */
   __IO uint32_t MACLMIR;          /*!< Log message interval register                              Address offset: 0x0BD0 */
-       uint32_t RESERVED29[11];   /*!< Reserved                                                   Address offset: 0x0BD4-0x0BFC */
+       uint32_t RESERVED34[11];   /*!< Reserved                                                   Address offset: 0x0BD4-0x0BFC */
   __IO uint32_t MTLOMR;           /*!< Operating mode Register                                    Address offset: 0x0C00 */
-       uint32_t RESERVED30[7];    /*!< Reserved                                                   Address offset: 0x0C04-0x0C1C */
+       uint32_t RESERVED35[7];    /*!< Reserved                                                   Address offset: 0x0C04-0x0C1C */
   __IO uint32_t MTLISR;           /*!< Interrupt status Register                                  Address offset: 0x0C20 */
-       uint32_t RESERVED31[55];   /*!< Reserved                                                   Address offset: 0x0C24-0x0CFC */
+       uint32_t RESERVED36[55];   /*!< Reserved                                                   Address offset: 0x0C24-0x0CFC */
   __IO uint32_t MTLTXQ0OMR;       /*!< Tx queue 0 operating mode Register                         Address offset: 0x0D00 */
   __IO uint32_t MTLTXQ0UR;        /*!< Tx queue 0 underflow register                              Address offset: 0x0D04 */
   __IO uint32_t MTLTXQ0DR;        /*!< Tx queue 0 debug Register                                  Address offset: 0x0D08 */
-       uint32_t RESERVED32[2];    /*!< Reserved                                                   Address offset: 0x0D0C-0x0D10 */
-  __IO uint32_t MTLTXQ0ESR;       /*!< Tx queue x ETS status Register                             Address offset: 0x0D14 */
-       uint32_t RESERVED33[5];    /*!< Reserved                                                   Address offset: 0x0D18-0x0D28 */
+       uint32_t RESERVED37[2];    /*!< Reserved                                                   Address offset: 0x0D0C-0x0D10 */
+  __IO uint32_t MTLTXQ0ESR;       /*!< Tx queue 0 ETS status Register                             Address offset: 0x0D14 */
+  __IO uint32_t MTLTXQ0QWR;       /*!< Tx queue 0 quantum weight Register                         Address offset: 0x0D18 */
+       uint32_t RESERVED38[4];    /*!< Reserved                                                   Address offset: 0x0D1C-0x0D28 */
   __IO uint32_t MTLQ0ICSR;        /*!< Queue 0 interrupt control status Register                  Address offset: 0x0D2C */
   __IO uint32_t MTLRXQ0OMR;       /*!< Rx queue 0 operating mode register                         Address offset: 0x0D30 */
   __IO uint32_t MTLRXQ0MPOCR;     /*!< Rx queue 0 missed packet and overflow counter register     Address offset: 0x0D34 */
@@ -1091,76 +1095,76 @@ typedef struct
   __IO uint32_t MTLTXQ1OMR;       /*!< Tx queue 1 operating mode Register                         Address offset: 0x0D40 */
   __IO uint32_t MTLTXQ1UR;        /*!< Tx queue 1 underflow register                              Address offset: 0x0D44 */
   __IO uint32_t MTLTXQ1DR;        /*!< Tx queue 1 debug Register                                  Address offset: 0x0D48 */
-       uint32_t RESERVED34;       /*!< Reserved                                                   Address offset: 0x0D4C */
+       uint32_t RESERVED39;       /*!< Reserved                                                   Address offset: 0x0D4C */
   __IO uint32_t MTLTXQ1ECR;       /*!< Tx queue 1 ETS control Register                            Address offset: 0x0D50 */
-  __IO uint32_t MTLTXQ1ESR;       /*!< Tx queue x ETS status Register                             Address offset: 0x0D54 */
+       uint32_t MTLTXTXQ1ESR;     /*!< Tx queue 1 ETS status Register                             Address offset: 0x0D54 */
   __IO uint32_t MTLTXQ1QWR;       /*!< Tx queue 1 quantum weight register                         Address offset: 0x0D58 */
   __IO uint32_t MTLTXQ1SSCR;      /*!< Tx queue 1 send slope credit Register                      Address offset: 0x0D5C */
   __IO uint32_t MTLTXQ1HCR;       /*!< Tx Queue 1 hiCredit register                               Address offset: 0x0D60 */
   __IO uint32_t MTLTXQ1LCR;       /*!< Tx queue 1 loCredit register                               Address offset: 0x0D64 */
-       uint32_t RESERVED35;       /*!< Reserved                                                   Address offset: 0x0D68 */
+       uint32_t RESERVED40;       /*!< Reserved                                                   Address offset: 0x0D68 */
   __IO uint32_t MTLQ1ICSR;        /*!< Queue 1 interrupt control status Register                  Address offset: 0x0D6C */
   __IO uint32_t MTLRXQ1OMR;       /*!< Rx queue 1 operating mode register                         Address offset: 0x0D70 */
   __IO uint32_t MTLRXQ1MPOCR;     /*!< Rx queue 1 missed packet and overflow counter register     Address offset: 0x0D74 */
   __IO uint32_t MTLRXQ1DR;        /*!< Rx queue 1 debug register                                  Address offset: 0x0D78 */
   __IO uint32_t MTLRXQ1CR;        /*!< Rx queue 1 control register                                Address offset: 0x0D7C */
-       uint32_t RESERVED36[160];  /*!< Reserved                                                   Address offset: 0x0D80-0x0FFC */
+       uint32_t RESERVED42[160];  /*!< Reserved                                                   Address offset: 0x0D80-0x0FFC */
   __IO uint32_t DMAMR;            /*!< DMA mode register                                          Address offset: 0x1000 */
   __IO uint32_t DMASBMR;          /*!< System bus mode register                                   Address offset: 0x1004 */
   __IO uint32_t DMAISR;           /*!< Interrupt status register                                  Address offset: 0x1008 */
   __IO uint32_t DMADSR;           /*!< Debug status register                                      Address offset: 0x100C */
-       uint32_t RESERVED37[4];    /*!< Reserved                                                   Address offset: 0x1010-0x101C */
+       uint32_t RESERVED43[4];    /*!< Reserved                                                   Address offset: 0x1010-0x101C */
   __IO uint32_t DMAA4TXACR;       /*!< AXI4 transmit channel ACE control register                 Address offset: 0x1020 */
   __IO uint32_t DMAA4RXACR;       /*!< AXI4 receive channel ACE control register                  Address offset: 0x1024 */
   __IO uint32_t DMAA4DACR;        /*!< AXI4 descriptor ACE control register                       Address offset: 0x1028 */
-       uint32_t RESERVED38[53];   /*!< Reserved                                                   Address offset: 0x102C-0x10FC */
+       uint32_t RESERVED44[5];    /*!< Reserved                                                   Address offset: 0x102C-0x103C */
+  __IO uint32_t DMALPIEI;         /*!< AXI4 LPI Entry Interval register                           Address offset: 0x1040 */
+       uint32_t RESERVED45[47];   /*!< Reserved                                                   Address offset: 0x1044-0x10FC */
   __IO uint32_t DMAC0CR;          /*!< Channel 0 control register                                 Address offset: 0x1100 */
   __IO uint32_t DMAC0TXCR;        /*!< Channel 0 transmit control register                        Address offset: 0x1104 */
   __IO uint32_t DMAC0RXCR;        /*!< Channel 0 receive control register                         Address offset: 0x1108 */
-       uint32_t RESERVED39[2];    /*!< Reserved                                                   Address offset: 0x110C-0x1110 */
+       uint32_t RESERVED46[2];    /*!< Reserved                                                   Address offset: 0x110C-0x1110 */
   __IO uint32_t DMAC0TXDLAR;      /*!< Channel 0 Tx descriptor list address register              Address offset: 0x1114 */
-       uint32_t RESERVED40;       /*!< Reserved                                                   Address offset: 0x1118 */
+       uint32_t RESERVED47;       /*!< Reserved                                                   Address offset: 0x1118 */
   __IO uint32_t DMAC0RXDLAR;      /*!< Channel 0 Rx descriptor list address register              Address offset: 0x111C */
   __IO uint32_t DMAC0TXDTPR;      /*!< Channel 0 Tx descriptor tail pointer register              Address offset: 0x1120 */
-       uint32_t RESERVED41;       /*!< Reserved                                                   Address offset: 0x1124 */
+       uint32_t RESERVED48;       /*!< Reserved                                                   Address offset: 0x1124 */
   __IO uint32_t DMAC0RXDTPR;      /*!< Channel 0 Rx descriptor tail pointer register              Address offset: 0x1128 */
   __IO uint32_t DMAC0TXRLR;       /*!< Channel 0 Tx descriptor ring length register               Address offset: 0x112C */
   __IO uint32_t DMAC0RXRLR;       /*!< Channel 0 Rx descriptor ring length register               Address offset: 0x1130 */
   __IO uint32_t DMAC0IER;         /*!< Channel 0 interrupt enable register                        Address offset: 0x1134 */
   __IO uint32_t DMAC0RXIWTR;      /*!< Channel 0 Rx interrupt watchdog timer register             Address offset: 0x1138 */
   __IO uint32_t DMAC0SFCSR;       /*!< Channel 0 slot function control status register            Address offset: 0x113C */
-       uint32_t RESERVED42;       /*!< Reserved                                                   Address offset: 0x1140 */
+       uint32_t RESERVED49;       /*!< Reserved                                                   Address offset: 0x1140 */
   __IO uint32_t DMAC0CATXDR;      /*!< Channel 0 current application transmit descriptor register Address offset: 0x1144 */
-       uint32_t RESERVED43;       /*!< Reserved                                                   Address offset: 0x1148 */
+       uint32_t RESERVED50;       /*!< Reserved                                                   Address offset: 0x1148 */
   __IO uint32_t DMAC0CARXDR;      /*!< Channel 0 current application receive descriptor register  Address offset: 0x114C */
-       uint32_t RESERVED44;       /*!< Reserved                                                   Address offset: 0x1150 */
+       uint32_t RESERVED51;       /*!< Reserved                                                   Address offset: 0x1150 */
   __IO uint32_t DMAC0CATXBR;      /*!< Channel 0 current application transmit buffer register     Address offset: 0x1154 */
-       uint32_t RESERVED45;       /*!< Reserved                                                   Address offset: 0x1158 */
+       uint32_t RESERVED52;       /*!< Reserved                                                   Address offset: 0x1158 */
   __IO uint32_t DMAC0CARXBR;      /*!< Channel 0 current application receive buffer register      Address offset: 0x115C */
   __IO uint32_t DMAC0SR;          /*!< Channel 0 status register                                  Address offset: 0x1160 */
-       uint32_t RESERVED46[2];    /*!< Reserved                                                   Address offset: 0x1164-0x1168 */
-  __IO uint32_t DMAC0MFCR;        /*!< Channel 0 missed frame count register                      Address offset: 0x116C */
-       uint32_t RESERVED47[4];    /*!< Reserved                                                   Address offset: 0x1170-0x117C */
+  __IO uint32_t DMAC0MFCR;        /*!< Channel 0 missed frame count register                      Address offset: 0x1164 */
+       uint32_t RESERVED53[6];    /*!< Reserved                                                   Address offset: 0x1168-0x117C */
   __IO uint32_t DMAC1CR;          /*!< Channel 1 control register                                 Address offset: 0x1180 */
   __IO uint32_t DMAC1TXCR;        /*!< Channel 1 transmit control register                        Address offset: 0x1184 */
-       uint32_t RESERVED48[3];    /*!< Reserved                                                   Address offset: 0x1188-0x1190 */
+       uint32_t RESERVED54[3];    /*!< Reserved                                                   Address offset: 0x1188-0x1190 */
   __IO uint32_t DMAC1TXDLAR;      /*!< Channel 1 Tx descriptor list address register              Address offset: 0x1194 */
-       uint32_t RESERVED49[2];    /*!< Reserved                                                   Address offset: 0x1198-0x119C */
+       uint32_t RESERVED55[2];    /*!< Reserved                                                   Address offset: 0x1198-0x119C */
   __IO uint32_t DMAC1TXDTPR;      /*!< Channel 1 Tx descriptor tail pointer register              Address offset: 0x11A0 */
-       uint32_t RESERVED50[2];    /*!< Reserved                                                   Address offset: 0x11A4-0x11A8 */
+       uint32_t RESERVED56[2];    /*!< Reserved                                                   Address offset: 0x11A4-0x11A8 */
   __IO uint32_t DMAC1TXRLR;       /*!< Channel 1 Tx descriptor ring length register               Address offset: 0x11AC */
-       uint32_t RESERVED51;       /*!< Reserved                                                   Address offset: 0x11B0 */
+       uint32_t RESERVED57;       /*!< Reserved                                                   Address offset: 0x11B0 */
   __IO uint32_t DMAC1IER;         /*!< Channel 1 interrupt enable register                        Address offset: 0x11B4 */
-       uint32_t RESERVED52;       /*!< Reserved                                                   Address offset: 0x11B8 */
+       uint32_t RESERVED58;       /*!< Reserved                                                   Address offset: 0x11B8 */
   __IO uint32_t DMAC1SFCSR;       /*!< Channel 1 slot function control status register            Address offset: 0x11BC */
-       uint32_t RESERVED53;       /*!< Reserved                                                   Address offset: 0x11C0 */
+       uint32_t RESERVED59;       /*!< Reserved                                                   Address offset: 0x11C0 */
   __IO uint32_t DMAC1CATXDR;      /*!< Channel 1 current application transmit descriptor register Address offset: 0x11C4 */
-       uint32_t RESERVED54[3];    /*!< Reserved                                                   Address offset: 0x11C8-0x11D0 */
+       uint32_t RESERVED60[3];    /*!< Reserved                                                   Address offset: 0x11C8-0x11D0 */
   __IO uint32_t DMAC1CATXBR;      /*!< Channel 1 current application transmit buffer register     Address offset: 0x11D4 */
-       uint32_t RESERVED55[2];    /*!< Reserved                                                   Address offset: 0x11D8-0x11DC */
+       uint32_t RESERVED61[2];    /*!< Reserved                                                   Address offset: 0x11D8-0x11DC */
   __IO uint32_t DMAC1SR;          /*!< Channel 1 status register                                  Address offset: 0x11E0 */
-       uint32_t RESERVED56[2];    /*!< Reserved                                                   Address offset: 0x11E4-0x11E8 */
-  __IO uint32_t DMAC1MFCR;        /*!< Channel 1 missed frame count register                      Address offset: 0x11EC */
+  __IO uint32_t DMAC1MFCR;        /*!< Channel 1 missed frame count register                      Address offset: 0x11E4 */
 } ETH_TypeDef;
 
 /**
@@ -13125,12 +13129,6 @@ typedef struct
 #define ETH_MACPHYCSR_LNKSTS_Pos            (19U)
 #define ETH_MACPHYCSR_LNKSTS_Msk            (0x1UL << ETH_MACPHYCSR_LNKSTS_Pos)                  /*!< 0x00080000 */
 #define ETH_MACPHYCSR_LNKSTS                ETH_MACPHYCSR_LNKSTS_Msk                            /*!< Link Status */
-#define ETH_MACPHYCSR_JABTO_Pos             (20U)
-#define ETH_MACPHYCSR_JABTO_Msk             (0x1UL << ETH_MACPHYCSR_JABTO_Pos)                   /*!< 0x00100000 */
-#define ETH_MACPHYCSR_JABTO                 ETH_MACPHYCSR_JABTO_Msk                             /*!< Jabber Timeout */
-#define ETH_MACPHYCSR_FALSCARDET_Pos        (21U)
-#define ETH_MACPHYCSR_FALSCARDET_Msk        (0x1UL << ETH_MACPHYCSR_FALSCARDET_Pos)              /*!< 0x00200000 */
-#define ETH_MACPHYCSR_FALSCARDET            ETH_MACPHYCSR_FALSCARDET_Msk                        /*!< False Carrier Detected */
 
 /***************  Bit definition for ETH_MACVR register  ***************/
 #define ETH_MACVR_SNPSVER_Pos               (0U)
@@ -14666,9 +14664,6 @@ typedef struct
 #define ETH_MACTSCR_TSENMACADDR_Pos         (18U)
 #define ETH_MACTSCR_TSENMACADDR_Msk         (0x1UL << ETH_MACTSCR_TSENMACADDR_Pos)               /*!< 0x00040000 */
 #define ETH_MACTSCR_TSENMACADDR             ETH_MACTSCR_TSENMACADDR_Msk                         /*!< Enable MAC Address for PTP Packet Filtering */
-#define ETH_MACTSCR_CSC_Pos                 (19U)
-#define ETH_MACTSCR_CSC_Msk                 (0x1UL << ETH_MACTSCR_CSC_Pos)                       /*!< 0x00080000 */
-#define ETH_MACTSCR_CSC                     ETH_MACTSCR_CSC_Msk                                 /*!< Enable checksum correction during OST for PTP over UDP/IPv4 packets */
 #define ETH_MACTSCR_TXTSSTSM_Pos            (24U)
 #define ETH_MACTSCR_TXTSSTSM_Msk            (0x1UL << ETH_MACTSCR_TXTSSTSM_Pos)                  /*!< 0x01000000 */
 #define ETH_MACTSCR_TXTSSTSM                ETH_MACTSCR_TXTSSTSM_Msk                            /*!< Transmit Timestamp Status Mode */
@@ -14677,17 +14672,6 @@ typedef struct
 #define ETH_MACTSCR_AV8021ASMEN             ETH_MACTSCR_AV8021ASMEN_Msk                         /*!< AV 802.1AS Mode Enable */
 
 /**************  Bit definition for ETH_MACSSIR register  **************/
-#define ETH_MACSSIR_SNSINC_Pos              (8U)
-#define ETH_MACSSIR_SNSINC_Msk              (0xFFUL << ETH_MACSSIR_SNSINC_Pos)                   /*!< 0x0000FF00 */
-#define ETH_MACSSIR_SNSINC                  ETH_MACSSIR_SNSINC_Msk                              /*!< Sub-nanosecond Increment Value */
-#define ETH_MACSSIR_SNSINC_0                (0x1UL << ETH_MACSSIR_SNSINC_Pos)                  /*!< 0x00000100 */
-#define ETH_MACSSIR_SNSINC_1                (0x2UL << ETH_MACSSIR_SNSINC_Pos)                  /*!< 0x00000200 */
-#define ETH_MACSSIR_SNSINC_2                (0x4UL << ETH_MACSSIR_SNSINC_Pos)                  /*!< 0x00000400 */
-#define ETH_MACSSIR_SNSINC_3                (0x8UL << ETH_MACSSIR_SNSINC_Pos)                  /*!< 0x00000800 */
-#define ETH_MACSSIR_SNSINC_4                (0x10UL << ETH_MACSSIR_SNSINC_Pos)                 /*!< 0x00001000 */
-#define ETH_MACSSIR_SNSINC_5                (0x20UL << ETH_MACSSIR_SNSINC_Pos)                 /*!< 0x00002000 */
-#define ETH_MACSSIR_SNSINC_6                (0x40UL << ETH_MACSSIR_SNSINC_Pos)                 /*!< 0x00004000 */
-#define ETH_MACSSIR_SNSINC_7                (0x80UL << ETH_MACSSIR_SNSINC_Pos)                 /*!< 0x00008000 */
 #define ETH_MACSSIR_SSINC_Pos               (16U)
 #define ETH_MACSSIR_SSINC_Msk               (0xFFUL << ETH_MACSSIR_SSINC_Pos)                    /*!< 0x00FF0000 */
 #define ETH_MACSSIR_SSINC                   ETH_MACSSIR_SSINC_Msk                               /*!< Sub-second Increment Value */
@@ -16444,10 +16428,10 @@ typedef struct
 #define ETH_DMAC0CR_DSL_Pos                 (18U)
 #define ETH_DMAC0CR_DSL_Msk                 (0x7UL << ETH_DMAC0CR_DSL_Pos)                       /*!< 0x001C0000 */
 #define ETH_DMAC0CR_DSL                     ETH_DMAC0CR_DSL_Msk                                 /*!< Descriptor Skip Length */
-#define ETH_DMACCR_DSL_0BIT                 (0x0UL << ETH_DMAC0CR_DSL_Pos)                       /*!< 0x00000000 */
-#define ETH_DMACCR_DSL_32BIT                (0x1UL << ETH_DMAC0CR_DSL_Pos)                       /*!< 0x00040000 */
-#define ETH_DMACCR_DSL_64BIT                (0x2UL << ETH_DMAC0CR_DSL_Pos)                       /*!< 0x00080000 */
-#define ETH_DMACCR_DSL_128BIT               (0x4UL << ETH_DMAC0CR_DSL_Pos)                       /*!< 0x00100000 */
+#define ETH_DMACCR_DSL_0BIT                 (0x0U << ETH_DMAC0CR_DSL_Pos)                       /*!< 0x00000000 */
+#define ETH_DMACCR_DSL_64BIT                (0x1U << ETH_DMAC0CR_DSL_Pos)                       /*!< 0x00040000 */
+#define ETH_DMACCR_DSL_128BIT               (0x2U << ETH_DMAC0CR_DSL_Pos)                       /*!< 0x00080000 */
+#define ETH_DMACCR_DSL_256BIT               (0x4U << ETH_DMAC0CR_DSL_Pos)                       /*!< 0x00100000 */
 
 /*************  Bit definition for ETH_DMAC0TXCR register  *************/
 #define ETH_DMAC0TXCR_ST_Pos                (0U)

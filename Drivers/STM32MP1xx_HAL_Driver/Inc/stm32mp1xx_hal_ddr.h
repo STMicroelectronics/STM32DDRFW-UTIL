@@ -46,16 +46,17 @@ extern "C" {
 /**
   * @brief  HAL DDR type definition
   */
-typedef enum {
+typedef enum
+{
   STM32MP_DDR3,
   STM32MP_LPDDR2_16,
   STM32MP_LPDDR2_32,
   STM32MP_LPDDR3_16,
   STM32MP_LPDDR3_32,
-}ddr_type;
+} ddr_type;
 
 /**
-  * @brief  HAL DDR Self Refresh modes definition  
+  * @brief  HAL DDR Self Refresh modes definition
   */
 typedef enum
 {
@@ -63,7 +64,7 @@ typedef enum
   HAL_DDR_AUTO_SELF_REFRESH_MODE = 0x1U, /*!< DDR Automatic Self Refresh Mode */
   HAL_DDR_HW_SELF_REFRESH_MODE = 0x2U,   /*!< DDR Hardware Self Refresh Mode */
   HAL_DDR_INVALID_MODE = 0x3U,           /*!< DDR Invalid Self Refresh Mode */
-}HAL_DDR_SelfRefreshModeTypeDef;
+} HAL_DDR_SelfRefreshModeTypeDef;
 
 /**
   * @brief  HAL DDR settings definition

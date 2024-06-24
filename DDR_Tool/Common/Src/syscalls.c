@@ -70,7 +70,7 @@ int _getpid(void)
     return 1;
 }
 
-int _kill(int pid, int sig)
+int _kill(__attribute__((unused))int pid, __attribute__((unused))int sig)
 {
     errno = EINVAL;
     return -1;
@@ -82,7 +82,7 @@ void _exit (int status)
     while (1) {}        /* Make sure we hang here */
 }
 
-int _read (int file, char *ptr, int len)
+int _read (__attribute__((unused))int file, char *ptr, int len)
 {
     int DataIdx;
 
@@ -94,7 +94,7 @@ int _read (int file, char *ptr, int len)
 return len;
 }
 
-int _write(int file, char *ptr, int len)
+int _write(__attribute__((unused))int file, char *ptr, int len)
 {
     int DataIdx;
 
@@ -136,58 +136,59 @@ caddr_t _sbrk(int incr)
     return (caddr_t) prev_heap_end;
 }
 
-int _close(int file)
+int _close(__attribute__((unused))int file)
 {
     return -1;
 }
 
 
-int _fstat(int file, struct stat *st)
+int _fstat(__attribute__((unused))int file, struct stat *st)
 {
     st->st_mode = S_IFCHR;
     return 0;
 }
 
-int _isatty(int file)
+int _isatty(__attribute__((unused))int file)
 {
     return 1;
 }
 
-int _lseek(int file, int ptr, int dir)
+int _lseek(__attribute__((unused))int file, __attribute__((unused))int ptr,
+           __attribute__((unused))int dir)
 {
     return 0;
 }
 
-int _open(char *path, int flags, ...)
+int _open(__attribute__((unused))char *path, __attribute__((unused))int flags, ...)
 {
     /* Pretend like we always fail */
     return -1;
 }
 
-int _wait(int *status)
+int _wait(__attribute__((unused))int *status)
 {
     errno = ECHILD;
     return -1;
 }
 
-int _unlink(char *name)
+int _unlink(__attribute__((unused))char *name)
 {
     errno = ENOENT;
     return -1;
 }
 
-int _times(struct tms *buf)
+int _times(__attribute__((unused))struct tms *buf)
 {
     return -1;
 }
 
-int _stat(char *file, struct stat *st)
+int _stat(__attribute__((unused))char *file, struct stat *st)
 {
     st->st_mode = S_IFCHR;
     return 0;
 }
 
-int _link(char *old, char *new)
+int _link(__attribute__((unused))char *old, __attribute__((unused))char *new)
 {
     errno = EMLINK;
     return -1;
@@ -199,7 +200,8 @@ int _fork(void)
     return -1;
 }
 
-int _execve(char *name, char **argv, char **env)
+int _execve(__attribute__((unused))char *name, __attribute__((unused))char **argv,
+            __attribute__((unused))char **env)
 {
     errno = ENOMEM;
     return -1;

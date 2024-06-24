@@ -8,14 +8,14 @@ header-includes: <link rel="icon" type="image/x-icon" href="_htmresc/favicon.png
 
 <center>
 # Release Notes for <mark>STM32MP13xx_DISCO BSP Drivers</mark>
-Copyright &copy; 2021 STMicroelectronics\
+Copyright &copy; 2023 STMicroelectronics\
     
 [![ST logo](_htmresc/st_logo_2020.png)](https://www.st.com){.logo}
 </center>
 
 # Purpose
 
-The BSP (Board Specific Package) drivers are parts of the STM32Cube package based on the HAL drivers and provide a set of high level APIs relative to the hardware components and features in the disco boards coming with the STM32Cube package for a given STM32 serie.
+The BSP (Board Specific Package) drivers are parts of the STM32Cube package based on the HAL drivers and provide a set of high level APIs relative to the hardware components and features in the disco boards coming with the STM32Cube package for a given STM32 series.
 
 The BSP drivers allow a quick access to the boardsâ€™ services using high level APIs and without any specific configuration as the link with the HAL and the external components is done in intrinsic within the drivers.
 
@@ -28,7 +28,67 @@ From project settings points of view, user has only to add the necessary driverâ
 
 ::: {.collapse}
 <input type="checkbox" id="collapse-section0" checked aria-hidden="true">
-<label for="collapse-section0" aria-hidden="true">__V0.6.0 / 16-December-2022__</label>
+<label for="collapse-section0" aria-hidden="true">__V1.1.0 / 23-Feb-2024__</label>
+<div>			
+
+## Main Changes
+
+**Major Maintenance DV** of STMP32MP13xx_DISCO BSP
+
+## Contents
+
+- TouchScreen support added with gt911 component
+
+## Notes
+
+stm32mp13xx_disco_conf_template.h file must be copied in user application as >stm32mp13xx_disco_conf.h with optional configuration update
+
+</div>
+:::
+
+::: {.collapse}
+<input type="checkbox" id="collapse-section8" aria-hidden="true">
+<label for="collapse-section8" aria-hidden="true">__V1.0.0 / 01-November-2023__</label>
+<div>			
+
+## Main Changes
+
+**Mass Market DV** of STMP32MP13xx_DISCO BSP
+
+## Contents
+
+- Mirror, Flip and Special effect modes added in GC2145 Component
+
+## Notes
+
+stm32mp13xx_disco_conf_template.h file must be copied in user application as >stm32mp13xx_disco_conf.h with optional configuration update
+
+</div>
+:::
+
+
+
+::: {.collapse}
+<input type="checkbox" id="collapse-section7" aria-hidden="true">
+<label for="collapse-section7" aria-hidden="true">__V0.7.0 / 27-June-2023__</label>
+<div>
+
+**5th ALPHA DV** of STMP32MP13xx_DISCO BSP
+
+## Contents
+
+- Support added for GC2145 and STMIPID02
+
+## Notes
+
+stm32mp13xx_disco_conf_template.h file must be copied in user application as >stm32mp13xx_disco_conf.h with optional configuration update
+
+</div>
+:::
+
+::: {.collapse}
+<input type="checkbox" id="collapse-section6" aria-hidden="true">
+<label for="collapse-section6" aria-hidden="true">__V0.6.0 / 16-December-2022__</label>
 <div>			
 
 ## Main Changes

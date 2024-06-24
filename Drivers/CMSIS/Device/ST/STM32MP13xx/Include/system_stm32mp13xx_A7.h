@@ -47,6 +47,7 @@
 /** @addtogroup STM32MP13xx_System_Exported_types
   * @{
   */
+
   /* This variable is updated in three ways:
       1) by calling CMSIS function SystemCoreClockUpdate()
       2) by calling HAL API function HAL_RCC_GetSysClockFreq()

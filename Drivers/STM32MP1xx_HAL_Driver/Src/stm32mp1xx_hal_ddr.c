@@ -46,26 +46,26 @@
 #include <string.h>
 
 #ifdef DDR_INTERACTIVE
-  #include "stm32mp_util_conf.h"
-  #include "stm32mp_util_ddr_conf.h"
+#include "stm32mp_util_conf.h"
+#include "stm32mp_util_ddr_conf.h"
 #else /* DDR_INTERACTIVE */
 #if defined DDR_TYPE_DDR3_4Gb
-      #include "stm32mp1xx-ddr3-4Gb.h"
+#include "stm32mp1xx-ddr3-4Gb.h"
 #elif defined DDR_TYPE_DDR3_8Gb
-    #include "stm32mp1xx-ddr3-8Gb.h"
+#include "stm32mp1xx-ddr3-8Gb.h"
 #elif defined DDR_TYPE_LPDDR2_4Gb
-    #error "Mismatch between driver generation and DDR_TYPE."
+#error "Mismatch between driver generation and DDR_TYPE."
 #elif defined DDR_TYPE_LPDDR3_4Gb
-    #error "Mismatch between driver generation and DDR_TYPE."
-#else
-  #error "no DDR settings defined."
-  #error "Please make sure that DDR_TYPE is set within those values:"
-  #error "  DDR_TYPE_DDR3_4Gb"
-  #error "  DDR_TYPE_DDR3_8Gb"
-  #error "  DDR_TYPE_LPDDR2_4Gb"
-  #error "  DDR_TYPE_LPDDR3_4Gb"
-  #error "Please refer to your HW platform capabilities."
-#endif
+#error "Mismatch between driver generation and DDR_TYPE."
+#else /* DDR_TYPE_DDR3_4Gb */
+#error "no DDR settings defined."
+#error "Please make sure that DDR_TYPE is set within those values:"
+#error "  DDR_TYPE_DDR3_4Gb"
+#error "  DDR_TYPE_DDR3_8Gb"
+#error "  DDR_TYPE_LPDDR2_4Gb"
+#error "  DDR_TYPE_LPDDR3_4Gb"
+#error "Please refer to your HW platform capabilities."
+#endif  /* DDR_TYPE_DDR3_4Gb */
 #endif /* DDR_INTERACTIVE */
 
 /** @addtogroup STM32MP1xx_HAL_Driver
@@ -80,26 +80,30 @@
 
 /* Private typedef -----------------------------------------------------------*/
 
-typedef struct {
+typedef struct
+{
   const char *name;
   uint16_t offset; /* Offset for base address */
   uint8_t par_offset; /* Offset for parameter array */
-}reg_desc;
+} reg_desc_t;
 
-typedef enum {
+typedef enum
+{
   BASE_DDRCTRL,
   BASE_DDRPHYC,
   BASE_NONE
 } base_type;
 
-typedef struct {
+typedef struct
+{
   const char *name;
-  const reg_desc *desc;
+  const reg_desc_t *desc;
   uint8_t size;
   base_type base;
-}ddr_reg_info;
+} ddr_reg_info_t;
 
-typedef enum {
+typedef enum
+{
   REG_REG,
   REG_TIMING,
   REG_PERF,
@@ -114,7 +118,7 @@ typedef enum {
   REGPHY_DYN,
 #endif
   REG_TYPE_NB
-}reg_type;
+} reg_type;
 
 /* Private define ------------------------------------------------------------*/
 /** @defgroup DDR_Private_Constants DDR Private Constants
@@ -153,7 +157,8 @@ typedef enum {
 #endif /* DDR_INTERACTIVE */
 
 #define DDRCTL_REG_REG(x) DDRCTL_REG(x, HAL_DDR_RegTypeDef)
-static const reg_desc ddr_reg_desc[] = {
+static const reg_desc_t ddr_reg_desc[] =
+{
   DDRCTL_REG_REG(MSTR),
   DDRCTL_REG_REG(MRCTRL0),
   DDRCTL_REG_REG(MRCTRL1),
@@ -182,7 +187,8 @@ static const reg_desc ddr_reg_desc[] = {
 };
 
 #define DDRCTL_REG_TIMING(x) DDRCTL_REG(x, HAL_DDR_TimingTypeDef)
-static const reg_desc ddr_timing_desc[] = {
+static const reg_desc_t ddr_timing_desc[] =
+{
   DDRCTL_REG_TIMING(RFSHTMG),
   DDRCTL_REG_TIMING(DRAMTMG0),
   DDRCTL_REG_TIMING(DRAMTMG1),
@@ -198,7 +204,8 @@ static const reg_desc ddr_timing_desc[] = {
 };
 
 #define DDRCTL_REG_MAP(x) DDRCTL_REG(x, HAL_DDR_MapTypeDef)
-static const reg_desc ddr_map_desc[] = {
+static const reg_desc_t ddr_map_desc[] =
+{
   DDRCTL_REG_MAP(ADDRMAP1),
   DDRCTL_REG_MAP(ADDRMAP2),
   DDRCTL_REG_MAP(ADDRMAP3),
@@ -211,7 +218,8 @@ static const reg_desc ddr_map_desc[] = {
 };
 
 #define DDRCTL_REG_PERF(x) DDRCTL_REG(x, HAL_DDR_PerfTypeDef)
-static const reg_desc ddr_perf_desc[] = {
+static const reg_desc_t ddr_perf_desc[] =
+{
   DDRCTL_REG_PERF(SCHED),
   DDRCTL_REG_PERF(SCHED1),
   DDRCTL_REG_PERF(PERFHPR1),
@@ -230,11 +238,12 @@ static const reg_desc ddr_perf_desc[] = {
   DDRCTL_REG_PERF(PCFGQOS1_1),
   DDRCTL_REG_PERF(PCFGWQOS0_1),
   DDRCTL_REG_PERF(PCFGWQOS1_1),
-#endif
+#endif /* DDR_DUAL_AXI_PORT */
 };
 
 #define DDRPHY_REG_REG(x) DDRPHY_REG(x, HAL_DDR_PhyRegTypeDef)
-static const reg_desc ddrphy_reg_desc[] = {
+static const reg_desc_t ddrphy_reg_desc[] =
+{
   DDRPHY_REG_REG(PGCR),
   DDRPHY_REG_REG(ACIOCR),
   DDRPHY_REG_REG(DXCCR),
@@ -247,11 +256,12 @@ static const reg_desc ddrphy_reg_desc[] = {
 #ifdef DDR_32BIT_INTERFACE
   DDRPHY_REG_REG(DX2GCR),
   DDRPHY_REG_REG(DX3GCR),
-#endif
+#endif /* DDR_32BIT_INTERFACE */
 };
 
 #define DDRPHY_REG_TIMING(x) DDRPHY_REG(x, HAL_DDR_PhyTimingTypeDef)
-static const reg_desc ddrphy_timing_desc[] = {
+static const reg_desc_t ddrphy_timing_desc[] =
+{
   DDRPHY_REG_TIMING(PTR0),
   DDRPHY_REG_TIMING(PTR1),
   DDRPHY_REG_TIMING(PTR2),
@@ -268,7 +278,7 @@ static const reg_desc ddrphy_timing_desc[] = {
 /*******************************************************************
  * DYNAMIC REGISTERS: only used for interactive mode (read/modify)
  *******************************************************************/
-static const reg_desc ddr_dyn_desc[] = {
+static const reg_desc_t ddr_dyn_desc[] = {
   DDRCTL_REG_DYN(STAT),
   DDRCTL_REG_DYN(INIT0),
   DDRCTL_REG_DYN(DFIMISC),
@@ -278,12 +288,12 @@ static const reg_desc ddr_dyn_desc[] = {
   DDRCTL_REG_DYN(PCTRL_0),
 #ifdef DDR_DUAL_AXI_PORT
   DDRCTL_REG_DYN(PCTRL_1),
-#endif
+#endif /* DDR_DUAL_AXI_PORT */
 };
 
 #define DDRCTL_REG_DYN_SIZE ARRAY_SIZE(ddr_dyn)
 
-static const reg_desc ddrphy_dyn_desc[] = {
+static const reg_desc_t ddrphy_dyn_desc[] = {
   DDRPHY_REG_DYN(PIR),
   DDRPHY_REG_DYN(PGSR),
   DDRPHY_REG_DYN(ZQ0SR0),
@@ -309,14 +319,15 @@ static const reg_desc ddrphy_dyn_desc[] = {
   DDRPHY_REG_DYN(DX3DLLCR),
   DDRPHY_REG_DYN(DX3DQTR),
   DDRPHY_REG_DYN(DX3DQSTR),
-#endif
+#endif /* DDR_32BIT_INTERFACE */
 };
 
 #define DDRPHY_REG_DYN_SIZE ARRAY_SIZE(ddrphy_dyn)
 #endif /* DDR_INTERACTIVE */
 
 #define ARRAY_SIZE(a) (sizeof(a) / sizeof((a)[0]))
-static const ddr_reg_info ddr_registers[REG_TYPE_NB] = {
+static const ddr_reg_info_t ddr_registers[REG_TYPE_NB] =
+{
   [REG_REG] = {
     .name = "static",
     .desc = ddr_reg_desc,
@@ -382,7 +393,7 @@ const char *base_name[] = {
 #define DDR_DELAY_PHY_INIT_US                DDR_DELAY_10_US
 #define DDR_TIMEOUT_10_US                    10U * DDR_TIMEOUT_1_US
 #define DDR_TIMEOUT_50_US                    50U * DDR_TIMEOUT_1_US
-#define DDR_TIMEOUT_500_US                   500 * DDR_TIMEOUT_1_US
+#define DDR_TIMEOUT_500_US                   500U * DDR_TIMEOUT_1_US
 #define DDR_TIMEOUT_200_MS                   200000U * DDR_TIMEOUT_1_US
 #define DDR_TIMEOUT_1S                       1000000U * DDR_TIMEOUT_1_US
 
@@ -401,15 +412,16 @@ const char *base_name[] = {
 #define DDRCTRL_MRCTRL0_MR_RANK_ALL          DDRCTRL_MRCTRL0_MR_RANK
 #define DDRCTRL_INIT0_SKIP_DRAM_INIT_NORMAL  DDRCTRL_INIT0_SKIP_DRAM_INIT_0
 #define DDRCTRL_DBGCAM_DATA_PIPELINE_EMPTY \
-                                      (DDRCTRL_DBGCAM_WR_DATA_PIPELINE_EMPTY | \
-                                       DDRCTRL_DBGCAM_RD_DATA_PIPELINE_EMPTY)
+  (DDRCTRL_DBGCAM_WR_DATA_PIPELINE_EMPTY | \
+   DDRCTRL_DBGCAM_RD_DATA_PIPELINE_EMPTY)
 #define DDRCTRL_DBG_Q_AND_DATA_PIPELINE_EMPTY \
-                                            (DDRCTRL_DBGCAM_DBG_WR_Q_EMPTY | \
-                                             DDRCTRL_DBGCAM_DBG_RD_Q_EMPTY | \
-                                             DDRCTRL_DBGCAM_DATA_PIPELINE_EMPTY)
-#define DDRCTRL_DBGCAM_DBG_Q_DEPTH           (DDRCTRL_DBGCAM_DBG_WR_Q_EMPTY | \
-                                              DDRCTRL_DBGCAM_DBG_LPR_Q_DEPTH | \
-                                              DDRCTRL_DBGCAM_DBG_HPR_Q_DEPTH)
+  (DDRCTRL_DBGCAM_DBG_WR_Q_EMPTY | \
+   DDRCTRL_DBGCAM_DBG_RD_Q_EMPTY | \
+   DDRCTRL_DBGCAM_DATA_PIPELINE_EMPTY)
+#define DDRCTRL_DBGCAM_DBG_Q_DEPTH \
+  (DDRCTRL_DBGCAM_DBG_WR_Q_EMPTY | \
+   DDRCTRL_DBGCAM_DBG_LPR_Q_DEPTH | \
+   DDRCTRL_DBGCAM_DBG_HPR_Q_DEPTH)
 
 #define DDR_BASE_ADDR                        0xC0000000U
 #define DDR_MAX_SIZE                         0x40000000U
@@ -430,7 +442,8 @@ const char *base_name[] = {
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 
-HAL_DDR_ConfigTypeDef static_ddr_config = {
+HAL_DDR_ConfigTypeDef static_ddr_config =
+{
   .info = {
     .name = DDR_MEM_NAME,
     .speed = DDR_MEM_SPEED,
@@ -512,7 +525,7 @@ HAL_DDR_ConfigTypeDef static_ddr_config = {
     .PCFGQOS1_1 = DDR_PCFGQOS1_1,
     .PCFGWQOS0_1 = DDR_PCFGWQOS0_1,
     .PCFGWQOS1_1 = DDR_PCFGWQOS1_1
-#endif
+#endif /* DDR_DUAL_AXI_PORT */
   },
 
   .p_reg = {
@@ -528,7 +541,7 @@ HAL_DDR_ConfigTypeDef static_ddr_config = {
 #ifdef DDR_32BIT_INTERFACE
     .DX2GCR = DDR_DX2GCR,
     .DX3GCR = DDR_DX3GCR
-#endif
+#endif /* DDR_32BIT_INTERFACE */
   },
 
   .p_timing = {
@@ -550,20 +563,25 @@ HAL_DDR_ConfigTypeDef static_ddr_config = {
   * @{
   */
 
-static void ddr_delay_us(unsigned long delay_us)
+static void ddr_delay_us(uint32_t delay_us)
 {
   __IO uint32_t wait_loop_index = 0U;
 
   wait_loop_index = (delay_us * (SystemCoreClock / (1000000UL * 2UL)));
 
 
-  while(wait_loop_index != 0UL)
+  while (wait_loop_index != 0UL)
   {
     wait_loop_index--;
   }
 }
 
-static __IO uint32_t ddr_timeout_init_us(unsigned long timeout_us)
+/**
+  * @brief  Initialize DDR timeout in us
+  * @param  timeout_us timeout in us
+  * @retval wait_loop_index
+  */
+static __IO uint32_t ddr_timeout_init_us(uint32_t timeout_us)
 {
   __IO uint32_t wait_loop_index = 0U;
 
@@ -573,6 +591,11 @@ static __IO uint32_t ddr_timeout_init_us(unsigned long timeout_us)
   return wait_loop_index;
 }
 
+/**
+  * @brief  Check if timeout has expired
+  * @param  timeout timeout in us
+  * @retval Timeout status
+  */
 static bool ddr_timeout_elapsed(__IO uint32_t timeout)
 {
   if (timeout == 0U)
@@ -584,59 +607,106 @@ static bool ddr_timeout_elapsed(__IO uint32_t timeout)
 }
 
 #ifndef DDR_INTERACTIVE
-static void __attribute__ ((unused)) save_ddr_training_area(void)
+/**
+  * @brief  Save DDR training Area
+  * @param  None
+  * @retval Return status
+  */
+#if defined ( __ICCARM__ )
+static bool __attribute__((unused)) save_ddr_training_area(void)
+#else
+static bool __unused save_ddr_training_area(void)
+#endif /* __ICCARM__ */
 {
+  bool ret = true;
+
   SET_BIT(RCC->MP_AHB5ENSETR, RCC_MP_AHB5ENSETR_BKPSRAMEN);
 
-  memcpy(( uint32_t*)BKPSRAM_BASE , (uint32_t *)DDR_BASE_ADDR,
-         DDR_TRAINING_AREA_SIZE);
+  if (memcpy((uint32_t *)BKPSRAM_BASE, (uint32_t *)DDR_BASE_ADDR,
+             DDR_TRAINING_AREA_SIZE) == NULL)
+  {
+    ret = false;
+  }
 
   __DSB();
 
   CLEAR_BIT(RCC->MP_AHB5ENSETR, RCC_MP_AHB5ENSETR_BKPSRAMEN);
+
+  return ret;
 }
 #endif /* !DDR_INTERACTIVE */
 
-static void restore_ddr_training_area(void)
+/**
+  * @brief  Restore DDR training Area
+  * @param  None
+  * @retval Return status
+  */
+static bool restore_ddr_training_area(void)
 {
+  bool ret = true;
+
   SET_BIT(RCC->MP_AHB5ENSETR, RCC_MP_AHB5ENSETR_BKPSRAMEN);
 
-  memcpy((uint32_t *)DDR_BASE_ADDR, ( uint32_t*)BKPSRAM_BASE ,
-         DDR_TRAINING_AREA_SIZE);
+  if (memcpy((uint32_t *)DDR_BASE_ADDR, (uint32_t *)BKPSRAM_BASE,
+             DDR_TRAINING_AREA_SIZE) == NULL)
+  {
+    ret = false;
+  }
 
   __DSB();
 
   CLEAR_BIT(RCC->MP_AHB5ENSETR, RCC_MP_AHB5ENSETR_BKPSRAMEN);
+
+  return ret;
 }
 
 /* board-specific DDR power initializations. */
-__weak int HAL_DDR_MspInit(ddr_type type)
+#if defined ( __ICCARM__ )
+__weak int32_t HAL_DDR_MspInit(__attribute__((unused)) ddr_type type)
+#else
+__weak int32_t HAL_DDR_MspInit(__unused ddr_type type)
+#endif /* __ICCARM__ */
 {
   return 0;
 }
 
+/**
+  * @brief  DDR Clock Register Enable
+  * @param  None
+  * @retval None
+  */
 static void ddr_enable_clock(void)
 {
-  SET_BIT(RCC->DDRITFCR, RCC_DDRITFCR_DDRC1EN
 #ifdef DDR_DUAL_AXI_PORT
-                         | RCC_DDRITFCR_DDRC2EN
-#endif
-                         | RCC_DDRITFCR_DDRPHYCEN
-                         | RCC_DDRITFCR_DDRPHYCAPBEN
-                         | RCC_DDRITFCR_DDRCAPBEN);
+  SET_BIT(RCC->DDRITFCR, RCC_DDRITFCR_DDRC1EN
+                        | RCC_DDRITFCR_DDRC2EN
+                        | RCC_DDRITFCR_DDRPHYCEN
+                        | RCC_DDRITFCR_DDRPHYCAPBEN
+                        | RCC_DDRITFCR_DDRCAPBEN);
+#else /* DDR_DUAL_AXI_PORT */
+  SET_BIT(RCC->DDRITFCR, RCC_DDRITFCR_DDRC1EN
+                        | RCC_DDRITFCR_DDRPHYCEN
+                        | RCC_DDRITFCR_DDRPHYCAPBEN
+                        | RCC_DDRITFCR_DDRCAPBEN);
+#endif /* DDR_DUAL_AXI_PORT */
 }
 
-static int ddr_clk_enable(uint32_t mem_speed)
+/**
+  * @brief  Set DDR Clock Speed
+  * @param  mem_speed Memory Speed to be set
+  * @retval HAL Status
+  */
+static int32_t ddr_clk_enable(uint32_t mem_speed)
 {
-  unsigned long ddrphy_clk, ddr_clk, mem_speed_hz;
   PLL2_ClocksTypeDef PLL2;
+  uint32_t ddr_clk;
+  uint32_t ddrphy_clk;
+  uint32_t mem_speed_hz = mem_speed * 1000U;
 
   ddr_enable_clock();
 
   HAL_RCC_GetPLL2ClockFreq(&PLL2);
   ddrphy_clk = PLL2.PLL2_R_Frequency;
-
-  mem_speed_hz = mem_speed * 1000U;
 
   /* Max 10% frequency delta */
   if (ddrphy_clk > mem_speed_hz)
@@ -648,14 +718,19 @@ static int ddr_clk_enable(uint32_t mem_speed)
     ddr_clk = mem_speed_hz - ddrphy_clk;
   }
 
-  if (ddr_clk > (mem_speed_hz / 10))
+  if (ddr_clk > (mem_speed_hz / (uint32_t)10))
   {
-    return -1;
+    return -1; /* Return Error if  frequency deviation > 10% */
   }
 
   return 0;
 }
 
+/**
+  * @brief  Get DDR Base Register Address
+  * @param  base Base Register Type
+  * @retval Return DDR Base Register Address
+  */
 static uint32_t get_base_addr(base_type base)
 {
   if (base == BASE_DDRPHYC)
@@ -668,12 +743,16 @@ static uint32_t get_base_addr(base_type base)
   }
 }
 
-static HAL_StatusTypeDef set_reg(reg_type type, const void *param)
+/**
+  * @brief  Set DDR Base Register Address
+  * @param  base Base Register Type
+  * @retval HAL Status
+  */
+static HAL_StatusTypeDef set_reg(reg_type type, uint32_t param)
 {
-  unsigned int i;
-  uint32_t value;
+  uint8_t i;
   uint32_t base_addr = get_base_addr(ddr_registers[type].base);
-  const reg_desc *desc = ddr_registers[type].desc;
+  const reg_desc_t *desc = ddr_registers[type].desc;
 
   for (i = 0; i < ddr_registers[type].size; i++)
   {
@@ -683,8 +762,11 @@ static HAL_StatusTypeDef set_reg(reg_type type, const void *param)
     }
     else
     {
-      value = *((uint32_t *)((uintptr_t)param + desc[i].par_offset));
-      WRITE_REG(*(volatile uint32_t*)(base_addr + desc[i].offset), value);
+      uint32_t address = param + (uint32_t)desc[i].par_offset;
+      uint32_t *ptr = (uint32_t *)address;
+
+      WRITE_REG(*(volatile uint32_t *)(base_addr + (uint32_t)desc[i].offset),
+                *ptr);
     }
   }
 
@@ -722,7 +804,7 @@ void HAL_DDR_Convert_Case(const char *in_str, char *out_str, bool ToUpper)
   return;
 }
 
-static void dump_reg_desc(uint32_t base_addr, const reg_desc *desc,
+static void dump_reg_desc(uint32_t base_addr, const reg_desc_t *desc,
                                    bool save)
 {
   uint32_t ptr;
@@ -743,7 +825,7 @@ static void dump_reg_desc(uint32_t base_addr, const reg_desc *desc,
   printf("%s 0x%08lx\n\r", output_dest, READ_REG(*(volatile uint32_t*)ptr));
 }
 
-static void dump_param_desc(uint32_t par_addr, const reg_desc *desc)
+static void dump_param_desc(uint32_t par_addr, const reg_desc_t *desc)
 {
   uint32_t ptr;
   char reg_name[strlen(desc->name)];
@@ -753,10 +835,10 @@ static void dump_param_desc(uint32_t par_addr, const reg_desc *desc)
   printf("%s= 0x%08lx\n\r", reg_name, READ_REG(*(volatile uint32_t*)ptr));
 }
 
-static const reg_desc *found_reg(const char *name, reg_type *type)
+static const reg_desc_t *found_reg(const char *name, reg_type *type)
 {
   unsigned int i, j;
-  const reg_desc *desc;
+  const reg_desc_t *desc;
 
   for (i = 0; i < ARRAY_SIZE(ddr_registers); i++)
   {
@@ -779,7 +861,7 @@ static const reg_desc *found_reg(const char *name, reg_type *type)
 HAL_StatusTypeDef HAL_DDR_Dump_Reg(const char *name, bool save)
 {
   unsigned int i, j;
-  const reg_desc *desc;
+  const reg_desc_t *desc;
   uint32_t base_addr;
   base_type p_base;
   reg_type type;
@@ -819,12 +901,10 @@ HAL_StatusTypeDef HAL_DDR_Dump_Reg(const char *name, bool save)
 
       if (save)
       {
-#ifdef DDR_INTERACTIVE
         if (i == REG_DYN)
         {
           printf("\n/* /!\\ No need to copy DDR dynamic registers to conf file */\n\r");
         }
-#endif
         printf("\n/* %s.%s */\n\r", base_name[p_base], p_name);
       }
       else
@@ -859,7 +939,7 @@ void HAL_DDR_Edit_Reg(char *name, char *string)
   uint32_t value;
   uint32_t ptr;
   reg_type type;
-  const reg_desc *desc;
+  const reg_desc_t *desc;
   uint32_t base_addr;
   char *end_ptr;
   char reg_name[strlen(name)];
@@ -927,7 +1007,7 @@ HAL_StatusTypeDef HAL_DDR_Dump_Param(HAL_DDR_ConfigTypeDef *config,
                                      const char *name)
 {
   unsigned int i, j;
-  const reg_desc *desc;
+  const reg_desc_t *desc;
   uint32_t par_addr;
   base_type p_base;
   reg_type type;
@@ -990,7 +1070,7 @@ void HAL_DDR_Edit_Param(HAL_DDR_ConfigTypeDef *config, char *name,
   uint32_t ptr;
   uint32_t value;
   reg_type type;
-  const reg_desc *desc;
+  const reg_desc_t *desc;
   uint32_t par_addr;
   char *end_ptr;
 
@@ -1036,7 +1116,7 @@ __weak bool HAL_DDR_Interactive(HAL_DDR_InteractStepTypeDef step)
 static HAL_StatusTypeDef ddrphy_idone_wait(void)
 {
   uint32_t pgsr;
-  int error = 0;
+  uint32_t error = 0U;
   uint32_t errormask = DDRPHYC_PGSR_DTERR | DDRPHYC_PGSR_DTIERR
                        | DDRPHYC_PGSR_DFTERR | DDRPHYC_PGSR_RVERR
                        | DDRPHYC_PGSR_RVEIRR;
@@ -1056,8 +1136,7 @@ static HAL_StatusTypeDef ddrphy_idone_wait(void)
     {
       error++;
     }
-  }
-  while (((pgsr & DDRPHYC_PGSR_IDONE) == 0U) && (error == 0));
+  } while (((pgsr & DDRPHYC_PGSR_IDONE) == 0U) && (error == 0U));
 
   return HAL_OK;
 }
@@ -1130,8 +1209,7 @@ static HAL_StatusTypeDef wait_sw_done_ack(void)
     {
       return HAL_TIMEOUT; /* Timeout initialising DRAM */
     }
-  }
-  while ((swstat & DDRCTRL_SWSTAT_SW_DONE_ACK) == 0U);
+  } while ((swstat & DDRCTRL_SWSTAT_SW_DONE_ACK) == 0U);
 
   return HAL_OK;
 }
@@ -1140,10 +1218,10 @@ static HAL_StatusTypeDef wait_sw_done_ack(void)
 static HAL_StatusTypeDef wait_operating_mode(uint32_t mode)
 {
   uint32_t stat;
-  int break_loop = 0;
+  uint32_t break_loop = 0U;
   __IO uint32_t timeout = ddr_timeout_init_us(DDR_TIMEOUT_1_US);
 
-  for ( ; ; )
+  for (; ;)
   {
     uint32_t operating_mode;
     uint32_t selref_type;
@@ -1167,22 +1245,26 @@ static HAL_StatusTypeDef wait_operating_mode(uint32_t mode)
       if ((operating_mode == DDRCTRL_STAT_OPERATING_MODE_SR)
           && (selref_type == DDRCTRL_STAT_SELFREF_TYPE_SR))
       {
-        break_loop = 1;
+        break_loop = 1U;
       }
     }
     else if (operating_mode == mode)
     {
-      break_loop = 1;
+      break_loop = 1U;
     }
     else if ((mode == DDRCTRL_STAT_OPERATING_MODE_NORMAL)
              && (operating_mode == DDRCTRL_STAT_OPERATING_MODE_SR)
              && (selref_type == DDRCTRL_STAT_SELFREF_TYPE_ASR))
     {
       /* Normal mode: handle also automatic self refresh */
-      break_loop = 1;
+      break_loop = 1U;
+    }
+    else
+    {
+      /* Continue loop */
     }
 
-    if (break_loop == 1)
+    if (break_loop == 1U)
     {
       break;
     }
@@ -1192,16 +1274,17 @@ static HAL_StatusTypeDef wait_operating_mode(uint32_t mode)
 }
 
 static void enable_axi_port(void)
-{  /* Enable uMCTL2 AXI port 0 */
+{
+  /* Enable uMCTL2 AXI port 0 */
   SET_BIT(DDRCTRL->PCTRL_0, DDRCTRL_PCTRL_0_PORT_EN);
 
 #ifdef DDR_DUAL_AXI_PORT
   /* Enable uMCTL2 AXI port 1 */
   SET_BIT(DDRCTRL->PCTRL_1, DDRCTRL_PCTRL_0_PORT_EN);
-#endif
+#endif /* DDR_DUAL_AXI_PORT */
 }
 
-static int disable_axi_port(void)
+static int32_t disable_axi_port(void)
 {
   __IO uint32_t timeout;
 
@@ -1209,14 +1292,14 @@ static int disable_axi_port(void)
   CLEAR_BIT(DDRCTRL->PCTRL_0, DDRCTRL_PCTRL_0_PORT_EN);
 #ifdef DDR_DUAL_AXI_PORT
   CLEAR_BIT(DDRCTRL->PCTRL_1, DDRCTRL_PCTRL_0_PORT_EN);
-#endif
+#endif  /* DDR_DUAL_AXI_PORT */
 
   /* Waits unit all AXI ports are idle
    * Poll PSTAT.rd_port_busy_n = 0
    * Poll PSTAT.wr_port_busy_n = 0
    */
   timeout = ddr_timeout_init_us(DDR_TIMEOUT_1S);
-  while (READ_REG(DDRCTRL->PSTAT))
+  while (READ_REG(DDRCTRL->PSTAT) != 0U)
   {
     timeout--;
     if (ddr_timeout_elapsed(timeout))
@@ -1233,11 +1316,11 @@ static void enable_host_interface(void)
   CLEAR_BIT(DDRCTRL->DBG1, DDRCTRL_DBG1_DIS_HIF);
 }
 
-static int disable_host_interface(void)
+static int32_t disable_host_interface(void)
 {
   __IO uint32_t timeout;
   uint32_t dbgcam;
-  int count = 0;
+  uint32_t count = 0;
 
   SET_BIT(DDRCTRL->DBG1, DDRCTRL_DBG1_DIS_HIF);
 
@@ -1252,7 +1335,8 @@ static int disable_host_interface(void)
    * value propoagation, so count is added to loop condition.
    */
   timeout = ddr_timeout_init_us(DDR_TIMEOUT_1S);
-  do {
+  do
+  {
     dbgcam = READ_REG(DDRCTRL->DBGCAM);
     timeout--;
     if (ddr_timeout_elapsed(timeout))
@@ -1261,12 +1345,12 @@ static int disable_host_interface(void)
     }
     count++;
   } while (((dbgcam & DDRCTRL_DBG_Q_AND_DATA_PIPELINE_EMPTY) !=
-            DDRCTRL_DBG_Q_AND_DATA_PIPELINE_EMPTY) || (count < 2));
+            DDRCTRL_DBG_Q_AND_DATA_PIPELINE_EMPTY) || (count < 2U));
 
   return 0;
 }
 
-static int sw_selfref_entry(void)
+static int32_t sw_selfref_entry(void)
 {
   __IO uint32_t timeout;
   uint32_t stat;
@@ -1305,12 +1389,16 @@ static void sw_selfref_exit(void)
   CLEAR_BIT(DDRCTRL->PWRCTL, DDRCTRL_PWRCTL_SELFREF_SW);
 }
 
-static int set_qd3_update_conditions(void)
+static int32_t set_qd3_update_conditions(void)
 {
-  if (disable_axi_port() != 0) {
+  if (disable_axi_port() != 0)
+  {
     return -1;
   }
-  disable_host_interface();
+  if (disable_host_interface() != 0)
+  {
+    return -1;
+  }
   start_sw_done();
 
   return 0;
@@ -1331,7 +1419,7 @@ static HAL_StatusTypeDef unset_qd3_update_conditions(void)
   return ret;
 }
 
-static int wait_refresh_update_done_ack(void)
+static int32_t wait_refresh_update_done_ack(void)
 {
   __IO uint32_t timeout;
   uint32_t rfshctl3;
@@ -1339,19 +1427,24 @@ static int wait_refresh_update_done_ack(void)
 
   /* Toggle rfshctl3.refresh_update_level */
   rfshctl3 = READ_REG(DDRCTRL->RFSHCTL3);
-  if ((rfshctl3 & refresh_update_level) == refresh_update_level) {
+  if ((rfshctl3 & refresh_update_level) == refresh_update_level)
+  {
     SET_BIT(DDRCTRL->RFSHCTL3, refresh_update_level);
-  } else {
+  }
+  else
+  {
     CLEAR_BIT(DDRCTRL->RFSHCTL3, refresh_update_level);
     refresh_update_level = 0U;
   }
 
   timeout = ddr_timeout_init_us(DDR_TIMEOUT_1S);
-  do {
+  do
+  {
     rfshctl3 = READ_REG(DDRCTRL->RFSHCTL3);
     timeout--;
 
-    if (ddr_timeout_elapsed(timeout)) {
+    if (ddr_timeout_elapsed(timeout))
+    {
       return -1;
     }
   } while ((rfshctl3 & DDRCTRL_RFSHCTL3_REFRESH_UPDATE_LEVEL) !=
@@ -1361,7 +1454,7 @@ static int wait_refresh_update_done_ack(void)
 }
 
 /* Mode Register Writes (MRW or MRS) */
-static HAL_StatusTypeDef mode_register_write(uint8_t addr, uint16_t data)
+static HAL_StatusTypeDef mode_register_write(uint32_t addr, uint32_t data)
 {
   uint32_t mrctrl0;
   __IO uint32_t timeout = ddr_timeout_init_us(DDR_TIMEOUT_200_MS);
@@ -1419,7 +1512,7 @@ static HAL_StatusTypeDef mode_register_write(uint8_t addr, uint16_t data)
 /* Switch DDR3 from DLL-on to DLL-off */
 static HAL_StatusTypeDef ddr3_dll_off(void)
 {
-  HAL_StatusTypeDef ret = HAL_OK;
+  HAL_StatusTypeDef ret;
   uint32_t mr1 = READ_REG(DDRPHYC->MR1);
   uint32_t mr2 = READ_REG(DDRPHYC->MR2);
   uint32_t dbgcam;
@@ -1448,10 +1541,9 @@ static HAL_StatusTypeDef ddr3_dll_off(void)
     }
 
     dbgcam = READ_REG(DDRCTRL->DBGCAM);
-  }
-  while ((((dbgcam & DDRCTRL_DBGCAM_DATA_PIPELINE_EMPTY)
-           == DDRCTRL_DBGCAM_DATA_PIPELINE_EMPTY))
-         && ((dbgcam & DDRCTRL_DBGCAM_DBG_Q_DEPTH) == 0U));
+  } while ((((dbgcam & DDRCTRL_DBGCAM_DATA_PIPELINE_EMPTY)
+             == DDRCTRL_DBGCAM_DATA_PIPELINE_EMPTY))
+           && ((dbgcam & DDRCTRL_DBGCAM_DBG_Q_DEPTH) == 0U));
 
   /*
    * 3. Perform an MRS command (using MRCTRL0 and MRCTRL1 registers)
@@ -1461,7 +1553,7 @@ static HAL_StatusTypeDef ddr3_dll_off(void)
    */
   mr1 &= ~(DDRPHYC_MR1_RTT0 | DDRPHYC_MR1_RTT1
            | DDRPHYC_MR1_RTT2);
-  ret = mode_register_write(1, mr1);
+  ret = mode_register_write(1U, mr1);
   if (ret != HAL_OK)
   {
     return ret;
@@ -1480,7 +1572,7 @@ static HAL_StatusTypeDef ddr3_dll_off(void)
    *    This applies for both DDR3 and DDR4.
    */
   mr2 &= ~DDRPHYC_MR2_RTTWR_Msk;
-  ret = mode_register_write(2, mr2);
+  ret = mode_register_write(2U, mr2);
   if (ret != HAL_OK)
   {
     return ret;
@@ -1494,7 +1586,7 @@ static HAL_StatusTypeDef ddr3_dll_off(void)
    *    b. DDR4: Write to MR1[0]
    */
   mr1 |= DDRPHYC_MR1_DE;
-  ret = mode_register_write(1, mr1);
+  ret = mode_register_write(1U, mr1);
   if (ret != HAL_OK)
   {
     return ret;
@@ -1542,7 +1634,7 @@ static HAL_StatusTypeDef ddr3_dll_off(void)
    */
 
   /* Change Bypass Mode Frequency Range (depends on DDRPHYC_CLK_RATE) */
-  if (DDR_MEM_SPEED < 100000U)
+  if (static_ddr_config.info.speed < 100000U)
   {
     CLEAR_BIT(DDRPHYC->DLLGCR, DDRPHYC_DLLGCR_BPS200);
   }
@@ -1558,7 +1650,7 @@ static HAL_StatusTypeDef ddr3_dll_off(void)
 #ifdef DDR_32BIT_INTERFACE
   SET_BIT(DDRPHYC->DX2DLLCR, DDRPHYC_DX2DLLCR_DLLDIS);
   SET_BIT(DDRPHYC->DX3DLLCR, DDRPHYC_DX3DLLCR_DLLDIS);
-#endif
+#endif /* DDR_32BIT_INTERFACE */
 
   /* 12. Exit the self-refresh state by setting PWRCTL.selfref_sw = 0. */
   CLEAR_BIT(DDRCTRL->PWRCTL, DDRCTRL_PWRCTL_SELFREF_SW);
@@ -1610,7 +1702,7 @@ static HAL_StatusTypeDef HAL_DDR_Refresh_Disable(void)
   }
 
   CLEAR_BIT(DDRCTRL->PWRCTL, DDRCTRL_PWRCTL_POWERDOWN_EN
-                          | DDRCTRL_PWRCTL_SELFREF_EN);
+                            | DDRCTRL_PWRCTL_SELFREF_EN);
   CLEAR_BIT(DDRCTRL->DFIMISC, DDRCTRL_DFIMISC_DFI_INIT_COMPLETE_EN);
 
   ret = wait_sw_done_ack();
@@ -1672,9 +1764,9 @@ static HAL_StatusTypeDef HAL_DDR_Refresh_Restore(uint32_t rfshctl3, uint32_t pwr
   return HAL_OK;
 }
 
-static unsigned long get_timer(unsigned long base)
+static uint32_t get_timer(uint32_t base)
 {
-  return (unsigned long)PL1_GetCurrentPhysicalValue() - base;
+  return (uint32_t)PL1_GetCurrentPhysicalValue() - base;
 }
 
 static HAL_StatusTypeDef refresh_cmd(void)
@@ -1691,8 +1783,7 @@ static HAL_StatusTypeDef refresh_cmd(void)
     }
 
     dbgstat = READ_REG(DDRCTRL->DBGSTAT);
-  }
-  while ((dbgstat & DDRCTRL_DBGSTAT_RANK0_REFRESH_BUSY) != 0U);
+  } while ((dbgstat & DDRCTRL_DBGSTAT_RANK0_REFRESH_BUSY) != 0U);
 
   SET_BIT(DDRCTRL->DBGCMD, DDRCTRL_DBGCMD_RANK0_REFRESH);
 
@@ -1703,16 +1794,19 @@ static HAL_StatusTypeDef refresh_cmd(void)
  * Rule1: Tref should be always < tREFW ? R x tREBW/8
  * Rule2: refcomp = RU(Tref/tREFI)  = RU(RxTref/tREFW)
  */
-static HAL_StatusTypeDef refresh_compensation(unsigned long start)
+static HAL_StatusTypeDef refresh_compensation(uint32_t start)
 {
   HAL_StatusTypeDef res = HAL_OK;
-  uint32_t tck_ps, tref, trefi, refcomp;
-  int i;
-  unsigned long time;
-  unsigned long time_us;
+  uint32_t tck_ps;
+  uint32_t tref;
+  uint32_t trefi;
+  uint32_t refcomp;
+  uint32_t i;
+  uint32_t time;
+  uint32_t time_us;
 
   time = get_timer(start);
-  time_us = (unsigned long)(time / TIMESLOT_1US);
+  time_us = time / TIMESLOT_1US;
 
   tck_ps = 1000000000U / static_ddr_config.info.speed;
   if (tck_ps == 0U)
@@ -1733,7 +1827,7 @@ static HAL_StatusTypeDef refresh_compensation(unsigned long start)
   /* div round up : number of refresh to compensate */
   refcomp = (tref + trefi - 1U) / trefi;
 
-  for (i = 0; i < refcomp; i++)
+  for (i = 0U; i < refcomp; i++)
   {
     res = refresh_cmd();
     if (res != HAL_OK)
@@ -1745,19 +1839,27 @@ static HAL_StatusTypeDef refresh_compensation(unsigned long start)
   return res;
 }
 
-static int ddr_sw_self_refresh_in(void)
+static int32_t ddr_sw_self_refresh_in(void)
 {
   CLEAR_BIT(RCC->DDRITFCR, RCC_DDRITFCR_AXIDCGEN);
 
   if (disable_axi_port() != 0)
   {
-    goto pstat_failed;
+    /* pstat failed */
+    enable_axi_port();
+
+    return -1;
   }
 
   /* SW Self-Refresh entry */
-  if (sw_selfref_entry() != 0U)
+  if (sw_selfref_entry() != 0)
   {
-    goto selfref_sw_failed;
+    /* selfref_sw_failed: restore DDR in its previous state */
+    sw_selfref_exit();
+
+    enable_axi_port();
+
+    return -1;
   }
 
   /* IOs powering down (PUBL registers) */
@@ -1782,7 +1884,7 @@ static int ddr_sw_self_refresh_in(void)
   CLEAR_BIT(DDRPHYC->DSGCR, DDRPHYC_DSGCR_CKOE);
 
   /* Additional delay to avoid early latch, 10us */
-  ddr_delay_us(DDR_DELAY_10_US );
+  ddr_delay_us(DDR_DELAY_10_US);
 
   /* Activate sw retention in PWRCTRL */
   SET_BIT(PWR->CR3, PWR_CR3_DDRRETEN);
@@ -1797,69 +1899,67 @@ static int ddr_sw_self_refresh_in(void)
 #ifdef DDR_32BIT_INTERFACE
   SET_BIT(DDRPHYC->DX2DLLCR, DDRPHYC_DX2DLLCR_DLLDIS);
   SET_BIT(DDRPHYC->DX3DLLCR, DDRPHYC_DX3DLLCR_DLLDIS);
-#endif
+#endif /* DDR_32BIT_INTERFACE */
 
   /* Switch controller clocks (uMCTL2/PUBL) to DLL output clock */
   CLEAR_BIT(RCC->DDRITFCR, RCC_DDRITFCR_GSKPCTRL);
 
   /* Deactivate all DDR clocks */
-  CLEAR_BIT(RCC->DDRITFCR, RCC_DDRITFCR_DDRC1EN
 #ifdef DDR_DUAL_AXI_PORT
-                           | RCC_DDRITFCR_DDRC2EN
-#endif
-                           | RCC_DDRITFCR_DDRCAPBEN
-                           | RCC_DDRITFCR_DDRPHYCAPBEN);
+  CLEAR_BIT(RCC->DDRITFCR, RCC_DDRITFCR_DDRC1EN
+                          | RCC_DDRITFCR_DDRC2EN
+                          | RCC_DDRITFCR_DDRCAPBEN
+                          | RCC_DDRITFCR_DDRPHYCAPBEN);
+#else /* DDR_DUAL_AXI_PORT */
+  CLEAR_BIT(RCC->DDRITFCR, RCC_DDRITFCR_DDRC1EN
+                          | RCC_DDRITFCR_DDRCAPBEN
+                          | RCC_DDRITFCR_DDRPHYCAPBEN);
+#endif /* DDR_DUAL_AXI_PORT */
 
   return 0;
-
-selfref_sw_failed:
-  /* Restore DDR in its previous state */
-  sw_selfref_exit();
-
-pstat_failed:
-  enable_axi_port();
-
-  return -1;
 }
 
 /*******************************************************************************
- * This function tests a simple read/write access to the DDR.
- * Note that the previous content is restored after test.
- * Returns 0 if success, and address value else.
- ******************************************************************************/
+  * This function tests a simple read/write access to the DDR.
+  * Note that the previous content is restored after test.
+  * Returns 0 if success, and address value else.
+  ******************************************************************************/
 static uint32_t ddr_test_rw_access(void)
 {
-  uint32_t saved_value = READ_REG(*(volatile uint32_t*)DDR_BASE_ADDR);
+  uint32_t saved_value = READ_REG(*(volatile uint32_t *)DDR_BASE_ADDR);
 
-  WRITE_REG(*(volatile uint32_t*)DDR_BASE_ADDR, DDR_PATTERN);
+  WRITE_REG(*(volatile uint32_t *)DDR_BASE_ADDR, DDR_PATTERN);
 
-  if (READ_REG(*(volatile uint32_t*)DDR_BASE_ADDR) != DDR_PATTERN)
+  if (READ_REG(*(volatile uint32_t *)DDR_BASE_ADDR) != DDR_PATTERN)
   {
     return (uint32_t)DDR_BASE_ADDR;
   }
 
-  WRITE_REG(*(volatile uint32_t*)DDR_BASE_ADDR, saved_value);
+  WRITE_REG(*(volatile uint32_t *)DDR_BASE_ADDR, saved_value);
 
   return 0U;
 }
 
 /*******************************************************************************
- * This function tests the DDR data bus wiring.
- * This is inspired from the Data Bus Test algorithm written by Michael Barr
- * in "Programming Embedded Systems in C and C++" book.
- * resources.oreilly.com/examples/9781565923546/blob/master/Chapter6/
- * File: memtest.c - This source code belongs to Public Domain.
- * Returns 0 if success, and address value else.
- ******************************************************************************/
+  * This function tests the DDR data bus wiring.
+  * This is inspired from the Data Bus Test algorithm written by Michael Barr
+  * in "Programming Embedded Systems in C and C++" book.
+  * resources.oreilly.com/examples/9781565923546/blob/master/Chapter6/
+  * File: memtest.c - This source code belongs to Public Domain.
+  * Returns 0 if success, and address value else.
+  ******************************************************************************/
 static uint32_t ddr_test_data_bus(void)
 {
+  uint32_t i;
   uint32_t pattern;
 
-  for (pattern = 1U; pattern != 0U; pattern <<= 1)
+  for (i = 0U; i < 32U; i++)
   {
-    WRITE_REG(*(volatile uint32_t*)DDR_BASE_ADDR, pattern);
+    pattern = (uint32_t)1 << i;
 
-    if (READ_REG(*(volatile uint32_t*)DDR_BASE_ADDR) != pattern)
+    WRITE_REG(*(volatile uint32_t *)DDR_BASE_ADDR, pattern);
+
+    if (READ_REG(*(volatile uint32_t *)DDR_BASE_ADDR) != pattern)
     {
       return (uint32_t)DDR_BASE_ADDR;
     }
@@ -1869,50 +1969,50 @@ static uint32_t ddr_test_data_bus(void)
 }
 
 /*******************************************************************************
- * This function tests the DDR address bus wiring.
- * This is inspired from the Data Bus Test algorithm written by Michael Barr
- * in "Programming Embedded Systems in C and C++" book.
- * resources.oreilly.com/examples/9781565923546/blob/master/Chapter6/
- * File: memtest.c - This source code belongs to Public Domain.
- * Returns 0 if success, and address value else.
- ******************************************************************************/
+  * This function tests the DDR address bus wiring.
+  * This is inspired from the Data Bus Test algorithm written by Michael Barr
+  * in "Programming Embedded Systems in C and C++" book.
+  * resources.oreilly.com/examples/9781565923546/blob/master/Chapter6/
+  * File: memtest.c - This source code belongs to Public Domain.
+  * Returns 0 if success, and address value else.
+  ******************************************************************************/
 static uint32_t ddr_test_addr_bus(void)
 {
-  uint64_t addressmask = (static_ddr_config.info.size - 1U);
-  uint64_t offset;
-  uint64_t testoffset = 0;
+  uint32_t addressmask = (static_ddr_config.info.size - 1U);
+  uint32_t offset;
+  uint32_t testoffset = 0;
 
   /* Write the default pattern at each of the power-of-two offsets. */
   for (offset = sizeof(uint32_t); (offset & addressmask) != 0U; offset <<= 1)
   {
-    WRITE_REG(*(volatile uint32_t*)(DDR_BASE_ADDR + (uint32_t)offset),
+    WRITE_REG(*(volatile uint32_t *)(DDR_BASE_ADDR + (uint32_t)offset),
               DDR_PATTERN);
   }
 
   /* Check for address bits stuck high. */
-  WRITE_REG(*(volatile uint32_t*)(DDR_BASE_ADDR + (uint32_t)testoffset),
+  WRITE_REG(*(volatile uint32_t *)(DDR_BASE_ADDR + (uint32_t)testoffset),
             DDR_ANTIPATTERN);
 
   for (offset = sizeof(uint32_t); (offset & addressmask) != 0U; offset <<= 1)
   {
-    if (READ_REG(*(volatile uint32_t*)(DDR_BASE_ADDR + (uint32_t)offset))
+    if (READ_REG(*(volatile uint32_t *)(DDR_BASE_ADDR + (uint32_t)offset))
         != DDR_PATTERN)
     {
       return (uint32_t)(DDR_BASE_ADDR + offset);
     }
   }
 
-  WRITE_REG(*(volatile uint32_t*)(DDR_BASE_ADDR + (uint32_t)testoffset),
+  WRITE_REG(*(volatile uint32_t *)(DDR_BASE_ADDR + (uint32_t)testoffset),
             DDR_PATTERN);
 
   /* Check for address bits stuck low or shorted. */
   for (testoffset = sizeof(uint32_t); (testoffset & addressmask) != 0U;
        testoffset <<= 1)
   {
-    WRITE_REG(*(volatile uint32_t*)(DDR_BASE_ADDR + (uint32_t)testoffset),
+    WRITE_REG(*(volatile uint32_t *)(DDR_BASE_ADDR + (uint32_t)testoffset),
               DDR_ANTIPATTERN);
 
-    if (READ_REG(*(volatile uint32_t*)DDR_BASE_ADDR) != DDR_PATTERN)
+    if (READ_REG(*(volatile uint32_t *)DDR_BASE_ADDR) != DDR_PATTERN)
     {
       return DDR_BASE_ADDR;
     }
@@ -1920,7 +2020,7 @@ static uint32_t ddr_test_addr_bus(void)
     for (offset = sizeof(uint32_t); (offset & addressmask) != 0U;
          offset <<= 1)
     {
-      if ((READ_REG(*(volatile uint32_t*)(DDR_BASE_ADDR + (uint32_t)offset))
+      if ((READ_REG(*(volatile uint32_t *)(DDR_BASE_ADDR + (uint32_t)offset))
            != DDR_PATTERN)
           && (offset != testoffset))
       {
@@ -1928,7 +2028,7 @@ static uint32_t ddr_test_addr_bus(void)
       }
     }
 
-    WRITE_REG(*(volatile uint32_t*)(DDR_BASE_ADDR + (uint32_t)testoffset),
+    WRITE_REG(*(volatile uint32_t *)(DDR_BASE_ADDR + (uint32_t)testoffset),
               DDR_PATTERN);
   }
 
@@ -1936,24 +2036,24 @@ static uint32_t ddr_test_addr_bus(void)
 }
 
 /*******************************************************************************
- * This function checks the DDR size. It has to be run with Data Cache off.
- * This test is run before data have been put in DDR, and is only done for
- * cold boot. The DDR data can then be overwritten, and it is not useful to
- * restore its content.
- * Returns DDR computed size.
- ******************************************************************************/
+  * This function checks the DDR size. It has to be run with Data Cache off.
+  * This test is run before data have been put in DDR, and is only done for
+  * cold boot. The DDR data can then be overwritten, and it is not useful to
+  * restore its content.
+  * Returns DDR computed size.
+  ******************************************************************************/
 static uint32_t ddr_check_size(void)
 {
   uint32_t offset = sizeof(uint32_t);
 
-  WRITE_REG(*(volatile uint32_t*)DDR_BASE_ADDR, DDR_PATTERN);
+  WRITE_REG(*(volatile uint32_t *)DDR_BASE_ADDR, DDR_PATTERN);
 
   while (offset < DDR_MAX_SIZE)
   {
-    WRITE_REG(*(volatile uint32_t*)(DDR_BASE_ADDR + offset), DDR_ANTIPATTERN);
+    WRITE_REG(*(volatile uint32_t *)(DDR_BASE_ADDR + offset), DDR_ANTIPATTERN);
     __DSB();
 
-    if (READ_REG(*(volatile uint32_t*)DDR_BASE_ADDR) != DDR_PATTERN)
+    if (READ_REG(*(volatile uint32_t *)DDR_BASE_ADDR) != DDR_PATTERN)
     {
       break;
     }
@@ -1985,7 +2085,7 @@ static HAL_StatusTypeDef ddr_sr_mode_ssr(void)
 #ifdef DDR_DUAL_AXI_PORT
   SET_BIT(RCC->DDRITFCR, RCC_DDRITFCR_DDRC2LPEN);
   SET_BIT(RCC->DDRITFCR, RCC_DDRITFCR_DDRC2EN);
-#endif
+#endif /* DDR_DUAL_AXI_PORT */
   SET_BIT(RCC->DDRITFCR, RCC_DDRITFCR_DDRCAPBLPEN);
   SET_BIT(RCC->DDRITFCR, RCC_DDRITFCR_DDRPHYCAPBLPEN);
   SET_BIT(RCC->DDRITFCR, RCC_DDRITFCR_DDRCAPBEN);
@@ -1994,12 +2094,12 @@ static HAL_StatusTypeDef ddr_sr_mode_ssr(void)
   CLEAR_BIT(RCC->DDRITFCR, RCC_DDRITFCR_AXIDCGEN);
   CLEAR_BIT(RCC->DDRITFCR, RCC_DDRITFCR_DDRCKMOD_Msk);
 
-  /*
-   * manage quasi-dynamic registers modification
-   * hwlpctl.hw_lp_en : Group 3
-   * pwrtmg.selfref_to_x32 & powerdown_to_x32 : Group 4
-   * Group 3 is the most restrictive, apply its conditions for all
-   */
+  /**
+    * manage quasi-dynamic registers modification
+    * hwlpctl.hw_lp_en : Group 3
+    * pwrtmg.selfref_to_x32 & powerdown_to_x32 : Group 4
+    * Group 3 is the most restrictive, apply its conditions for all
+    */
   if (set_qd3_update_conditions() != 0)
   {
     return HAL_ERROR;
@@ -2010,7 +2110,7 @@ static HAL_StatusTypeDef ddr_sr_mode_ssr(void)
 
   /* Configure Automatic LP modes of uMCTL2 */
   MODIFY_REG(DDRCTRL->PWRTMG, DDRCTRL_PWRTMG_SELFREF_TO_X32_Msk,
-                           DDRCTRL_PWRTMG_SELFREF_TO_X32_0);
+             DDRCTRL_PWRTMG_SELFREF_TO_X32_0);
 
   ret = unset_qd3_update_conditions();
   if (ret != HAL_OK)
@@ -2018,10 +2118,10 @@ static HAL_StatusTypeDef ddr_sr_mode_ssr(void)
     return ret;
   }
 
-  /*
-   * Disable Clock disable with LP modes
-   * (used in RUN mode for LPDDR2 with specific timing).
-   */
+  /**
+    * Disable Clock disable with LP modes
+    * (used in RUN mode for LPDDR2 with specific timing).
+    */
   CLEAR_BIT(DDRCTRL->PWRCTL, DDRCTRL_PWRCTL_EN_DFI_DRAM_CLK_DISABLE);
 
   /* Disable automatic Self-Refresh mode */
@@ -2043,17 +2143,17 @@ static HAL_StatusTypeDef ddr_sr_mode_asr(void)
   SET_BIT(RCC->DDRITFCR, RCC_DDRITFCR_DDRC1LPEN);
 #ifdef DDR_DUAL_AXI_PORT
   SET_BIT(RCC->DDRITFCR, RCC_DDRITFCR_DDRC2LPEN);
-#endif
+#endif /* DDR_DUAL_AXI_PORT */
   SET_BIT(RCC->DDRITFCR, RCC_DDRITFCR_DDRPHYCLPEN);
   MODIFY_REG(RCC->DDRITFCR, RCC_DDRITFCR_DDRCKMOD_Msk,
-                            RCC_DDRITFCR_DDRCKMOD_ASR1);
+             RCC_DDRITFCR_DDRCKMOD_ASR1);
 
-  /*
-   * manage quasi-dynamic registers modification
-   * hwlpctl.hw_lp_en : Group 3
-   * pwrtmg.selfref_to_x32 & powerdown_to_x32 : Group 4
-   * Group 3 is the most restrictive, apply its conditions for all
-   */
+  /**
+    * manage quasi-dynamic registers modification
+    * hwlpctl.hw_lp_en : Group 3
+    * pwrtmg.selfref_to_x32 & powerdown_to_x32 : Group 4
+    * Group 3 is the most restrictive, apply its conditions for all
+    */
   if (set_qd3_update_conditions() != 0)
   {
     return HAL_ERROR;
@@ -2064,7 +2164,7 @@ static HAL_StatusTypeDef ddr_sr_mode_asr(void)
 
   /* Configure Automatic LP modes of uMCTL2 */
   MODIFY_REG(DDRCTRL->PWRTMG, DDRCTRL_PWRTMG_SELFREF_TO_X32_Msk,
-                           DDRCTRL_PWRTMG_SELFREF_TO_X32_0);
+             DDRCTRL_PWRTMG_SELFREF_TO_X32_0);
 
   ret = unset_qd3_update_conditions();
   if (ret != HAL_OK)
@@ -2072,10 +2172,10 @@ static HAL_StatusTypeDef ddr_sr_mode_asr(void)
     return ret;
   }
 
-  /*
-   * Enable Clock disable with LP modes
-   * (used in RUN mode for LPDDR2 with specific timing).
-   */
+  /**
+    * Enable Clock disable with LP modes
+    * (used in RUN mode for LPDDR2 with specific timing).
+    */
   SET_BIT(DDRCTRL->PWRCTL, DDRCTRL_PWRCTL_EN_DFI_DRAM_CLK_DISABLE);
 
   /* Enable automatic Self-Refresh for ASR mode */
@@ -2092,17 +2192,17 @@ static HAL_StatusTypeDef ddr_sr_mode_hsr(void)
   CLEAR_BIT(RCC->DDRITFCR, RCC_DDRITFCR_DDRC1LPEN);
 #ifdef DDR_DUAL_AXI_PORT
   CLEAR_BIT(RCC->DDRITFCR, RCC_DDRITFCR_DDRC2LPEN);
-#endif
+#endif /* DDR_DUAL_AXI_PORT */
   SET_BIT(RCC->DDRITFCR, RCC_DDRITFCR_DDRPHYCLPEN);
   MODIFY_REG(RCC->DDRITFCR, RCC_DDRITFCR_DDRCKMOD_Msk,
-                            RCC_DDRITFCR_DDRCKMOD_HSR1);
+             RCC_DDRITFCR_DDRCKMOD_HSR1);
 
-  /*
-   * manage quasi-dynamic registers modification
-   * hwlpctl.hw_lp_en : Group 3
-   * pwrtmg.selfref_to_x32 & powerdown_to_x32 : Group 4
-   * Group 3 is the most restrictive, apply its conditions for all
-   */
+  /**
+    * manage quasi-dynamic registers modification
+    * hwlpctl.hw_lp_en : Group 3
+    * pwrtmg.selfref_to_x32 & powerdown_to_x32 : Group 4
+    * Group 3 is the most restrictive, apply its conditions for all
+    */
   if (set_qd3_update_conditions() != 0)
   {
     return HAL_ERROR;
@@ -2113,7 +2213,7 @@ static HAL_StatusTypeDef ddr_sr_mode_hsr(void)
 
   /* Configure Automatic LP modes of uMCTL2 */
   MODIFY_REG(DDRCTRL->PWRTMG, DDRCTRL_PWRTMG_SELFREF_TO_X32_Msk,
-                           DDRCTRL_PWRTMG_SELFREF_TO_X32_0);
+             DDRCTRL_PWRTMG_SELFREF_TO_X32_0);
 
   ret = unset_qd3_update_conditions();
   if (ret != HAL_OK)
@@ -2121,10 +2221,10 @@ static HAL_StatusTypeDef ddr_sr_mode_hsr(void)
     return ret;
   }
 
-  /*
-   * Enable Clock disable with LP modes
-   * (used in RUN mode for LPDDR2 with specific timing).
-   */
+  /**
+    * Enable Clock disable with LP modes
+    * (used in RUN mode for LPDDR2 with specific timing).
+    */
   SET_BIT(DDRCTRL->PWRCTL, DDRCTRL_PWRCTL_EN_DFI_DRAM_CLK_DISABLE);
 
   return ret;
@@ -2133,19 +2233,26 @@ static HAL_StatusTypeDef ddr_sr_mode_hsr(void)
 static HAL_DDR_SelfRefreshModeTypeDef ddr_sr_read_mode(void)
 {
   uint32_t pwrctl = READ_REG(DDRCTRL->PWRCTL);
+  HAL_DDR_SelfRefreshModeTypeDef ret;
 
-  switch (pwrctl &(DDRCTRL_PWRCTL_EN_DFI_DRAM_CLK_DISABLE |
-                   DDRCTRL_PWRCTL_SELFREF_EN))
+  switch (pwrctl & (DDRCTRL_PWRCTL_EN_DFI_DRAM_CLK_DISABLE |
+                    DDRCTRL_PWRCTL_SELFREF_EN))
   {
-  case 0U:
-    return HAL_DDR_SW_SELF_REFRESH_MODE;
-  case DDRCTRL_PWRCTL_EN_DFI_DRAM_CLK_DISABLE:
-    return HAL_DDR_HW_SELF_REFRESH_MODE;
-  case DDRCTRL_PWRCTL_EN_DFI_DRAM_CLK_DISABLE | DDRCTRL_PWRCTL_SELFREF_EN:
-    return HAL_DDR_AUTO_SELF_REFRESH_MODE;
-  default:
-    return HAL_DDR_INVALID_MODE;
+    case 0U:
+      ret = HAL_DDR_SW_SELF_REFRESH_MODE;
+      break;
+    case DDRCTRL_PWRCTL_EN_DFI_DRAM_CLK_DISABLE:
+      ret = HAL_DDR_HW_SELF_REFRESH_MODE;
+      break;
+    case DDRCTRL_PWRCTL_EN_DFI_DRAM_CLK_DISABLE | DDRCTRL_PWRCTL_SELFREF_EN:
+      ret = HAL_DDR_AUTO_SELF_REFRESH_MODE;
+      break;
+    default:
+      ret = HAL_DDR_INVALID_MODE;
+      break;
   }
+
+  return ret;
 }
 
 /**
@@ -2170,13 +2277,13 @@ static HAL_DDR_SelfRefreshModeTypeDef ddr_sr_read_mode(void)
   */
 HAL_StatusTypeDef HAL_DDR_Init(DDR_InitTypeDef *iddr)
 {
-  HAL_StatusTypeDef ret = HAL_OK;
-  int iret = -1;
+  HAL_StatusTypeDef ret;
+  int32_t iret;
   uint32_t ddr_reten;
   uint32_t pir;
   uint32_t uret;
-  unsigned long time;
-  char bus_width;
+  uint32_t time;
+  uint32_t bus_width;
 
   iddr->self_refresh = false;
 
@@ -2190,15 +2297,15 @@ HAL_StatusTypeDef HAL_DDR_Init(DDR_InitTypeDef *iddr)
 
   switch (static_ddr_config.c_reg.MSTR & DDRCTRL_MSTR_DATA_BUS_WIDTH)
   {
-  case DDRCTRL_MSTR_DATA_BUS_WIDTH_QUARTER:
-    bus_width = 8;
-    break;
-  case DDRCTRL_MSTR_DATA_BUS_WIDTH_HALF:
-    bus_width = 16;
-    break;
-  default:
-    bus_width = 32;
-    break;
+    case DDRCTRL_MSTR_DATA_BUS_WIDTH_QUARTER:
+      bus_width = 8U;
+      break;
+    case DDRCTRL_MSTR_DATA_BUS_WIDTH_HALF:
+      bus_width = 16U;
+      break;
+    default:
+      bus_width = 32U;
+      break;
   }
 
 
@@ -2208,7 +2315,7 @@ HAL_StatusTypeDef HAL_DDR_Init(DDR_InitTypeDef *iddr)
   }
   else if ((static_ddr_config.c_reg.MSTR & DDRCTRL_MSTR_LPDDR2) != 0U)
   {
-    if (bus_width == 32)
+    if (bus_width == 32U)
     {
       iret = HAL_DDR_MspInit(STM32MP_LPDDR2_32);
     }
@@ -2219,7 +2326,7 @@ HAL_StatusTypeDef HAL_DDR_Init(DDR_InitTypeDef *iddr)
   }
   else if ((static_ddr_config.c_reg.MSTR & DDRCTRL_MSTR_LPDDR3) != 0U)
   {
-    if (bus_width == 32)
+    if (bus_width == 32U)
     {
       iret = HAL_DDR_MspInit(STM32MP_LPDDR3_32);
     }
@@ -2228,10 +2335,15 @@ HAL_StatusTypeDef HAL_DDR_Init(DDR_InitTypeDef *iddr)
       iret = HAL_DDR_MspInit(STM32MP_LPDDR3_16);
     }
   }
+  else
+  {
+    /*  Unsupported DDR type */
+    return HAL_ERROR;
+  }
 
   if (iret != 0)
   {
-   return HAL_ERROR;
+    return HAL_ERROR;
   }
 
   /* Check DDR PHY pads retention */
@@ -2297,7 +2409,7 @@ start:
   /* Stop uMCTL2 before PHY is ready */
   CLEAR_BIT(DDRCTRL->DFIMISC, DDRCTRL_DFIMISC_DFI_INIT_COMPLETE_EN);
 
-  ret = set_reg(REG_REG, &static_ddr_config.c_reg);
+  ret = set_reg(REG_REG, (uint32_t)&static_ddr_config.c_reg);
   if (ret != HAL_OK)
   {
     return ret;
@@ -2311,12 +2423,12 @@ start:
     CLEAR_BIT(DDRCTRL->MSTR, DDRCTRL_MSTR_DLL_OFF_MODE);
   }
 
-  ret = set_reg(REG_TIMING, &static_ddr_config.c_timing);
+  ret = set_reg(REG_TIMING, (uint32_t)&static_ddr_config.c_timing);
   if (ret != HAL_OK)
   {
     return ret;
   }
-  ret = set_reg(REG_MAP, &static_ddr_config.c_map);
+  ret = set_reg(REG_MAP, (uint32_t)&static_ddr_config.c_map);
   if (ret != HAL_OK)
   {
     return ret;
@@ -2332,7 +2444,7 @@ start:
   MODIFY_REG(DDRCTRL->INIT0, DDRCTRL_INIT0_SKIP_DRAM_INIT_Msk,
              DDRCTRL_INIT0_SKIP_DRAM_INIT_NORMAL);
 
-  ret = set_reg(REG_PERF, &static_ddr_config.c_perf);
+  ret = set_reg(REG_PERF, (uint32_t)&static_ddr_config.c_perf);
   if (ret != HAL_OK)
   {
     return ret;
@@ -2352,12 +2464,12 @@ start:
    * 3. start PHY init by accessing relevant PUBL registers
    *    (DXGCR, DCR, PTR*, MR*, DTPR*)
    */
-  ret = set_reg(REGPHY_REG, &static_ddr_config.p_reg);
-    if (ret != HAL_OK)
+  ret = set_reg(REGPHY_REG, (uint32_t)&static_ddr_config.p_reg);
+  if (ret != HAL_OK)
   {
     return ret;
   }
-  ret = set_reg(REGPHY_TIMING, &static_ddr_config.p_timing);
+  ret = set_reg(REGPHY_TIMING, (uint32_t)&static_ddr_config.p_timing);
   if (ret != HAL_OK)
   {
     return ret;
@@ -2471,7 +2583,7 @@ start:
 
   /* DDR DQS training done */
 
-  time = get_timer(0);
+  time = get_timer(0U);
 
   /*
    *  8. Disable Auto refresh and power down by setting
@@ -2488,7 +2600,7 @@ start:
   /*
    *  9. Program PUBL PGCR to enable refresh during training
    *     and rank to train
-   *     not done => keep the programed value in PGCR
+   *     not done => keep the programmed value in PGCR
    */
 
   /*
@@ -2528,7 +2640,7 @@ start:
   }
 
   /*
-   * 12. set back registers in step 8 to the orginal values
+   * 12. set back registers in step 8 to the original values
    *     if desidered
    */
   ret = HAL_DDR_Refresh_Restore(static_ddr_config.c_reg.RFSHCTL3,
@@ -2557,7 +2669,7 @@ start:
 
 #ifndef DCACHE_OFF
   __set_SCTLR(__get_SCTLR() & ~SCTLR_C_BIT);
-#endif
+#endif /* DCACHE_OFF */
 
   if (iddr->self_refresh)
   {
@@ -2568,7 +2680,10 @@ start:
     }
 
     /* Restore area overwritten by training */
-    restore_ddr_training_area();
+    if (!restore_ddr_training_area())
+    {
+      return HAL_ERROR;
+    }
   }
   else
   {
@@ -2600,7 +2715,7 @@ start:
 
 #ifndef DCACHE_OFF
   __set_SCTLR(__get_SCTLR() | SCTLR_C_BIT);
-#endif
+#endif /* DCACHE_OFF */
 
   return ret;
 }
@@ -2625,7 +2740,7 @@ HAL_StatusTypeDef HAL_DDR_SR_Entry(uint32_t *zq0cr0_zdata)
     return HAL_ERROR;
   }
 
- /* Enable I/O retention mode in standby */
+  /* Enable I/O retention mode in standby */
   SET_BIT(PWR->CR3, PWR_CR3_DDRSREN);
 
   return HAL_OK;
@@ -2638,7 +2753,7 @@ HAL_StatusTypeDef HAL_DDR_SR_Entry(uint32_t *zq0cr0_zdata)
   */
 HAL_StatusTypeDef HAL_DDR_SR_Exit(void)
 {
-  HAL_StatusTypeDef ret = HAL_OK;
+  HAL_StatusTypeDef ret;
   __IO uint32_t timeout;
 
   /* Enable all clocks */
@@ -2672,7 +2787,7 @@ HAL_StatusTypeDef HAL_DDR_SR_Exit(void)
 #ifdef DDR_32BIT_INTERFACE
   CLEAR_BIT(DDRPHYC->DX2DLLCR, DDRPHYC_DX2DLLCR_DLLDIS);
   CLEAR_BIT(DDRPHYC->DX3DLLCR, DDRPHYC_DX3DLLCR_DLLDIS);
-#endif
+#endif /* DDR_32BIT_INTERFACE */
 
   /* Additional delay to avoid early DLL clock switch */
   ddr_delay_us(DDR_DELAY_10_US);
@@ -2688,7 +2803,7 @@ HAL_StatusTypeDef HAL_DDR_SR_Exit(void)
 
   /* PHY partial init: (DLL lock and ITM reset) */
   WRITE_REG(DDRPHYC->PIR, DDRPHYC_PIR_DLLSRST | DDRPHYC_PIR_DLLLOCK
-                          | DDRPHYC_PIR_ITMSRST | DDRPHYC_PIR_INIT);
+                        | DDRPHYC_PIR_ITMSRST | DDRPHYC_PIR_INIT);
 
   /* Need to wait at least 10 clock cycles before accessing PGSR */
   ddr_delay_us(DDR_DELAY_1_US);
@@ -2776,17 +2891,25 @@ HAL_StatusTypeDef HAL_DDR_SR_Exit(void)
   */
 HAL_StatusTypeDef HAL_DDR_SR_SetMode(HAL_DDR_SelfRefreshModeTypeDef mode)
 {
+  HAL_StatusTypeDef ret;
+
   switch (mode)
   {
-  case HAL_DDR_SW_SELF_REFRESH_MODE:
-    return ddr_sr_mode_ssr();
-  case HAL_DDR_AUTO_SELF_REFRESH_MODE:
-    return ddr_sr_mode_asr();
-  case HAL_DDR_HW_SELF_REFRESH_MODE:
-    return ddr_sr_mode_hsr();
-  default:
-    return HAL_ERROR;
+    case HAL_DDR_SW_SELF_REFRESH_MODE:
+      ret = ddr_sr_mode_ssr();
+      break;
+    case HAL_DDR_AUTO_SELF_REFRESH_MODE:
+      ret = ddr_sr_mode_asr();
+      break;
+    case HAL_DDR_HW_SELF_REFRESH_MODE:
+      ret = ddr_sr_mode_hsr();
+      break;
+    default:
+      ret = HAL_ERROR;
+      break;
   }
+
+  return ret;
 }
 
 /**

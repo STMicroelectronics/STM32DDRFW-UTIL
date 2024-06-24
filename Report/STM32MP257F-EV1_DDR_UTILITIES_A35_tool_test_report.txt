@@ -1,0 +1,161 @@
+==================================================================================
+==                  Utilities-ddr non-regression test Report                    ==
+==================================================================================
+
+/****** Bench Parameters ******/
+-------------------------------
+- Board             : STM32MP257F-EV1
+- Package version   : v0.3.0
+- Generated on      : Nov 06 2023
+
+ +------------------------------------------------------------------ +
+      Test in terminal emulator appplication :
+ +------------------------------------------------------------------ +
+
+     Type command-lines in terminal following the given order below:
+
+     _______________________________________________________________________________________________________
+     | Command-line          |                              Expected result                      | Verdict |
+     _______________________________________________________________________________________________________
+     | help                  |help                       displays help                           | PASS    |
+     |                       |info                       displays DDR information                |         |
+     |                       |info  <param> <val>        changes DDR information                 |         |
+     |                       |  with <param> = step, name, size or speed                         |         |
+     |                       |freq                       displays the DDR PHY frequency in kHz   |         |
+     |                       |freq  <freq>               changes the DDR PHY frequency           |         |
+     |                       |param [type|reg]           prints input parameters                 |         |
+     |                       |param <reg> <val>          edits parameters in step 0              |         |
+     |                       |print [type|reg]           dumps registers                         |         |
+     |                       |edit <reg> <val>           modifies one register                   |         |
+     |                       |save                       output formated DDR regs to be saved    |         |
+     |                       |...                                                                |         |
+     -------------------------------------------------------------------------------------------------------
+     | info                  |step = 0 : DDR_RESET                                               | PASS    |
+     |                       |name = DDR4 2x8Gbits 2x16bits 1200MHz                              |         |
+     |                       |size = 0x80000000                                                  |         |
+     |                       |speed = 1200000 kHz                                                |         |
+     -------------------------------------------------------------------------------------------------------
+     | param                 |==ctl.static==                                                     | PASS    |
+     |                       |                                                                   |         |
+     |                       |mstr= 0x01040010                                                   |         |
+     |                       |mrctrl0= 0x00000030                                                |         |
+     |                       |mrctrl1= 0x00000000                                                |         |
+     |                       |mrctrl2= 0x00000000                                                |         |
+     |                       |derateen= 0x00000000                                               |         |
+     |                       |derateint= 0x0124B980                                              |         |
+     |                       |deratectl= 0x00000000                                              |         |
+     |                       |pwrctl= 0x00000008                                                 |         |
+     |                       |pwrtmg= 0x00130001                                                 |         |
+     |                       |...                                                                |         |
+     -------------------------------------------------------------------------------------------------------
+     | param mstr            |mstr= 0x01040010                                                   | PASS    |
+     -------------------------------------------------------------------------------------------------------
+     | param mstr 0x01040012 |mstr= 0x01040012                                                   | PASS    |
+     -------------------------------------------------------------------------------------------------------
+     | param mstr            |mstr= 0x01040012                                                   | PASS    |
+     -------------------------------------------------------------------------------------------------------
+     | param mstr 0x01040010 |mstr= 0x01040010                                                   | PASS    |
+     -------------------------------------------------------------------------------------------------------
+     | next                  |1:DDR_CTRL_INIT_DONE                                               | PASS    |
+     -------------------------------------------------------------------------------------------------------
+     | freq                  |DDRPHY = 1199040 kHz                                               | PASS    |
+     -------------------------------------------------------------------------------------------------------
+     | step 3                |step to 3:DDR_READY                                                | PASS    |
+     |                       |2:DDR PHY_INIT_DONE                                                |         |
+     |                       |3:DDR_READY                                                        |         |
+     -------------------------------------------------------------------------------------------------------
+     | test help             |commands:                                                          | PASS    |
+     |                       |                                                                   |         |
+     |                       | 0: Test All [none] | [loop] | [loop] [size] | [loop] [size] [addr]|         |
+     |                       |          Execute all tests                                        |         |
+     |                       | 1: Test Simple DataBus [addr]                                     |         |
+     |                       |          Verifies each data line by walking 1 on fixed address    |         |
+     |                       |...                                                                |         |
+     -------------------------------------------------------------------------------------------------------
+     | test 1 0x80000000     |Result: Pass [Test Simple DataBus]                                 | PASS    |
+     -------------------------------------------------------------------------------------------------------
+     | test 0                |result 1:Test Simple DataBus = Passed                              | PASS    |
+     |                       |result 2:Test DataBusWalking0 = Passed                             |         |
+     |                       |result 3:Test DataBusWalking1 = Passed                             |         |
+     |                       |result 4:Test AddressBus = Passed                                  |         |
+     |                       |result 5:Test MemDevice = Passed                                   |         |
+     |                       |result 6:Test SimultaneousSwitchingOutput = Passed                 |         |
+     |                       |result 7:Test Noise = Passed                                       |         |
+     |                       |result 8:Test NoiseBurst = Passed                                  |         |
+     |                       |result 9:Test Random = Passed                                      |         |
+     |                       |result 10:Test FrequencySelectivePattern = Passed                  |         |
+     |                       |result 11:Test BlockSequential = Passed                            |         |
+     |                       |result 12:Test Checkerboard = Passed                               |         |
+     |                       |result 13:Test BitSpread = Passed                                  |         |
+     |                       |result 14:Test BitFlip = Passed                                    |         |
+     |                       |result 15:Test WalkingZeroes = Passed                              |         |
+     |                       |result 16:Test WalkingOnes = Passed                                |         |
+     |                       |Result: Pass [Test All]                                            |         |
+     -------------------------------------------------------------------------------------------------------
+     | print                 |==ctl.static==                                                     | PASS    |
+     |                       |mstr= 0x01040010                                                   |         |
+     |                       |mrctrl0= 0x00000030                                                |         |
+     |                       |mrctrl1= 0x00000000                                                |         |
+     |                       |mrctrl2= 0x00000000                                                |         |
+     |                       |derateen= 0x00000000                                               |         |
+     |                       |derateint= 0x0124B980                                              |         |
+     |                       |deratectl= 0x00000000                                              |         |
+     |                       |pwrctl= 0x00000008                                                 |         |
+     |                       |pwrtmg= 0x00130001                                                 |         |
+     |                       |hwlpctl= 0x00000002                                                |         |
+     |                       |...                                                                |         |
+     -------------------------------------------------------------------------------------------------------
+     | print rfshctl3        |rfshctl3= 0x00000000                                               | PASS    |
+     -------------------------------------------------------------------------------------------------------
+     | edit RFSHCTL3 0x1     |RFSHCTL3= 0x00000001                                               | PASS    |
+     -------------------------------------------------------------------------------------------------------
+     | print rfshctl3        |rfshctl3= 0x00000001                                               | PASS    |
+     -------------------------------------------------------------------------------------------------------
+     | edit RFSHCTL3 0x0     |RFSHCTL3= 0x00000000                                               | PASS    |
+     -------------------------------------------------------------------------------------------------------
+     | save                  |/* DDR REG VALUES TO BE SAVED */                                   | PASS    |
+     |                       |#define DDR_MEM_NAME  "DDR4 2x8Gbits 2x16bits 1200MHz"             |         |
+     |                       |#define DDR_MEM_SPEED 1200000                                      |         |
+     |                       |#define DDR_MEM_SIZE  0x80000000                                   |         |
+     |                       |                                                                   |         |
+     |                       |/* ctl.static */                                                   |         |
+     |                       |#define DDR_MSTR 0x01040010                                        |         |
+     |                       |#define DDR_MRCTRL0 0x00000030                                     |         |
+     |                       |#define DDR_MRCTRL1 0x00000000                                     |         |
+     |                       |#define DDR_MRCTRL2 0x00000000                                     |         |
+     |                       |#define DDR_DERATEEN 0x00000000                                    |         |
+     |                       |...                                                                |         |
+     -------------------------------------------------------------------------------------------------------
+     | step 0                |step to 0:DDR_RESET                                                | PASS    |
+     |                       |0:DDR_RESET                                                        |         |
+     -------------------------------------------------------------------------------------------------------
+     |                                                   END                                               |
+     -------------------------------------------------------------------------------------------------------
+
+
+
+ +------------------------------------------------------------------ +
+      Test in STM32CubeMX :
+ +------------------------------------------------------------------ +
+
+     Start utilities-ddr tool on board (using STM32CubeIDE or µSD)
+     then click on following buttons in STM32CubeMX DDR Test Suite:
+
+     _______________________________________________________________________________________________________
+     | Button                |                              Expected result                      | Verdict |
+     _______________________________________________________________________________________________________
+     | Load Registers        |Load the current configuration to the SYSRAM and initialize        | PASS    |
+     |                       |DDR CTRL and PHY with new registers value                          |         |
+     -------------------------------------------------------------------------------------------------------
+     | Save Config File      |DDR configuration saved in STM32CubeMX log                         | PASS    |
+     -------------------------------------------------------------------------------------------------------
+     | Run test 0            |Run all tests                                                      | PASS    |
+     -------------------------------------------------------------------------------------------------------
+     |                                                   END                                               |
+     -------------------------------------------------------------------------------------------------------
+
+
+
+ +------------------------------------------------------------------ +
+      Test signed binary: OK
+ +------------------------------------------------------------------ +

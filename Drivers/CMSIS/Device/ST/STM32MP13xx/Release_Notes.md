@@ -9,7 +9,7 @@ header-includes: <link rel="icon" type="image/x-icon" href="_htmresc/favicon.png
 
 <center>
 # Release Notes for <mark>\ STM32MP13xx CMSIS </mark>
-Copyright &copy; 2021\ STMicroelectronics\
+Copyright &copy; 2024\ STMicroelectronics\
     
 [![ST logo](_htmresc/st_logo_2020.png)](https://www.st.com){.logo}
 </center>
@@ -38,7 +38,86 @@ They can be adapted to fit applications requirements:
 
 ::: {.collapse}
 <input type="checkbox" id="collapse-section0" checked aria-hidden="true">
-<label for="collapse-section0" checked aria-hidden="true">__V0.6.0 / 16-December-2022__</label>
+<label for="collapse-section0" checked aria-hidden="true">__V1.1.0 / 23-Feb-2024__</label>
+<div>
+
+## Main Changes
+
+This release is the **Major Maintenance DV of Bit and registers definition** for STM32MP13xx
+
+## Contents
+- Support added for IAR Embedded Workbench 9.50
+
+## Known Limitations
+
+- None
+
+## Dependencies
+
+None
+
+</div>
+:::
+
+
+::: {.collapse}
+<input type="checkbox" id="collapse-section8" aria-hidden="true">
+<label for="collapse-section8" checked aria-hidden="true">__V1.0.0 / 01-Nov-2023__</label>
+<div>
+
+## Main Changes
+
+This release is the **Mass Market DV of Bit and registers definition** for STM32MP13xx
+
+## Contents
+
+- Support added for the MMU and CACHE initialization
+- System, Startup, ThreadX initialization and linker script files for AzureRTOS MW updated to support thumb mode
+- Support added for part numbers 
+
+## Known Limitations
+
+- IAR support is not implemented
+
+## Dependencies
+
+None
+
+</div>
+:::
+
+::: {.collapse}
+<input type="checkbox" id="collapse-section7" aria-hidden="true">
+<label for="collapse-section7" aria-hidden="true">__V0.7.0 / 27-June-2023__</label>
+<div>
+
+## Main Changes
+
+This release is the **5th ALPHA DV of Bit and registers definition** for STM32MP13xx
+
+## Contents
+
+- FMC NAND defines updated for the HAL NAND sequencer
+- Fixes for the MMU initialization
+- Update bit definition in header files for ETZPC
+- System, startup, ThreadX initialization and linker script files for AzureRTOS MW updated to support thumb mode
+  
+
+## Known Limitations
+
+- IAR Templates not yet available
+
+## Dependencies
+
+None
+
+</div>
+:::
+
+
+::: {.collapse}
+<input type="checkbox" id="collapse-section6"  aria-hidden="true">
+<label for="collapse-section6" aria-hidden="true">__V0.6.0 / 16-December-2022__</label>
 <div>
 
 ## Main Changes

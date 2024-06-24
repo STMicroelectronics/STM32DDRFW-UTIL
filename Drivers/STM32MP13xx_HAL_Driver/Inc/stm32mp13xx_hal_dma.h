@@ -310,7 +310,7 @@ typedef struct __DMA_HandleTypeDef
 #if defined(CRYP2)
 #define DMA_REQUEST_CRYP2_IN         76U  /*!< DMAMUX1 CRYP2 IN request  */
 #define DMA_REQUEST_CRYP2_OUT        77U  /*!< DMAMUX1 CRYP2 OUT request */
-#endif
+#endif /* CRYP2 */
 
 #define DMA_REQUEST_I2C4_RX          75U  /*!< DMAMUX1 I2C4 RX request   */
 #define DMA_REQUEST_I2C4_TX          76U  /*!< DMAMUX1 I2C4 TX request   */
@@ -400,7 +400,7 @@ typedef struct __DMA_HandleTypeDef
 
 #define DMA_REQUEST_SEC_TIM17_CH1        31U  /*!< DMAMUX2 TIM17 CH1 request  */
 #define DMA_REQUEST_SEC_TIM17_UP         32U  /*!< DMAMUX2 TIM17 UP request   */
-#endif
+#endif /* DMAMUX2 */
 
 /**
   * @}
@@ -597,7 +597,9 @@ typedef struct __DMA_HandleTypeDef
   *           - DMA_FIFOStatus_Empty: when FIFO is empty
   *           - DMA_FIFOStatus_Full: when FIFO is full
   */
-#define __HAL_DMA_GET_FS(__HANDLE__) ((IS_DMA_INSTANCE(__HANDLE__))? (((DMA_Stream_TypeDef *)(__HANDLE__)->Instance)->FCR & (DMA_SxFCR_FS)) : 0)
+#define __HAL_DMA_GET_FS(__HANDLE__) ((IS_DMA_INSTANCE(__HANDLE__))? \
+                                      (((DMA_Stream_TypeDef *)(__HANDLE__)->Instance)->FCR &\
+                                       (DMA_SxFCR_FS)) : 0)
 
 /**
   * @brief  Enable the specified DMA Stream.
@@ -621,124 +623,124 @@ typedef struct __DMA_HandleTypeDef
   * @retval The specified transfer complete flag index.
   */
 #define __HAL_DMA_GET_TC_FLAG_INDEX(__HANDLE__) \
-(((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream0))? DMA_FLAG_TCIF0_4 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream0))? DMA_FLAG_TCIF0_4 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream0))? DMA_FLAG_TCIF0_4 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream4))? DMA_FLAG_TCIF0_4 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream4))? DMA_FLAG_TCIF0_4 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream4))? DMA_FLAG_TCIF0_4 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream1))? DMA_FLAG_TCIF1_5 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream1))? DMA_FLAG_TCIF1_5 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream1))? DMA_FLAG_TCIF1_5 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream5))? DMA_FLAG_TCIF1_5 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream5))? DMA_FLAG_TCIF1_5 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream5))? DMA_FLAG_TCIF1_5 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream2))? DMA_FLAG_TCIF2_6 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream2))? DMA_FLAG_TCIF2_6 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream2))? DMA_FLAG_TCIF2_6 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream6))? DMA_FLAG_TCIF2_6 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream6))? DMA_FLAG_TCIF2_6 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream6))? DMA_FLAG_TCIF2_6 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream3))? DMA_FLAG_TCIF3_7 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream3))? DMA_FLAG_TCIF3_7 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream3))? DMA_FLAG_TCIF3_7 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream7))? DMA_FLAG_TCIF3_7 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream7))? DMA_FLAG_TCIF3_7 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream7))? DMA_FLAG_TCIF3_7 :\
- (uint32_t)0x00000000)
+  (((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream0))? DMA_FLAG_TCIF0_4 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream0))? DMA_FLAG_TCIF0_4 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream0))? DMA_FLAG_TCIF0_4 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream4))? DMA_FLAG_TCIF0_4 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream4))? DMA_FLAG_TCIF0_4 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream4))? DMA_FLAG_TCIF0_4 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream1))? DMA_FLAG_TCIF1_5 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream1))? DMA_FLAG_TCIF1_5 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream1))? DMA_FLAG_TCIF1_5 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream5))? DMA_FLAG_TCIF1_5 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream5))? DMA_FLAG_TCIF1_5 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream5))? DMA_FLAG_TCIF1_5 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream2))? DMA_FLAG_TCIF2_6 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream2))? DMA_FLAG_TCIF2_6 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream2))? DMA_FLAG_TCIF2_6 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream6))? DMA_FLAG_TCIF2_6 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream6))? DMA_FLAG_TCIF2_6 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream6))? DMA_FLAG_TCIF2_6 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream3))? DMA_FLAG_TCIF3_7 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream3))? DMA_FLAG_TCIF3_7 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream3))? DMA_FLAG_TCIF3_7 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream7))? DMA_FLAG_TCIF3_7 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream7))? DMA_FLAG_TCIF3_7 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream7))? DMA_FLAG_TCIF3_7 :\
+   (uint32_t)0x00000000)
 /**
   * @brief  Return the current DMA Stream half transfer complete flag.
   * @param  __HANDLE__: DMA handle
   * @retval The specified half transfer complete flag index.
   */
 #define __HAL_DMA_GET_HT_FLAG_INDEX(__HANDLE__)\
-(((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream0))? DMA_FLAG_HTIF0_4 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream0))? DMA_FLAG_HTIF0_4 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream0))? DMA_FLAG_HTIF0_4 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream4))? DMA_FLAG_HTIF0_4 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream4))? DMA_FLAG_HTIF0_4 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream4))? DMA_FLAG_HTIF0_4 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream1))? DMA_FLAG_HTIF1_5 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream1))? DMA_FLAG_HTIF1_5 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream1))? DMA_FLAG_HTIF1_5 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream5))? DMA_FLAG_HTIF1_5 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream5))? DMA_FLAG_HTIF1_5 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream5))? DMA_FLAG_HTIF1_5 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream2))? DMA_FLAG_HTIF2_6 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream2))? DMA_FLAG_HTIF2_6 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream2))? DMA_FLAG_HTIF2_6 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream6))? DMA_FLAG_HTIF2_6 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream6))? DMA_FLAG_HTIF2_6 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream6))? DMA_FLAG_HTIF2_6 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream3))? DMA_FLAG_HTIF3_7 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream3))? DMA_FLAG_HTIF3_7 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream3))? DMA_FLAG_HTIF3_7 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream7))? DMA_FLAG_HTIF3_7 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream7))? DMA_FLAG_HTIF3_7 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream7))? DMA_FLAG_HTIF3_7 :\
- (uint32_t)0x00000000)
+  (((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream0))? DMA_FLAG_HTIF0_4 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream0))? DMA_FLAG_HTIF0_4 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream0))? DMA_FLAG_HTIF0_4 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream4))? DMA_FLAG_HTIF0_4 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream4))? DMA_FLAG_HTIF0_4 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream4))? DMA_FLAG_HTIF0_4 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream1))? DMA_FLAG_HTIF1_5 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream1))? DMA_FLAG_HTIF1_5 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream1))? DMA_FLAG_HTIF1_5 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream5))? DMA_FLAG_HTIF1_5 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream5))? DMA_FLAG_HTIF1_5 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream5))? DMA_FLAG_HTIF1_5 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream2))? DMA_FLAG_HTIF2_6 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream2))? DMA_FLAG_HTIF2_6 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream2))? DMA_FLAG_HTIF2_6 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream6))? DMA_FLAG_HTIF2_6 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream6))? DMA_FLAG_HTIF2_6 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream6))? DMA_FLAG_HTIF2_6 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream3))? DMA_FLAG_HTIF3_7 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream3))? DMA_FLAG_HTIF3_7 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream3))? DMA_FLAG_HTIF3_7 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream7))? DMA_FLAG_HTIF3_7 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream7))? DMA_FLAG_HTIF3_7 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream7))? DMA_FLAG_HTIF3_7 :\
+   (uint32_t)0x00000000)
 /**
   * @brief  Return the current DMA Stream transfer error flag.
   * @param  __HANDLE__: DMA handle
   * @retval The specified transfer error flag index.
   */
 #define __HAL_DMA_GET_TE_FLAG_INDEX(__HANDLE__)\
-(((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream0))? DMA_FLAG_TEIF0_4 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream0))? DMA_FLAG_TEIF0_4 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream0))? DMA_FLAG_TEIF0_4 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream4))? DMA_FLAG_TEIF0_4 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream4))? DMA_FLAG_TEIF0_4 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream4))? DMA_FLAG_TEIF0_4 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream1))? DMA_FLAG_TEIF1_5 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream1))? DMA_FLAG_TEIF1_5 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream1))? DMA_FLAG_TEIF1_5 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream5))? DMA_FLAG_TEIF1_5 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream5))? DMA_FLAG_TEIF1_5 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream5))? DMA_FLAG_TEIF1_5 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream2))? DMA_FLAG_TEIF2_6 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream2))? DMA_FLAG_TEIF2_6 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream2))? DMA_FLAG_TEIF2_6 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream6))? DMA_FLAG_TEIF2_6 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream6))? DMA_FLAG_TEIF2_6 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream6))? DMA_FLAG_TEIF2_6 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream3))? DMA_FLAG_TEIF3_7 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream3))? DMA_FLAG_TEIF3_7 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream3))? DMA_FLAG_TEIF3_7 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream7))? DMA_FLAG_TEIF3_7 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream7))? DMA_FLAG_TEIF3_7 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream7))? DMA_FLAG_TEIF3_7 :\
- (uint32_t)0x00000000)
+  (((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream0))? DMA_FLAG_TEIF0_4 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream0))? DMA_FLAG_TEIF0_4 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream0))? DMA_FLAG_TEIF0_4 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream4))? DMA_FLAG_TEIF0_4 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream4))? DMA_FLAG_TEIF0_4 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream4))? DMA_FLAG_TEIF0_4 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream1))? DMA_FLAG_TEIF1_5 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream1))? DMA_FLAG_TEIF1_5 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream1))? DMA_FLAG_TEIF1_5 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream5))? DMA_FLAG_TEIF1_5 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream5))? DMA_FLAG_TEIF1_5 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream5))? DMA_FLAG_TEIF1_5 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream2))? DMA_FLAG_TEIF2_6 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream2))? DMA_FLAG_TEIF2_6 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream2))? DMA_FLAG_TEIF2_6 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream6))? DMA_FLAG_TEIF2_6 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream6))? DMA_FLAG_TEIF2_6 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream6))? DMA_FLAG_TEIF2_6 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream3))? DMA_FLAG_TEIF3_7 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream3))? DMA_FLAG_TEIF3_7 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream3))? DMA_FLAG_TEIF3_7 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream7))? DMA_FLAG_TEIF3_7 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream7))? DMA_FLAG_TEIF3_7 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream7))? DMA_FLAG_TEIF3_7 :\
+   (uint32_t)0x00000000)
 /**
   * @brief  Return the current DMA Stream FIFO error flag.
   * @param  __HANDLE__: DMA handle
   * @retval The specified FIFO error flag index.
   */
 #define __HAL_DMA_GET_FE_FLAG_INDEX(__HANDLE__)\
-(((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream0))? DMA_FLAG_FEIF0_4 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream0))? DMA_FLAG_FEIF0_4 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream0))? DMA_FLAG_FEIF0_4 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream4))? DMA_FLAG_FEIF0_4 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream4))? DMA_FLAG_FEIF0_4 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream4))? DMA_FLAG_FEIF0_4 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream1))? DMA_FLAG_FEIF1_5 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream1))? DMA_FLAG_FEIF1_5 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream1))? DMA_FLAG_FEIF1_5 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream5))? DMA_FLAG_FEIF1_5 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream5))? DMA_FLAG_FEIF1_5 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream5))? DMA_FLAG_FEIF1_5 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream2))? DMA_FLAG_FEIF2_6 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream2))? DMA_FLAG_FEIF2_6 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream2))? DMA_FLAG_FEIF2_6 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream6))? DMA_FLAG_FEIF2_6 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream6))? DMA_FLAG_FEIF2_6 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream6))? DMA_FLAG_FEIF2_6 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream3))? DMA_FLAG_FEIF3_7 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream3))? DMA_FLAG_FEIF3_7 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream3))? DMA_FLAG_FEIF3_7 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream7))? DMA_FLAG_FEIF3_7 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream7))? DMA_FLAG_FEIF3_7 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream7))? DMA_FLAG_FEIF3_7 :\
-  (uint32_t)0x00000000)
+  (((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream0))? DMA_FLAG_FEIF0_4 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream0))? DMA_FLAG_FEIF0_4 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream0))? DMA_FLAG_FEIF0_4 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream4))? DMA_FLAG_FEIF0_4 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream4))? DMA_FLAG_FEIF0_4 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream4))? DMA_FLAG_FEIF0_4 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream1))? DMA_FLAG_FEIF1_5 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream1))? DMA_FLAG_FEIF1_5 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream1))? DMA_FLAG_FEIF1_5 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream5))? DMA_FLAG_FEIF1_5 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream5))? DMA_FLAG_FEIF1_5 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream5))? DMA_FLAG_FEIF1_5 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream2))? DMA_FLAG_FEIF2_6 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream2))? DMA_FLAG_FEIF2_6 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream2))? DMA_FLAG_FEIF2_6 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream6))? DMA_FLAG_FEIF2_6 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream6))? DMA_FLAG_FEIF2_6 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream6))? DMA_FLAG_FEIF2_6 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream3))? DMA_FLAG_FEIF3_7 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream3))? DMA_FLAG_FEIF3_7 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream3))? DMA_FLAG_FEIF3_7 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream7))? DMA_FLAG_FEIF3_7 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream7))? DMA_FLAG_FEIF3_7 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream7))? DMA_FLAG_FEIF3_7 :\
+   (uint32_t)0x00000000)
 
 /**
   * @brief  Return the current DMA Stream direct mode error flag.
@@ -746,31 +748,31 @@ typedef struct __DMA_HandleTypeDef
   * @retval The specified direct mode error flag index.
   */
 #define __HAL_DMA_GET_DME_FLAG_INDEX(__HANDLE__)\
-(((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream0))? DMA_FLAG_DMEIF0_4 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream0))? DMA_FLAG_DMEIF0_4 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream0))? DMA_FLAG_DMEIF0_4 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream4))? DMA_FLAG_DMEIF0_4 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream4))? DMA_FLAG_DMEIF0_4 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream4))? DMA_FLAG_DMEIF0_4 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream1))? DMA_FLAG_DMEIF1_5 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream1))? DMA_FLAG_DMEIF1_5 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream1))? DMA_FLAG_DMEIF1_5 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream5))? DMA_FLAG_DMEIF1_5 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream5))? DMA_FLAG_DMEIF1_5 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream5))? DMA_FLAG_DMEIF1_5 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream2))? DMA_FLAG_DMEIF2_6 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream2))? DMA_FLAG_DMEIF2_6 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream2))? DMA_FLAG_DMEIF2_6 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream6))? DMA_FLAG_DMEIF2_6 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream6))? DMA_FLAG_DMEIF2_6 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream6))? DMA_FLAG_DMEIF2_6 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream3))? DMA_FLAG_DMEIF3_7 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream3))? DMA_FLAG_DMEIF3_7 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream3))? DMA_FLAG_DMEIF3_7 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream7))? DMA_FLAG_DMEIF3_7 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream7))? DMA_FLAG_DMEIF3_7 :\
- ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream7))? DMA_FLAG_DMEIF3_7 :\
-  (uint32_t)0x00000000)
+  (((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream0))? DMA_FLAG_DMEIF0_4 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream0))? DMA_FLAG_DMEIF0_4 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream0))? DMA_FLAG_DMEIF0_4 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream4))? DMA_FLAG_DMEIF0_4 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream4))? DMA_FLAG_DMEIF0_4 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream4))? DMA_FLAG_DMEIF0_4 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream1))? DMA_FLAG_DMEIF1_5 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream1))? DMA_FLAG_DMEIF1_5 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream1))? DMA_FLAG_DMEIF1_5 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream5))? DMA_FLAG_DMEIF1_5 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream5))? DMA_FLAG_DMEIF1_5 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream5))? DMA_FLAG_DMEIF1_5 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream2))? DMA_FLAG_DMEIF2_6 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream2))? DMA_FLAG_DMEIF2_6 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream2))? DMA_FLAG_DMEIF2_6 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream6))? DMA_FLAG_DMEIF2_6 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream6))? DMA_FLAG_DMEIF2_6 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream6))? DMA_FLAG_DMEIF2_6 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream3))? DMA_FLAG_DMEIF3_7 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream3))? DMA_FLAG_DMEIF3_7 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream3))? DMA_FLAG_DMEIF3_7 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA1_Stream7))? DMA_FLAG_DMEIF3_7 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA2_Stream7))? DMA_FLAG_DMEIF3_7 :\
+   ((uint32_t)((__HANDLE__)->Instance) == ((uint32_t)DMA3_Stream7))? DMA_FLAG_DMEIF3_7 :\
+   (uint32_t)0x00000000)
 
 /**
   * @brief  Get the DMA Stream pending flags.
@@ -786,11 +788,11 @@ typedef struct __DMA_HandleTypeDef
   * @retval The state of FLAG (SET or RESET).
   */
 #define __HAL_DMA_GET_FLAG(__HANDLE__, __FLAG__)\
-(((uint32_t)((__HANDLE__)->Instance) > (uint32_t)DMA3_Stream3)? (DMA3->HISR & (__FLAG__)) :\
- ((uint32_t)((__HANDLE__)->Instance) > (uint32_t)DMA2_Stream7)? (DMA3->LISR & (__FLAG__)) :\
- ((uint32_t)((__HANDLE__)->Instance) > (uint32_t)DMA2_Stream3)? (DMA2->HISR & (__FLAG__)) :\
- ((uint32_t)((__HANDLE__)->Instance) > (uint32_t)DMA1_Stream7)? (DMA2->LISR & (__FLAG__)) :\
- ((uint32_t)((__HANDLE__)->Instance) > (uint32_t)DMA1_Stream3)? (DMA1->HISR & (__FLAG__)) : (DMA1->LISR & (__FLAG__)))
+  (((uint32_t)((__HANDLE__)->Instance) > (uint32_t)DMA3_Stream3)? (DMA3->HISR & (__FLAG__)) :\
+   ((uint32_t)((__HANDLE__)->Instance) > (uint32_t)DMA2_Stream7)? (DMA3->LISR & (__FLAG__)) :\
+   ((uint32_t)((__HANDLE__)->Instance) > (uint32_t)DMA2_Stream3)? (DMA2->HISR & (__FLAG__)) :\
+   ((uint32_t)((__HANDLE__)->Instance) > (uint32_t)DMA1_Stream7)? (DMA2->LISR & (__FLAG__)) :\
+   ((uint32_t)((__HANDLE__)->Instance) > (uint32_t)DMA1_Stream3)? (DMA1->HISR & (__FLAG__)) : (DMA1->LISR & (__FLAG__)))
 
 /**
   * @brief  Clear the DMA Stream pending flags.
@@ -806,11 +808,12 @@ typedef struct __DMA_HandleTypeDef
   * @retval None
   */
 #define __HAL_DMA_CLEAR_FLAG(__HANDLE__, __FLAG__) \
-(((uint32_t)((__HANDLE__)->Instance) > (uint32_t)DMA3_Stream3)? (DMA3->HIFCR = (__FLAG__)) :\
- ((uint32_t)((__HANDLE__)->Instance) > (uint32_t)DMA2_Stream7)? (DMA3->LIFCR = (__FLAG__)) :\
- ((uint32_t)((__HANDLE__)->Instance) > (uint32_t)DMA2_Stream3)? (DMA2->HIFCR = (__FLAG__)) :\
- ((uint32_t)((__HANDLE__)->Instance) > (uint32_t)DMA1_Stream7)? (DMA2->LIFCR = (__FLAG__)) :\
- ((uint32_t)((__HANDLE__)->Instance) > (uint32_t)DMA1_Stream3)? (DMA1->HIFCR = (__FLAG__)) : (DMA1->LIFCR = (__FLAG__)))
+  (((uint32_t)((__HANDLE__)->Instance) > (uint32_t)DMA3_Stream3)? (DMA3->HIFCR = (__FLAG__)) :\
+   ((uint32_t)((__HANDLE__)->Instance) > (uint32_t)DMA2_Stream7)? (DMA3->LIFCR = (__FLAG__)) :\
+   ((uint32_t)((__HANDLE__)->Instance) > (uint32_t)DMA2_Stream3)? (DMA2->HIFCR = (__FLAG__)) :\
+   ((uint32_t)((__HANDLE__)->Instance) > (uint32_t)DMA1_Stream7)? (DMA2->LIFCR = (__FLAG__)) :\
+   ((uint32_t)((__HANDLE__)->Instance) > (uint32_t)DMA1_Stream3)? (DMA1->HIFCR = (__FLAG__)) : \
+   (DMA1->LIFCR = (__FLAG__)))
 
 /**
   * @brief  Enable the specified DMA Stream interrupts.
@@ -825,8 +828,11 @@ typedef struct __DMA_HandleTypeDef
   * @retval None
   */
 
-#define __HAL_DMA_ENABLE_IT(__HANDLE__, __INTERRUPT__)   (((__INTERRUPT__) != DMA_IT_FE)? \
-(((DMA_Stream_TypeDef *)(__HANDLE__)->Instance)->CR |= (__INTERRUPT__)) : (((DMA_Stream_TypeDef *)(__HANDLE__)->Instance)->FCR |= (__INTERRUPT__)))
+#define __HAL_DMA_ENABLE_IT(__HANDLE__, __INTERRUPT__)(((__INTERRUPT__) != DMA_IT_FE)? \
+                                                       (((DMA_Stream_TypeDef *)(__HANDLE__)->Instance)->CR \
+                                                        |= (__INTERRUPT__)):\
+                                                       (((DMA_Stream_TypeDef *)(__HANDLE__)->Instance)->FCR \
+                                                        |= (__INTERRUPT__)))
 
 /**
   * @brief  Disable the specified DMA Stream interrupts.
@@ -840,8 +846,11 @@ typedef struct __DMA_HandleTypeDef
   *            @arg DMA_IT_DME: Direct mode error interrupt.
   * @retval None
   */
-#define __HAL_DMA_DISABLE_IT(__HANDLE__, __INTERRUPT__)  (((__INTERRUPT__) != DMA_IT_FE)? \
-(((DMA_Stream_TypeDef *)(__HANDLE__)->Instance)->CR &= ~(__INTERRUPT__)) : (((DMA_Stream_TypeDef *)(__HANDLE__)->Instance)->FCR &= ~(__INTERRUPT__)))
+#define __HAL_DMA_DISABLE_IT(__HANDLE__, __INTERRUPT__)(((__INTERRUPT__) != DMA_IT_FE)?\
+                                                        (((DMA_Stream_TypeDef *)(__HANDLE__)->Instance)->CR \
+                                                         &= ~(__INTERRUPT__)) : \
+                                                        (((DMA_Stream_TypeDef *)(__HANDLE__)->Instance)->FCR \
+                                                         &= ~(__INTERRUPT__)))
 
 /**
   * @brief  Check whether the specified DMA Stream interrupt is enabled or not.
@@ -856,8 +865,10 @@ typedef struct __DMA_HandleTypeDef
   * @retval The state of DMA_IT.
   */
 #define __HAL_DMA_GET_IT_SOURCE(__HANDLE__, __INTERRUPT__)  (((__INTERRUPT__) != DMA_IT_FE)? \
-                                                        (((DMA_Stream_TypeDef *)(__HANDLE__)->Instance)->CR & (__INTERRUPT__)) : \
-                                                        (((DMA_Stream_TypeDef *)(__HANDLE__)->Instance)->FCR & (__INTERRUPT__)))
+                                                             (((DMA_Stream_TypeDef *)(__HANDLE__)->Instance)->CR \
+                                                              & (__INTERRUPT__)) : \
+                                                             (((DMA_Stream_TypeDef *)(__HANDLE__)->Instance)->FCR \
+                                                              & (__INTERRUPT__)))
 
 /**
   * @brief  Writes the number of data units to be transferred on the DMA Stream.
@@ -876,7 +887,8 @@ typedef struct __DMA_HandleTypeDef
   *
   * @retval The number of remaining data units in the current DMAy Streamx transfer.
   */
-#define __HAL_DMA_SET_COUNTER(__HANDLE__, __COUNTER__) (((DMA_Stream_TypeDef *)(__HANDLE__)->Instance)->NDTR = (uint16_t)(__COUNTER__))
+#define __HAL_DMA_SET_COUNTER(__HANDLE__, __COUNTER__) (((DMA_Stream_TypeDef *)(__HANDLE__)->Instance)->NDTR\
+                                                        = (uint16_t)(__COUNTER__))
 
 /**
   * @brief  Returns the number of remaining data units in the current DMAy Streamx transfer.
@@ -914,12 +926,15 @@ HAL_StatusTypeDef HAL_DMA_DeInit(DMA_HandleTypeDef *hdma);
   * @{
   */
 HAL_StatusTypeDef HAL_DMA_Start(DMA_HandleTypeDef *hdma, uint32_t SrcAddress, uint32_t DstAddress, uint32_t DataLength);
-HAL_StatusTypeDef HAL_DMA_Start_IT(DMA_HandleTypeDef *hdma, uint32_t SrcAddress, uint32_t DstAddress, uint32_t DataLength);
+HAL_StatusTypeDef HAL_DMA_Start_IT(DMA_HandleTypeDef *hdma, uint32_t SrcAddress, uint32_t DstAddress,
+                                   uint32_t DataLength);
 HAL_StatusTypeDef HAL_DMA_Abort(DMA_HandleTypeDef *hdma);
 HAL_StatusTypeDef HAL_DMA_Abort_IT(DMA_HandleTypeDef *hdma);
-HAL_StatusTypeDef HAL_DMA_PollForTransfer(DMA_HandleTypeDef *hdma, HAL_DMA_LevelCompleteTypeDef CompleteLevel, uint32_t Timeout);
+HAL_StatusTypeDef HAL_DMA_PollForTransfer(DMA_HandleTypeDef *hdma, HAL_DMA_LevelCompleteTypeDef CompleteLevel,
+                                          uint32_t Timeout);
 void              HAL_DMA_IRQHandler(DMA_HandleTypeDef *hdma);
-HAL_StatusTypeDef HAL_DMA_RegisterCallback(DMA_HandleTypeDef *hdma, HAL_DMA_CallbackIDTypeDef CallbackID, void (* pCallback)(DMA_HandleTypeDef *_hdma));
+HAL_StatusTypeDef HAL_DMA_RegisterCallback(DMA_HandleTypeDef *hdma, HAL_DMA_CallbackIDTypeDef CallbackID,
+                                           void (* pCallback)(DMA_HandleTypeDef *_hdma));
 HAL_StatusTypeDef HAL_DMA_UnRegisterCallback(DMA_HandleTypeDef *hdma, HAL_DMA_CallbackIDTypeDef CallbackID);
 
 /**
@@ -930,8 +945,8 @@ HAL_StatusTypeDef HAL_DMA_UnRegisterCallback(DMA_HandleTypeDef *hdma, HAL_DMA_Ca
   * @brief    Peripheral State functions
   * @{
   */
-HAL_DMA_StateTypeDef HAL_DMA_GetState(DMA_HandleTypeDef *hdma);
-uint32_t             HAL_DMA_GetError(DMA_HandleTypeDef *hdma);
+HAL_DMA_StateTypeDef HAL_DMA_GetState(const DMA_HandleTypeDef *hdma);
+uint32_t             HAL_DMA_GetError(const DMA_HandleTypeDef *hdma);
 /**
   * @}
   */
@@ -956,19 +971,19 @@ uint32_t             HAL_DMA_GetError(DMA_HandleTypeDef *hdma);
 
 #if defined (DMAMUX2)
 #define IS_DMA3_REQUEST(REQUEST) (((REQUEST) >= DMA_REQUEST_SEC_MEM2MEM) && ((REQUEST) <= DMA_REQUEST_SEC_TIM17_UP))
-#endif
+#endif /* DMAMUX2 */
 
 #define IS_DMA_INSTANCE(__HANDLE__) ( \
                                       (((uint32_t)((__HANDLE__)->Instance) >= ((uint32_t)DMA1_Stream0)) &&  \
                                        ((uint32_t)((__HANDLE__)->Instance) <= ((uint32_t)DMA2_Stream7)))    \
                                       ||  \
- 		                              (((uint32_t)((__HANDLE__)->Instance) >= ((uint32_t)DMA3_Stream0)) && \
+                                      (((uint32_t)((__HANDLE__)->Instance) >= ((uint32_t)DMA3_Stream0)) && \
                                        ((uint32_t)((__HANDLE__)->Instance) <= ((uint32_t)DMA3_Stream7)))    \
                                     )
 #define IS_DMA3_INSTANCE(__HANDLE__) ( \
-                                      (((uint32_t)((__HANDLE__)->Instance) >= ((uint32_t)DMA3_Stream0)) &&  \
-                                       ((uint32_t)((__HANDLE__)->Instance) <= ((uint32_t)DMA3_Stream7)))    \
-                                    )
+                                       (((uint32_t)((__HANDLE__)->Instance) >= ((uint32_t)DMA3_Stream0)) &&  \
+                                        ((uint32_t)((__HANDLE__)->Instance) <= ((uint32_t)DMA3_Stream7)))    \
+                                     )
 
 #define IS_DMA_DIRECTION(DIRECTION) (((DIRECTION) == DMA_PERIPH_TO_MEMORY ) || \
                                      ((DIRECTION) == DMA_MEMORY_TO_PERIPH)  || \

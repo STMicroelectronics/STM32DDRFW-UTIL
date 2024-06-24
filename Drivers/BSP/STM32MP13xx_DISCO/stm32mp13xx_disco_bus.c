@@ -208,7 +208,7 @@ static int32_t I2C_WriteReg(uint16_t DevAddr, uint16_t MemAddSize, uint16_t Reg,
 static int32_t I2C_ReadReg(uint16_t DevAddr, uint16_t MemAddSize, uint16_t Reg, uint8_t *pData, uint16_t Length);
 
 #if 0
-/* Currenlty not used */
+/* Currently not used */
 static uint32_t I2C_GetTiming(uint32_t clock_src_hz, uint32_t i2cfreq_hz);
 #endif /* 0 */
 

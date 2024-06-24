@@ -57,7 +57,6 @@
   * @{
   */
 
-
 /**
   * @}
   */
@@ -215,7 +214,7 @@ __weak void SystemInit_Interrupts_SoftIRQn_Handler(uint32_t Software_Interrupt_I
 
 void SecurePhysicalTimer_IRQHandler(void)
 {
-  IRQ_ClearPending((IRQn_ID_t)SecurePhysicalTimer_IRQn);
+  IRQ_ClearPending((IRQn_ID_t)SecurePhyTimer_IRQn);
 
 #if 0
 /* Simple version
@@ -272,68 +271,71 @@ void SecurePhysicalTimer_IRQHandler(void)
 
   HAL_IncTick();
 }
-
 /**
   * @brief  Generic IRQ Handler (Software IRQs, PPIs & IRQs)
   * @param  None
   * @retval None
   */
 #if defined ( __GNUC__ )
+#pragma GCC push_options
+#pragma GCC target("general-regs-only")
 void __attribute__ ((interrupt ("IRQ")))IRQ_Handler(void) {
 #elif defined ( __ICCARM__ )
-__irq __arm void IRQ_Handler(void) {
+	__irq __arm void IRQ_Handler(void) {
 #endif
-  uint32_t ItId;
-  IRQHandler_t handler;
+	  uint32_t ItId;
+	  IRQHandler_t handler;
 
-  while (1U)
-  {
-    /* Get highest pending Interrupt Id from GIC driver*/
-    ItId = (uint32_t)IRQ_GetActiveIRQ();
+	  while (1U)
+	  {
+	    /* Get highest pending Interrupt Id from GIC driver*/
+	    ItId = (uint32_t)IRQ_GetActiveIRQ();
 
-    if (ItId <= GIC_HIGHEST_INTERRUPT_VALUE) /* Highest value of GIC Valid Interrupt */
-    {
-      /* Check validity of IRQ */
-      if (ItId >= (uint32_t)MAX_IRQ_n)
-      {
-        SystemInit_IRQ_ErrorHandler();
-      }
-      else
-      {
-        /* Find appropriate IRQ Handler (Require registration before!) */
-        handler = IRQ_GetHandler((IRQn_ID_t)ItId);
+	    if (ItId <= GIC_HIGHEST_INTERRUPT_VALUE) /* Highest value of GIC Valid Interrupt */
+	    {
+	      /* Check validity of IRQ */
+	      if (ItId >= (uint32_t)MAX_IRQ_n)
+	      {
+	        SystemInit_IRQ_ErrorHandler();
+	      }
+	      else
+	      {
+	        /* Find appropriate IRQ Handler (Require registration before!) */
+	        handler = IRQ_GetHandler((IRQn_ID_t)ItId);
 
-        if (handler!=NULL)
-        {
-          /* Call IRQ Handler */
-          handler();
-        }
-        else
-        {
-          /* Un register Handler , error ! */
-          SystemInit_IRQ_ErrorHandler();
-        }
-      }
+	        if (handler!=NULL)
+	        {
+	          /* Call IRQ Handler */
+	          handler();
+	        }
+	        else
+	        {
+	          /* Un register Handler , error ! */
+	          SystemInit_IRQ_ErrorHandler();
+	        }
+	      }
 
-      /* End Acknowledge interrupt */
-      IRQ_EndOfInterrupt((IRQn_ID_t)ItId);
-    }
-    else
-    {
-      /* Normal case: whenever there is no more pending IRQ , IAR returns ACKNOWLEDGE special IRQ value */
-      if (ItId == GIC_ACKNOWLEDGE_RESPONSE)
-      {
-        break;
-      }
-      /* Spurious IRQ Value (1022)  ... */
-      else
-      {
-        SystemInit_IRQ_ErrorHandler();
-      }
-    }
-  }
-}
-
+	      /* End Acknowledge interrupt */
+	      IRQ_EndOfInterrupt((IRQn_ID_t)ItId);
+	    }
+	    else
+	    {
+	      /* Normal case: whenever there is no more pending IRQ , IAR returns ACKNOWLEDGE special IRQ value */
+	      if (ItId == GIC_ACKNOWLEDGE_RESPONSE)
+	      {
+	        break;
+	      }
+	      /* Spurious IRQ Value (1022)  ... */
+	      else
+	      {
+	        SystemInit_IRQ_ErrorHandler();
+	      }
+	    }
+	  }
+	}
+#ifdef __GNUC__
+#pragma GCC pop_options
+#endif
 /**
   * @brief  Ensure all bss part of code is initialized with zeros
   * @param  None
@@ -378,7 +380,7 @@ void SystemInit (void)
 #endif
 
   /* Invalidate entire Unified TLB */
-  __set_TLBIALL(0);
+  MMU_InvalidateTLB();
 
   /* Disable all interrupts and events */
   CLEAR_REG(EXTI_C1->IMR1);
@@ -389,14 +391,10 @@ void SystemInit (void)
   CLEAR_REG(EXTI_C1->EMR3);
 
   /* Invalidate entire branch predictor array */
-  __set_BPIALL(0);
-  __DSB();
-  __ISB();
+  L1C_InvalidateBTAC();
 
   /*  Invalidate instruction cache and flush branch target cache */
-  __set_ICIALLU(0);
-  __DSB();
-  __ISB();
+  L1C_InvalidateICacheAll();
 
   /*  Invalidate data cache */
   L1C_InvalidateDCacheAll();
@@ -406,7 +404,7 @@ void SystemInit (void)
   __FPU_Enable();
 #endif
 
-#ifndef NO_MMU_USE
+#ifdef MMU_USE
   /* Create Translation Table */
   MMU_CreateTranslationTable();
 
@@ -415,17 +413,10 @@ void SystemInit (void)
 #endif
 
   /* Enable Caches */
-#ifndef NO_CACHE_USE
+#ifdef CACHE_USE
   L1C_EnableCaches();
 #endif
   L1C_EnableBTAC();
-
-#ifndef NO_CACHE_USE
-#if (__L2C_PRESENT == 1)
-  /* Enable L2 Cache */
-  L2C_Enable();
-#endif
-#endif
 
 #if (__GIC_PRESENT == 1)
   uint32_t i;
@@ -449,49 +440,36 @@ void SystemInit (void)
  */
 void SystemInit_cpu1 (void)
 {
+  /* Invalidate entire Unified TLB */
+  MMU_InvalidateTLB();
 
+  /* Invalidate entire branch predictor array */
+  L1C_InvalidateBTAC();
 
- /* Invalidate entire Unified TLB */
- __set_TLBIALL(0);
+  /*  Invalidate instruction cache and flush branch target cache */
+  L1C_InvalidateICacheAll();
 
- /* Invalidate entire branch predictor array */
- __set_BPIALL(0);
- __DSB();
- __ISB();
-
- /*  Invalidate instruction cache and flush branch target cache */
- __set_ICIALLU(0);
- __DSB();
- __ISB();
-
- /*  Invalidate data cache */
- L1C_InvalidateDCacheAll();
+  /*  Invalidate data cache */
+  L1C_InvalidateDCacheAll();
 
 #if ((__FPU_PRESENT == 1) && (__FPU_USED == 1))
- /* Enable FPU */
- __FPU_Enable();
+  /* Enable FPU */
+  __FPU_Enable();
 #endif
 
-#ifndef NO_MMU_USE
- /* Create Translation Table */
- MMU_CreateTranslationTable();
+#ifdef MMU_USE
+  /* Create Translation Table */
+  MMU_CreateTranslationTable();
 
- /* Enable MMU */
- MMU_Enable();
+  /* Enable MMU */
+  MMU_Enable();
 #endif
 
  /* Enable Caches */
-#ifndef NO_CACHE_USE
- L1C_EnableCaches();
+#ifdef CACHE_USE
+  L1C_EnableCaches();
 #endif
- L1C_EnableBTAC();
-
-#ifndef NO_CACHE_USE
-#if (__L2C_PRESENT == 1)
- /* Enable L2 Cache */
- L2C_Enable();
-#endif
-#endif
+  L1C_EnableBTAC();
 
 }
 
@@ -576,6 +554,8 @@ void SystemCoreClockUpdate (void)
     break;
   }
 }
+
+
 /**
   * @}
   */

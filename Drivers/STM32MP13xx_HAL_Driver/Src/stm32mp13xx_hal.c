@@ -51,16 +51,16 @@
   */
 
 /**
- * @brief STM32MP13xx HAL Driver version number
+  * @brief STM32MP13xx HAL Driver version number
    */
-#define __STM32MP13xx_HAL_VERSION_MAIN   (0x00UL) /*!< [31:24] main version */
-#define __STM32MP13xx_HAL_VERSION_SUB1   (0x06UL) /*!< [23:16] sub1 version */
+#define __STM32MP13xx_HAL_VERSION_MAIN   (0x01UL) /*!< [31:24] main version */
+#define __STM32MP13xx_HAL_VERSION_SUB1   (0x01UL) /*!< [23:16] sub1 version */
 #define __STM32MP13xx_HAL_VERSION_SUB2   (0x00UL) /*!< [15:8]  sub2 version */
 #define __STM32MP13xx_HAL_VERSION_RC     (0x00UL) /*!< [7:0]  release candidate */
 #define __STM32MP13xx_HAL_VERSION         ((__STM32MP13xx_HAL_VERSION_MAIN << 24)\
-                                        |(__STM32MP13xx_HAL_VERSION_SUB1 << 16)\
-                                        |(__STM32MP13xx_HAL_VERSION_SUB2 << 8 )\
-                                        |(__STM32MP13xx_HAL_VERSION_RC))
+                                           |(__STM32MP13xx_HAL_VERSION_SUB1 << 16)\
+                                           |(__STM32MP13xx_HAL_VERSION_SUB2 << 8 )\
+                                           |(__STM32MP13xx_HAL_VERSION_RC))
 
 #define IDCODE_DEVID_MASK    ((uint32_t)0x00000FFF)
 #define VREFBUF_TIMEOUT_VALUE     (uint32_t)10   /* 10 ms  */
@@ -83,10 +83,9 @@
 /** @defgroup HAL_Exported_Variables HAL Exported Variables
   * @{
   */
-__IO uint32_t uwTick;
 #if defined(CORE_CA7)
 uint32_t uwTickPrio   = (1UL << 4); /* Invalid PRIO */
-#endif
+#endif /* CORE_CA7 */
 HAL_TickFreqTypeDef uwTickFreq = HAL_TICK_FREQ_DEFAULT;  /* 1KHz */
 /**
   * @}
@@ -100,8 +99,8 @@ HAL_TickFreqTypeDef uwTickFreq = HAL_TICK_FREQ_DEFAULT;  /* 1KHz */
   */
 
 /** @defgroup HAL_Group1 Initialization and de-initialization Functions
- *  @brief    Initialization and de-initialization functions
- *
+  *  @brief    Initialization and de-initialization functions
+  *
 @verbatim
  ===============================================================================
               ##### Initialization and de-initialization functions #####
@@ -264,14 +263,17 @@ __weak HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
 #else
   /*Set Counter Frequency */
   PL1_SetCounterFrequency(HSI_VALUE);
-// __set_CNTFRQ(HSI_VALUE);
+  /* __set_CNTFRQ(HSI_VALUE); */
   /* Initialize Counter */
   PL1_SetLoadValue(0x1U);
-// __set_CNTP_TVAL(0x1U);
-#endif
+  /* __set_CNTP_TVAL(0x1U); */
+
+#endif /* USE_ST_CASIS */
 
 #endif /* CORE_CA7 */
-
+  /* Added below statement to make code compliant with MISRA 2012 Rule - 2.7 */
+  /* Rule - 2.7 : There should be no unused parameters in functions */
+  UNUSED(TickPriority);
 
   /* Return function status */
   return HAL_OK;
@@ -282,8 +284,8 @@ __weak HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
   */
 
 /** @defgroup HAL_Group2 HAL Control functions
- *  @brief    HAL Control functions
- *
+  *  @brief    HAL Control functions
+  *
 @verbatim
  ===============================================================================
                       ##### HAL Control functions #####
@@ -305,16 +307,20 @@ __weak HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
   */
 
 /**
-  * @brief This function is called to increment  a global variable "uwTick"
+  * @brief This function is called to increment  a variable "uwTick"
   *        used as application time base.
   * @note In the default implementation, this variable is incremented each 1ms
   *       in Systick ISR.
- * @note This function is declared as __weak to be overwritten in case of other
+  * @note This function is declared as __weak to be overwritten in case of other
   *      implementations in user file.
   * @retval None
   */
 __weak void HAL_IncTick(void)
 {
+  /* Defining uwTick as local static to avoid MISRA warnings as it is only being used here right now
+  In case another function uses it define it as extern in hal.h and then reuse.
+  Earlier implementation declares it as extern in hal.h and defined it as global in this file */
+  static __IO uint32_t uwTick;
   uwTick += (uint32_t)uwTickFreq;
 }
 
@@ -329,11 +335,11 @@ __weak uint32_t HAL_GetTick(void)
   /* tick value directly got from 64bits CA7 register*/
   if ((RCC->STGENCKSELR & RCC_STGENCKSELR_STGENSRC) == RCC_STGENCLKSOURCE_HSE)
   {
-    return ((uint32_t)PL1_GetCurrentPhysicalValue() / (HSE_VALUE / 1000UL));
+    return (uint32_t)(PL1_GetCurrentPhysicalValue() / (HSE_VALUE / 1000UL));
   }
   else
   {
-    return ((uint32_t)PL1_GetCurrentPhysicalValue() / (HSI_VALUE / 1000UL));
+    return (uint32_t)(PL1_GetCurrentPhysicalValue() / (HSI_VALUE / 1000UL));
   }
 }
 
@@ -376,6 +382,7 @@ __weak void HAL_Delay(uint32_t Delay)
   */
 __weak void HAL_SuspendTick(void)
 {
+
 }
 
 /**
@@ -390,6 +397,7 @@ __weak void HAL_SuspendTick(void)
   */
 __weak void HAL_ResumeTick(void)
 {
+
 }
 
 /**
@@ -454,7 +462,7 @@ void HAL_EnableDBGWakeUp(void)
 {
 #if defined (CORE_CA7)
   SET_BIT(EXTI_C1->IMR3, EXTI_IMR3_IM75);
-#endif
+#endif /* CORE_CA7 */
 }
 
 /**
@@ -465,7 +473,7 @@ void HAL_DisableDBGWakeUp(void)
 {
 #if defined (CORE_CA7)
   CLEAR_BIT(EXTI_C1->IMR3, EXTI_IMR3_IM75);
-#endif
+#endif /* CORE_CA7 */
 }
 
 #if defined (DBGMCU_CR_DBG_SLEEP)
@@ -486,7 +494,7 @@ void HAL_DisableDBGSleepMode(void)
 {
   CLEAR_BIT(DBGMCU->CR, DBGMCU_CR_DBG_SLEEP);
 }
-#endif
+#endif /* DBGMCU_CR_DBG_SLEEP */
 
 #if defined (DBGMCU_CR_DBG_STOP)
 /**
@@ -506,7 +514,7 @@ void HAL_DisableDBGStopMode(void)
 {
   CLEAR_BIT(DBGMCU->CR, DBGMCU_CR_DBG_STOP);
 }
-#endif
+#endif /* DBGMCU_CR_DBG_STOP */
 
 #if defined (DBGMCU_CR_DBG_STANDBY)
 /**
@@ -526,7 +534,7 @@ void HAL_DisableDBGStandbyMode(void)
 {
   CLEAR_BIT(DBGMCU->CR, DBGMCU_CR_DBG_STANDBY);
 }
-#endif
+#endif /* DBGMCU_CR_DBG_STANDBY */
 
 #if defined (DBGMCU_CR_DBG_DBGLP)
 /**
@@ -546,7 +554,7 @@ void HAL_DisableDBGLPMode(void)
 {
   CLEAR_BIT(DBGMCU->CR, DBGMCU_CR_DBG_DBGLP);
 }
-#endif
+#endif /* DBGMCU_CR_DBG_DBGLP */
 
 /**
   * @brief Configure the internal voltage reference buffer voltage scale.
@@ -648,7 +656,7 @@ void HAL_SYSCFG_ETHInterfaceSelect(uint32_t SYSCFG_ETHInterface)
   assert_param(IS_SYSCFG_ETHERNET_CONFIG(SYSCFG_ETHInterface));
   SYSCFG->PMCSETR = (uint32_t)(SYSCFG_ETHInterface);
 }
-#endif
+#endif /* SYSCFG_DUAL_ETH_SUPPORT */
 
 /**
   * @brief  Enables the booster to reduce the total harmonic distortion of the analog
@@ -945,17 +953,22 @@ void HAL_SYSCFG_CompensationCodeConfig(uint32_t CompCell, uint32_t SYSCFG_PMOSCo
 
   if ((CompCell & SYSCFG_MAIN_COMP_CELL) == SYSCFG_MAIN_COMP_CELL)
   {
-    MODIFY_REG(SYSCFG->CMPCR, SYSCFG_CMPCR_RANSRC | SYSCFG_CMPCR_RAPSRC, (((uint32_t)(SYSCFG_PMOSCode) << 20) | ((uint32_t)(SYSCFG_NMOSCode) << 16)));
+    MODIFY_REG(SYSCFG->CMPCR, SYSCFG_CMPCR_RANSRC | SYSCFG_CMPCR_RAPSRC, (((uint32_t)(SYSCFG_PMOSCode) << 20) |
+                                                                          ((uint32_t)(SYSCFG_NMOSCode) << 16)));
   }
 
   else if ((CompCell & SYSCFG_SD1_COMP_CELL) == SYSCFG_SD1_COMP_CELL)
   {
-    MODIFY_REG(SYSCFG->CMPSD1CR, SYSCFG_CMPSD1CR_RANSRC | SYSCFG_CMPSD1CR_RAPSRC, (((uint32_t)(SYSCFG_PMOSCode) << 20) | ((uint32_t)(SYSCFG_NMOSCode) << 16)));
+    MODIFY_REG(SYSCFG->CMPSD1CR, SYSCFG_CMPSD1CR_RANSRC | SYSCFG_CMPSD1CR_RAPSRC, (((uint32_t)(SYSCFG_PMOSCode) << 20) |
+                                                                                   ((uint32_t)(SYSCFG_NMOSCode) << 16)))
+    ;
   }
 
   else if ((CompCell & SYSCFG_SD2_COMP_CELL) == SYSCFG_SD2_COMP_CELL)
   {
-    MODIFY_REG(SYSCFG->CMPSD2CR, SYSCFG_CMPSD2CR_RANSRC | SYSCFG_CMPSD2CR_RAPSRC, (((uint32_t)(SYSCFG_PMOSCode) << 20) | ((uint32_t)(SYSCFG_NMOSCode) << 16)));
+    MODIFY_REG(SYSCFG->CMPSD2CR, SYSCFG_CMPSD2CR_RANSRC | SYSCFG_CMPSD2CR_RAPSRC, (((uint32_t)(SYSCFG_PMOSCode) << 20) |
+                                                                                   ((uint32_t)(SYSCFG_NMOSCode) << 16)))
+    ;
   }
 
   else
@@ -1050,8 +1063,7 @@ HAL_StatusTypeDef HAL_SYSCFG_EnableIOCompensation(uint32_t CompCells)
       {
         return HAL_TIMEOUT;
       }
-    }
-    while (__HAL_SYSCFG_MAIN_CMP_CELL_GET_FLAG() == 0U);
+    } while (__HAL_SYSCFG_MAIN_CMP_CELL_GET_FLAG() == 0U);
   }
 
   if ((CompCells & SYSCFG_SD1_COMP_CELL) == SYSCFG_SD1_COMP_CELL)
@@ -1063,8 +1075,7 @@ HAL_StatusTypeDef HAL_SYSCFG_EnableIOCompensation(uint32_t CompCells)
       {
         return HAL_TIMEOUT;
       }
-    }
-    while (__HAL_SYSCFG_SD1_CMP_CELL_GET_FLAG() == 0U);
+    } while (__HAL_SYSCFG_SD1_CMP_CELL_GET_FLAG() == 0U);
   }
 
   if ((CompCells & SYSCFG_SD2_COMP_CELL) == SYSCFG_SD2_COMP_CELL)
@@ -1076,8 +1087,7 @@ HAL_StatusTypeDef HAL_SYSCFG_EnableIOCompensation(uint32_t CompCells)
       {
         return HAL_TIMEOUT;
       }
-    }
-    while (__HAL_SYSCFG_SD2_CMP_CELL_GET_FLAG() == 0U);
+    } while (__HAL_SYSCFG_SD2_CMP_CELL_GET_FLAG() == 0U);
   }
 
   /* Set SW_CTRL = 0 */
