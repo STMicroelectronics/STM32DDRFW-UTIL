@@ -343,7 +343,7 @@ This section describes how to compile and launch these projects in STM32CubeIDE.
 
 	- <span style="color: red;">Extra procedures <span style="color: blue;">(marked in blue below)</span> must complete nominal ones.</span>
 
-The projects contained in STM32DDRFW-UTIL package have been tested on <span style="background-color: yellow;">STM32CubeIDE 1.13.0.23-MP2-D4\_0 release</span>.
+The projects contained in STM32DDRFW-UTIL package have been tested on <span style="background-color: yellow;">STM32CubeIDE 1.16 release</span>.
 
 #### 2.2.1 Import the project in STM32CubeIDE
 
