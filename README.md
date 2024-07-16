@@ -362,7 +362,10 @@ To import a DDR Tool project in STM32CubeIDE, follow these steps:
 <span style="color: blue;">A local aarch64 toolchain has to be added in STM32CubeIDE Toolchain Manager and then enabled for the current project. Here are the recommended packages:</span>
 
 - <span style="color: blue;">Windows: **[gcc-arm-9.2-2019.12-mingw-w64-i686-aarch64-none-elf.tar.xz](https://developer.arm.com/-/media/Files/downloads/gnu-a/9.2-2019.12/binrel/gcc-arm-9.2-2019.12-mingw-w64-i686-aarch64-none-elf.tar.xz?revision=09ff6958-8d84-4694-a204-6413888aee5d&rev=a0b1b0bb25cc4bc79ca28c38fce37085&hash=DF8FBD5125F75ACF8FB826795DDC58E7DF330106)**</span>
-- <span style="color: blue;">Linux: **[gcc-arm-8.3-2019.03-x86_64-aarch64-elf.tar.xz](https://developer.arm.com/-/media/Files/downloads/gnu-a/8.3-2019.03/binrel/gcc-arm-8.3-2019.03-x86_64-aarch64-elf.tar.xz?revision=d678fd94-0ac4-485a-8054-1fbc60622a89&rev=d678fd940ac4485a80541fbc60622a89&hash=CAE423367ADC05B96378DB5EA2F9D7D1F4CC251A)**</span>
+- <span style="color: blue;">Linux:</span>
+	- <span style="color: blue;">Ubuntu 20.04: **[gcc-arm-11.2-2022.02-x86_64-aarch64-none-elf.tar.xz](https://developer.arm.com/-/media/Files/downloads/gnu/11.2-2022.02/binrel/gcc-arm-11.2-2022.02-x86_64-aarch64-none-elf.tar.xz?rev=981d8f7e91864070a466d852589598e2&hash=8D5397D4E41C99A96989ED813E8E95F0)**</span>
+	- <span style="color: blue;">Ubuntu 22.04: **[arm-gnu-toolchain-13.3.rel1-mingw-w64-i686-aarch64-none-elf.zip](https://developer.arm.com/-/media/Files/downloads/gnu/13.3.rel1/binrel/arm-gnu-toolchain-13.3.rel1-mingw-w64-i686-aarch64-none-elf.zip)**</span>
+	- <span style="color: blue;">Whatever the Ubuntu release please install libncursesw5 package (**sudo apt-get install libncursesw5**)</span>
 
 <span style="color: blue;">Download the aarch64 toolchain and unzip it on your PC. Here again, please install it not so far from root directory, because there can be some long path issues with unexpected behaviors.</span>
 
