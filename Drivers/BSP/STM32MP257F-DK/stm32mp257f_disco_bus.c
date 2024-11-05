@@ -23,7 +23,6 @@
 #include "stm32mp257f_disco_bus.h"
 #include "stm32mp257f_disco_errno.h"
 #include "res_mgr.h"
-
 /** @addtogroup BSP
   * @{
   */
@@ -43,11 +42,11 @@
 #define I2C_VALID_TIMING_NBR                 128U
 #endif /* I2C_VALID_TIMING_NBR */
 
-#define I2C_HSI_TIMING_100Khz           0x2050606F /* Analog Filter ON, Rise Time 25ns, Fall Time 10ns */
-#define I2C_HSI_TIMING_400Khz           0x2020121D /* Analog Filter ON, Rise Time 25ns, Fall Time 10ns */
-#define I2C_HSI_TIMING_1Mhz             0x00910B1C /* Analog Filter ON, Rise Time 100ns, Fall Time 100ns */
+#define I2C_HSI_TIMING_100KHZ           0x2050606F /* Analog Filter ON, Rise Time 25ns, Fall Time 10ns */
+#define I2C_HSI_TIMING_400KHZ           0x2020121D /* Analog Filter ON, Rise Time 25ns, Fall Time 10ns */
+#define I2C_HSI_TIMING_1MHZ             0x00910B1C /* Analog Filter ON, Rise Time 100ns, Fall Time 100ns */
 
-#define I2C_TIMINGR                     I2C_HSI_TIMING_100Khz
+#define I2C_TIMINGR                     I2C_HSI_TIMING_100KHZ
 
 #define I2C_SPEED_FREQ_STANDARD                0U    /* 100 kHz */
 #define I2C_SPEED_FREQ_FAST                    1U    /* 400 kHz */
@@ -815,76 +814,42 @@ static void I2C_MspInit(I2C_HandleTypeDef *hI2c)
 
   /*** Configure the GPIOs ***/
 #if (UTIL_USE_PMIC)
-#if (UTIL_PMIC_I2C_PORT == UTIL_I2C1)
-  if (ResMgr_Request(RESMGR_RESOURCE_RIF_RCC, RESMGR_RCC_RESOURCE(96)) == RESMGR_STATUS_ACCESS_OK)
-  {
-    /* Enable SCL GPIO clock */
-    BUS_I2C_SCL_GPIO_CLK_ENABLE();
-  }
-  if (ResMgr_Request(RESMGR_RESOURCE_RIF_RCC, RESMGR_RCC_RESOURCE(98)) == RESMGR_STATUS_ACCESS_OK)
-  {
-    /* Enable SDA GPIO clock */
-    BUS_I2C_SDA_GPIO_CLK_ENABLE();
-  }
-
-  /* Acquire I2C1 using Resource manager */
-  if (RESMGR_STATUS_ACCESS_OK != ResMgr_Request(RESMGR_RESOURCE_RIFSC, STM32MP25_RIFSC_I2C1_ID))
-  {
-    Error_Handler();
-  }
-  /* Acquire GPIOG13 using Resource manager */
-  if (RESMGR_STATUS_ACCESS_OK != ResMgr_Request(RESMGR_RESOURCE_RIF_GPIOG, RESMGR_GPIO_PIN(13)))
-  {
-    Error_Handler();
-  }
-  /* Acquire GPIOI1 using Resource manager */
-  if (RESMGR_STATUS_ACCESS_OK != ResMgr_Request(RESMGR_RESOURCE_RIF_GPIOI, RESMGR_GPIO_PIN(1)))
-  {
-    Error_Handler();
-  }
-#elif (UTIL_PMIC_I2C_PORT == UTIL_I2C2)
-  /*** Configure the GPIOs ***/
+#if (UTIL_PMIC_I2C_PORT == UTIL_I2C2)
   if (IS_DEVELOPER_BOOT_MODE())
   {
     /* Enable VddIO4 for Port B */
     HAL_PWREx_EnableSupply(PWR_PVM_VDDIO4);
   }
+#endif
+#endif
 
-  if (ResMgr_Request(RESMGR_RESOURCE_RIF_RCC, RESMGR_RCC_RESOURCE(91)) == RESMGR_STATUS_ACCESS_OK)
+  if (ResMgr_Request(RESMGR_RESOURCE_RIF_RCC, BUS_I2C_SCL_RCC_RES) == RESMGR_STATUS_ACCESS_OK)
   {
     /* Enable SCL GPIO clock */
     BUS_I2C_SCL_GPIO_CLK_ENABLE();
   }
 
-  if (ResMgr_Request(RESMGR_RESOURCE_RIF_RCC, RESMGR_RCC_RESOURCE(91)) == RESMGR_STATUS_ACCESS_OK)
+  if (ResMgr_Request(RESMGR_RESOURCE_RIF_RCC, BUS_I2C_SCL_RCC_RES) == RESMGR_STATUS_ACCESS_OK)
   {
     /* Enable SDA GPIO clock */
     BUS_I2C_SDA_GPIO_CLK_ENABLE();
-  }
-#elif (UTIL_PMIC_I2C_PORT == UTIL_I2C7)
-  if (ResMgr_Request(RESMGR_RESOURCE_RIF_RCC, RESMGR_RCC_RESOURCE(93)) == RESMGR_STATUS_ACCESS_OK)
-  {
-    /* Enable SCL GPIO clock */
-    BUS_I2C_SCL_GPIO_CLK_ENABLE();
   }
 
-  if (ResMgr_Request(RESMGR_RESOURCE_RIF_RCC, RESMGR_RCC_RESOURCE(93)) == RESMGR_STATUS_ACCESS_OK)
-  {
-    /* Enable SDA GPIO clock */
-    BUS_I2C_SDA_GPIO_CLK_ENABLE();
-  }
-  /* Acquire I2C7 using Resource manager */
-  if (RESMGR_STATUS_ACCESS_OK != ResMgr_Request(RESMGR_RESOURCE_RIFSC, STM32MP25_RIFSC_I2C7_ID))
+  /* Acquire I2C using Resource manager */
+  if (RESMGR_STATUS_ACCESS_OK != ResMgr_Request(RESMGR_RESOURCE_RIFSC, BUS_I2C_RIFSC_ID))
   {
     Error_Handler();
   }
-  /* Acquire GPIOD15 using Resource manager */
-  if (RESMGR_STATUS_ACCESS_OK != ResMgr_Request(RESMGR_RESOURCE_RIF_GPIOD, RESMGR_GPIO_PIN(15)))
+
+#if (UTIL_USE_PMIC)
+#if (UTIL_PMIC_I2C_PORT != UTIL_I2C2)
+  /* Acquire SCL using Resource manager */
+  if (RESMGR_STATUS_ACCESS_OK != ResMgr_Request(BUS_I2C_SCL_RIF_RES, BUS_I2C_SCL_PIN_RIF_RES))
   {
     Error_Handler();
   }
-  /* Acquire GPIOD14 using Resource manager */
-  if (RESMGR_STATUS_ACCESS_OK != ResMgr_Request(RESMGR_RESOURCE_RIF_GPIOD, RESMGR_GPIO_PIN(14)))
+  /* Acquire SDA using Resource manager */
+  if (RESMGR_STATUS_ACCESS_OK != ResMgr_Request(BUS_I2C_SDA_RIF_RES, BUS_I2C_SDA_PIN_RIF_RES))
   {
     Error_Handler();
   }
@@ -908,7 +873,13 @@ static void I2C_MspInit(I2C_HandleTypeDef *hI2c)
   /* Configure I2C Rx as alternate function */
   gpio_init_structure.Pin       = BUS_I2C_SDA_PIN;
   gpio_init_structure.Mode      = GPIO_MODE_AF_OD;
+#if (UTIL_USE_PMIC)
+#if (UTIL_PMIC_I2C_PORT == UTIL_I2C2)
+  gpio_init_structure.Pull      = GPIO_NOPULL;
+#else
   gpio_init_structure.Pull      = GPIO_PULLUP;
+#endif
+#endif
   gpio_init_structure.Speed     = GPIO_SPEED_FREQ_HIGH;
   gpio_init_structure.Alternate = BUS_I2C_SDA_AF;
   HAL_GPIO_Init(BUS_I2C_SDA_GPIO_PORT, &gpio_init_structure);
@@ -945,21 +916,10 @@ static void I2C_MspDeInit(I2C_HandleTypeDef *hI2c)
   /* Disable I2C clock */
   BUS_I2C_CLK_DISABLE();
 
-#if (UTIL_USE_PMIC)
-#if (UTIL_PMIC_I2C_PORT == UTIL_I2C1)
-  (void)ResMgr_Release(RESMGR_RESOURCE_RIF_GPIOG, RESMGR_GPIO_PIN(13));
-  (void)ResMgr_Release(RESMGR_RESOURCE_RIF_GPIOI, RESMGR_GPIO_PIN(1));
-  (void)ResMgr_Release(RESMGR_RESOURCE_RIFSC, STM32MP25_RIFSC_I2C1_ID);
-#elif (UTIL_PMIC_I2C_PORT == UTIL_I2C2)
-  (void)ResMgr_Release(RESMGR_RESOURCE_RIF_GPIOB, RESMGR_GPIO_PIN(4));
-  (void)ResMgr_Release(RESMGR_RESOURCE_RIF_GPIOB, RESMGR_GPIO_PIN(5));
-  (void)ResMgr_Release(RESMGR_RESOURCE_RIFSC, STM32MP25_RIFSC_I2C2_ID);
-#elif (UTIL_PMIC_I2C_PORT == UTIL_I2C7)
-  (void)ResMgr_Release(RESMGR_RESOURCE_RIF_GPIOD, RESMGR_GPIO_PIN(15));
-  (void)ResMgr_Release(RESMGR_RESOURCE_RIF_GPIOD, RESMGR_GPIO_PIN(14));
-  (void)ResMgr_Release(RESMGR_RESOURCE_RIFSC, STM32MP25_RIFSC_I2C7_ID);
-#endif
-#endif
+  (void)ResMgr_Release(BUS_I2C_SCL_RIF_RES, BUS_I2C_SCL_PIN_RIF_RES);
+  (void)ResMgr_Release(BUS_I2C_SDA_RIF_RES, BUS_I2C_SDA_PIN_RIF_RES);
+
+  (void)ResMgr_Release(RESMGR_RESOURCE_RIFSC, BUS_I2C_RIFSC_ID);
 }
 
 /**

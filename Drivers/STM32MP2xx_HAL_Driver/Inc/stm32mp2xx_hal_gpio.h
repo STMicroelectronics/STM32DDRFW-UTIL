@@ -171,7 +171,7 @@ typedef enum
   */
 
 /** @defgroup GPIO_attributes GPIO attributes
-  * @brief GPIO pin secure/non-secure  or/and priviledge/non-priviledge or/end CID attributes
+  * @brief GPIO pin secure/non-secure  or/and privilege/non-privilege or/end CID attributes
   * @{
   */
 #define GPIO_PIN_ATTR_PRIV_SELECT          0x01000000U

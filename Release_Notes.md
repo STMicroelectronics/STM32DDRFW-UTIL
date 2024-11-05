@@ -26,6 +26,13 @@ supported boards
 Update history
 ==============
 
+**V1.2.0 / 24-October-2024**
+
+This is the **V1.2.0 release of STM32DDRFW-UTIL** (V6.0.0 global release).
+
+-   Add support of STM32MP235F-DK (aarch64)
+-   Rebase all elements.
+
 **V1.1.0 / 24-June-2024**
 
 This is the **V1.1.0 release of STM32DDRFW-UTIL** (V5.1.0 global release).

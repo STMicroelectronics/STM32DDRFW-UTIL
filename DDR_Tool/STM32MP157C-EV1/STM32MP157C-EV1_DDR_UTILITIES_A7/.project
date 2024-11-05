@@ -45,12 +45,12 @@
 		<link>
 			<name>User/ddr_tests.c</name>
 			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/Src/ddr_tests.c</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/Common_MP1/Src/ddr_tests.c</locationURI>
 		</link>
 		<link>
 			<name>User/ddr_tool.c</name>
 			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/Src/ddr_tool.c</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/Common_MP1/Src/ddr_tool.c</locationURI>
 		</link>
 		<link>
 			<name>User/main.c</name>

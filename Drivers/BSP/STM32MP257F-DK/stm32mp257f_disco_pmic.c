@@ -27,6 +27,10 @@
   * @{
   */
 
+/** @addtogroup STM32MP257F_DK
+  * @{
+  */
+
 /** @addtogroup STM32MP257F_DK_STPMU
   * @{
   */
@@ -64,7 +68,7 @@
 /* Private variables ---------------------------------------------------------*/
 /* I2C handler declaration */
 I2C_HandleTypeDef I2cHandle;
-extern I2C_HandleTypeDef hI2c7;
+extern I2C_HandleTypeDef hI2c;
 
 static STPMIC2_Drv_t *Stpmic2Drv = NULL;
 static void         *CompObj = NULL;
@@ -74,7 +78,7 @@ static void         *CompObj = NULL;
   Table of DK board regulators
 */
 
-board_regul_struct board_regulators_table[] =
+board_regul_struct_t board_regulators_table[] =
 {
   {
     "VDDCPU",      VDDCPU,      STPMIC_BUCK1,  BUCK1_MAIN_CR1,  BUCK1_MAIN_CR2,  BUCK1_ALT_CR1,  BUCK1_ALT_CR2,
@@ -106,223 +110,224 @@ board_regul_struct board_regulators_table[] =
   },
   {
     "VDD3V3_USB",  VDD3V3_USB,  STPMIC_LDO4,   LDO4_MAIN_CR,    LDO4_MAIN_CR,    LDO4_ALT_CR,    LDO4_ALT_CR,
-    LDO4_PWRCTRL_CR,   3300, 33},
+    LDO4_PWRCTRL_CR,   3300, 33
+  },
 
-    {
-      "VDD1_DDR",    VDD1_DDR,    STPMIC_LDO3,   LDO3_MAIN_CR,    LDO3_MAIN_CR,    LDO3_ALT_CR,
-      LDO3_ALT_CR, LDO3_PWRCTRL_CR,   0000, 0000},
-    {
-      "VDD2_DDR",    VDD2_DDR,    STPMIC_BUCK6,  BUCK6_MAIN_CR1,  BUCK6_MAIN_CR2,  BUCK6_ALT_CR1,
-      BUCK6_ALT_CR2, BUCK6_PWRCTRL_CR,  1200, 1200
-    },
-    {
-      "V_HDMI",      V_HDMI,      STPMIC_LDO5,   LDO5_MAIN_CR,    LDO5_MAIN_CR,    LDO5_ALT_CR,
-      LDO5_ALT_CR, LDO5_PWRCTRL_CR,   2500, 2500
-    },
-    {
-      "VDD_SDCARD",  VDD_SDCARD,  STPMIC_LDO7,   LDO7_MAIN_CR,    LDO7_MAIN_CR,    LDO7_ALT_CR,
-      LDO7_ALT_CR, LDO7_PWRCTRL_CR,   1800, 3300
-    },
-    {
-      "VDDIO_SDCARD", VDDIO_SDCARD, STPMIC_LDO8,   LDO8_MAIN_CR,    LDO8_MAIN_CR,    LDO8_ALT_CR,
-      LDO8_ALT_CR, LDO8_PWRCTRL_CR,   3300, 3300
-    },
-    {
-      "V3V3",        V3V3,        STPMIC_BUCK7,  BUCK7_MAIN_CR1,  BUCK7_MAIN_CR2,  BUCK7_ALT_CR1,
-      BUCK7_ALT_CR2, BUCK7_PWRCTRL_CR,  3300, 3300
-    },
-    {
-      "",            V_FREE,      STPMIC_LDO6,   LDO6_MAIN_CR,    LDO6_MAIN_CR,    LDO6_ALT_CR, LDO6_ALT_CR,
-      LDO6_PWRCTRL_CR,   900,  900
-    },
-  };
-
-
-  /**
-    * @}
-   */
-
-  /** @defgroup STM32MP257F_DK_STPMU_Private_Functions Private Functionss
-    * @{
-    */
-
-  /* Private function prototypes -----------------------------------------------*/
-
-  STPMIC2_Object_t   STPMIC2Obj = { 0 };
-  static int32_t STPMIC_Probe();
-  void STPMIC_Enable_Interrupt(PMIC_IRQn IRQn);
-  void STPMIC_Disable_Interrupt(PMIC_IRQn IRQn);
-  void STPMIC_INTn_Callback(PMIC_IRQn IRQn);
-
-  /* Private functions ---------------------------------------------------------*/
-
-
-  static int32_t STPMIC_Probe()
   {
-    int32_t ret = STPMIC2_OK;
-    STPMIC2_IO_t              IOCtx;
-    uint8_t                  id;
+    "VDD1_DDR",    VDD1_DDR,    STPMIC_LDO3,   LDO3_MAIN_CR,    LDO3_MAIN_CR,    LDO3_ALT_CR,
+    LDO3_ALT_CR, LDO3_PWRCTRL_CR,   0000, 0000
+  },
+  {
+    "VDD2_DDR",    VDD2_DDR,    STPMIC_BUCK6,  BUCK6_MAIN_CR1,  BUCK6_MAIN_CR2,  BUCK6_ALT_CR1,
+    BUCK6_ALT_CR2, BUCK6_PWRCTRL_CR,  1200, 1200
+  },
+  {
+    "V_HDMI",      V_HDMI,      STPMIC_LDO5,   LDO5_MAIN_CR,    LDO5_MAIN_CR,    LDO5_ALT_CR,
+    LDO5_ALT_CR, LDO5_PWRCTRL_CR,   2500, 2500
+  },
+  {
+    "VDD_SDCARD",  VDD_SDCARD,  STPMIC_LDO7,   LDO7_MAIN_CR,    LDO7_MAIN_CR,    LDO7_ALT_CR,
+    LDO7_ALT_CR, LDO7_PWRCTRL_CR,   1800, 3300
+  },
+  {
+    "VDDIO_SDCARD", VDDIO_SDCARD, STPMIC_LDO8,   LDO8_MAIN_CR,    LDO8_MAIN_CR,    LDO8_ALT_CR,
+    LDO8_ALT_CR, LDO8_PWRCTRL_CR,   3300, 3300
+  },
+  {
+    "V3V3",        V3V3,        STPMIC_BUCK7,  BUCK7_MAIN_CR1,  BUCK7_MAIN_CR2,  BUCK7_ALT_CR1,
+    BUCK7_ALT_CR2, BUCK7_PWRCTRL_CR,  3300, 3300
+  },
+  {
+    "",            V_FREE,      STPMIC_LDO6,   LDO6_MAIN_CR,    LDO6_MAIN_CR,    LDO6_ALT_CR, LDO6_ALT_CR,
+    LDO6_PWRCTRL_CR,   900,  900
+  },
+};
 
-    /* Only perform the init if the object already exist */
-    if (!CompObj)
-    {
-      /* Configure the I2C driver */
-      IOCtx.Address     = STPMIC_I2C_ADDRESS;
-      IOCtx.Init        = BSP_I2C_Init;
-      IOCtx.DeInit      = BSP_I2C_DeInit;
-      IOCtx.ReadReg     = BSP_I2C_ReadReg;
-      IOCtx.WriteReg    = BSP_I2C_WriteReg;
-      IOCtx.GetTick     = BSP_GetTick;
 
-      ret = STPMIC2_RegisterBusIO(&STPMIC2Obj, &IOCtx);
-      if (ret != STPMIC2_OK)
-      {
-        return BSP_ERROR_COMPONENT_FAILURE;
-      }
+/**
+  * @}
+ */
 
-      ret = STPMIC2_ReadID(&STPMIC2Obj, &id);
-      if (ret != STPMIC2_OK)
-      {
-        return BSP_ERROR_COMPONENT_FAILURE;
-      }
+/** @defgroup STM32MP257F_DK_STPMU_Private_Functions Private Functionss
+  * @{
+  */
 
-      if ((id & 0xF0) != STPMIC2_ID)
-      {
-        return BSP_ERROR_UNKNOWN_COMPONENT;
-      }
+/* Private function prototypes -----------------------------------------------*/
 
-      Stpmic2Drv = (STPMIC2_Drv_t *) &STPMIC2_Driver;
-      CompObj = &STPMIC2Obj;
-    }
+STPMIC2_Object_t   STPMIC2Obj = { 0 };
+static int32_t STPMIC_Probe();
+void STPMIC_Enable_Interrupt(PMIC_IRQn IRQn);
+void STPMIC_Disable_Interrupt(PMIC_IRQn IRQn);
+void STPMIC_INTn_Callback(PMIC_IRQn IRQn);
 
-    ret = Stpmic2Drv->Init(CompObj);
+/* Private functions ---------------------------------------------------------*/
+
+
+static int32_t STPMIC_Probe()
+{
+  int32_t ret = STPMIC2_OK;
+  STPMIC2_IO_t              IOCtx;
+  uint8_t                  id;
+
+  /* Only perform the init if the object already exist */
+  if (!CompObj)
+  {
+    /* Configure the I2C driver */
+    IOCtx.Address     = STPMIC_I2C_ADDRESS;
+    IOCtx.Init        = BSP_I2C_Init;
+    IOCtx.DeInit      = BSP_I2C_DeInit;
+    IOCtx.ReadReg     = BSP_I2C_ReadReg;
+    IOCtx.WriteReg    = BSP_I2C_WriteReg;
+    IOCtx.GetTick     = BSP_GetTick;
+
+    ret = STPMIC2_RegisterBusIO(&STPMIC2Obj, &IOCtx);
     if (ret != STPMIC2_OK)
     {
       return BSP_ERROR_COMPONENT_FAILURE;
     }
 
-    return BSP_ERROR_NONE;
+    ret = STPMIC2_ReadID(&STPMIC2Obj, &id);
+    if (ret != STPMIC2_OK)
+    {
+      return BSP_ERROR_COMPONENT_FAILURE;
+    }
+
+    if ((id & 0xF0) != STPMIC2_ID)
+    {
+      return BSP_ERROR_UNKNOWN_COMPONENT;
+    }
+
+    Stpmic2Drv = (STPMIC2_Drv_t *) &STPMIC2_Driver;
+    CompObj = &STPMIC2Obj;
   }
 
-  uint32_t BSP_PMIC_Init(void)
+  ret = Stpmic2Drv->Init(CompObj);
+  if (ret != STPMIC2_OK)
   {
-    int32_t status = BSP_ERROR_NONE;
+    return BSP_ERROR_COMPONENT_FAILURE;
+  }
 
-    status = STPMIC_Probe();
-    if (status != BSP_ERROR_NONE)
-    {
-      return status;
-    }
+  return BSP_ERROR_NONE;
+}
+
+uint32_t BSP_PMIC_Init(void)
+{
+  int32_t status = BSP_ERROR_NONE;
+
+  status = STPMIC_Probe();
+  if (status != BSP_ERROR_NONE)
+  {
+    return status;
+  }
 
 #if defined(USE_WAKEUP_PIN)
 
 #else
-    GPIO_InitTypeDef  GPIO_InitStruct;
+  GPIO_InitTypeDef  GPIO_InitStruct;
 
-    /* INTn - Interrupt Line - Active Low (Falling Edge) */
-    if (ResMgr_Request(RESMGR_RESOURCE_RIF_RCC, RESMGR_RCC_RESOURCE(90)) == RESMGR_STATUS_ACCESS_OK)
-    {
-      PMIC_INTn_CLK_ENABLE();
-    }
-    /* Acquire GPIOA0 using Resource manager */
-    if (RESMGR_STATUS_ACCESS_OK != ResMgr_Request(RESMGR_RESOURCE_RIF_GPIOA, RESMGR_GPIO_PIN(0)))
-    {
-      return BSP_ERROR_PERIPH_FAILURE;
-    }
+  /* INTn - Interrupt Line - Active Low (Falling Edge) */
+  if (ResMgr_Request(RESMGR_RESOURCE_RIF_RCC, PMIC_INTN_RCC_RES) == RESMGR_STATUS_ACCESS_OK)
+  {
+    PMIC_INTN_CLK_ENABLE();
+  }
+  /* Acquire GPIOA0 using Resource manager */
+  if (RESMGR_STATUS_ACCESS_OK != ResMgr_Request(PMIC_INTN_RIF_RES, PMIC_INTN_PIN_RIF_RES))
+  {
+    return BSP_ERROR_PERIPH_FAILURE;
+  }
 
-    GPIO_InitStruct.Pin       = PMIC_INTn_PIN;
-    GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
-    GPIO_InitStruct.Pull      = GPIO_PULLUP;
-    GPIO_InitStruct.Speed     = GPIO_SPEED_FREQ_HIGH;
-    GPIO_InitStruct.Alternate = 0 ;
-    HAL_GPIO_Init(PMIC_INTn_PORT, &GPIO_InitStruct);
+  GPIO_InitStruct.Pin       = PMIC_INTN_PIN;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
+  GPIO_InitStruct.Pull      = GPIO_PULLUP;
+  GPIO_InitStruct.Speed     = GPIO_SPEED_FREQ_HIGH;
+  GPIO_InitStruct.Alternate = 0 ;
+  HAL_GPIO_Init(PMIC_INTN_PORT, &GPIO_InitStruct);
 
-    /* Enable and set INTn EXTI Interrupt  */
+  /* Enable and set INTn EXTI Interrupt  */
 #if defined (CORE_CM33) || defined (CORE_CM0PLUS)
-    HAL_NVIC_SetPriority(PMIC_INTn_EXTI_IRQ, 0, 0);
-    HAL_NVIC_EnableIRQ(PMIC_INTn_EXTI_IRQ);
+  HAL_NVIC_SetPriority(PMIC_INTN_EXTI_IRQ, 0, 0);
+  HAL_NVIC_EnableIRQ(PMIC_INTN_EXTI_IRQ);
 #endif /* CORE_CM33 || CORE_CM0PLUS */
 #endif /* USE_WAKEUP_PIN */
 
-    STPMIC_Enable_Interrupt(STPMIC2_IT_PONKEY_F);
-    STPMIC_Enable_Interrupt(STPMIC2_IT_PONKEY_R);
+  STPMIC_Enable_Interrupt(STPMIC2_IT_PONKEY_F);
+  STPMIC_Enable_Interrupt(STPMIC2_IT_PONKEY_R);
 
-    return BSP_ERROR_NONE;
-  }
+  return BSP_ERROR_NONE;
+}
 
-  uint32_t BSP_PMIC_DeInit(void)
+uint32_t BSP_PMIC_DeInit(void)
+{
+  uint32_t  status = BSP_ERROR_NONE;
+
+  status = Stpmic2Drv->DeInit(CompObj);
+  if (status != STPMIC2_OK)
   {
-    uint32_t  status = BSP_ERROR_NONE;
-
-    status = Stpmic2Drv->DeInit(CompObj);
-    if (status != STPMIC2_OK)
-    {
-      return BSP_ERROR_COMPONENT_FAILURE;
-    }
-    if (RESMGR_STATUS_ACCESS_OK != ResMgr_Release(RESMGR_RESOURCE_RIF_GPIOA, RESMGR_GPIO_PIN(0)))
-    {
-      return BSP_ERROR_PERIPH_FAILURE;
-    }
-    return status;
+    return BSP_ERROR_COMPONENT_FAILURE;
   }
-
-  uint32_t BSP_PMIC_ReadReg(uint8_t reg, uint8_t *pdata)
+  if (RESMGR_STATUS_ACCESS_OK != ResMgr_Release(PMIC_INTN_RIF_RES, PMIC_INTN_PIN_RIF_RES))
   {
-    int32_t  status = BSP_ERROR_NONE;
-
-    status = Stpmic2Drv->ReadReg(CompObj, reg, pdata);
-    if (status != STPMIC2_OK)
-    {
-      return BSP_ERROR_COMPONENT_FAILURE;
-    }
-    return status;
+    return BSP_ERROR_PERIPH_FAILURE;
   }
+  return status;
+}
 
-  uint32_t BSP_PMIC_WriteReg(uint8_t reg, uint8_t data)
+uint32_t BSP_PMIC_ReadReg(uint8_t reg, uint8_t *pdata)
+{
+  int32_t  status = BSP_ERROR_NONE;
+
+  status = Stpmic2Drv->ReadReg(CompObj, reg, pdata);
+  if (status != STPMIC2_OK)
   {
-    int32_t  status = BSP_ERROR_NONE;
-
-    status = Stpmic2Drv->WriteReg(CompObj, reg, data);
-    if (status != STPMIC2_OK)
-    {
-      return BSP_ERROR_COMPONENT_FAILURE;
-    }
-    return status;
+    return BSP_ERROR_COMPONENT_FAILURE;
   }
+  return status;
+}
 
-  uint32_t BSP_PMIC_UpdateReg(uint8_t reg, uint8_t mask)
+uint32_t BSP_PMIC_WriteReg(uint8_t reg, uint8_t data)
+{
+  int32_t  status = BSP_ERROR_NONE;
+
+  status = Stpmic2Drv->WriteReg(CompObj, reg, data);
+  if (status != STPMIC2_OK)
   {
-    int32_t  status = BSP_ERROR_NONE;
-
-    status = Stpmic2Drv->UpdateReg(CompObj, reg, mask);
-    if (status != STPMIC2_OK)
-    {
-      return BSP_ERROR_COMPONENT_FAILURE;
-    }
-    return status;
+    return BSP_ERROR_COMPONENT_FAILURE;
   }
+  return status;
+}
 
-#if defined (STPMIC2_DEBUG)
-  /*
-    *
-    * PMIC registers dump
-    *
-    */
-  /* following are configurations */
-  uint32_t BSP_PMIC_DumpRegs(void)
+uint32_t BSP_PMIC_UpdateReg(uint8_t reg, uint8_t mask)
+{
+  int32_t  status = BSP_ERROR_NONE;
+
+  status = Stpmic2Drv->UpdateReg(CompObj, reg, mask);
+  if (status != STPMIC2_OK)
   {
-    uint32_t  status = BSP_ERROR_NONE;
+    return BSP_ERROR_COMPONENT_FAILURE;
+  }
+  return status;
+}
+
+#if defined (STPMIC2_DEBUG)/*
+  *
+  * PMIC registers dump
+  *
+  */
+/* following are configurations */
+uint32_t BSP_PMIC_DumpRegs(void)
+{
+  uint32_t  status = BSP_ERROR_NONE;
 
 #if defined(STPMIC2_DEBUG)
-    status = Stpmic2Drv->DumpRegs(CompObj);
-    if (status != STPMIC2_OK)
-    {
-      return BSP_ERROR_COMPONENT_FAILURE;
-    }
+  status = Stpmic2Drv->DumpRegs(CompObj);
+  if (status != STPMIC2_OK)
+  {
+    return BSP_ERROR_COMPONENT_FAILURE;
+  }
 #endif /* STPMIC2_DEBUG */
 
-    return status;
-  }
+  return status;
+}
 #endif /* defined (STPMIC2_DEBUG) */
 
 #ifdef __AARCH64__
@@ -339,428 +344,430 @@ static void bsp_pmic_delay_us(uint64_t delay_us)
 }
 #endif /* __AARCH64__ */
 
-  /*
-    *
-    * @brief BSP_PMIC_DDR_Power_Init initialize DDR power
-    *
-    * DDR power on sequence is:
-    * enable VPP_DDR
-    * wait 2ms
-    * enable VREF_DDR, VTT_DDR, VPP_DDR
-    *
-    * @param  None
-    * @retval status
-    *
-    */
-  /* following are configurations */
-  uint32_t BSP_PMIC_DDR_Power_Init()
+/*
+  *
+  * @brief BSP_PMIC_DDR_Power_Init initialize DDR power
+  *
+  * DDR power on sequence is:
+  * enable VPP_DDR
+  * wait 2ms
+  * enable VREF_DDR, VTT_DDR, VPP_DDR
+  *
+  * @param  None
+  * @retval status
+  *
+  */
+/* following are configurations */
+uint32_t BSP_PMIC_DDR_Power_Init()
+{
+  uint32_t  status = BSP_ERROR_NONE;
+  /* VDD2_DDR ==> BUCK6 ==> 1100mV */
+  if (BSP_PMIC_WriteReg(board_regulators_table[VDD2_DDR].control_reg1, 0x3C) != BSP_ERROR_NONE)
   {
-    uint32_t  status = BSP_ERROR_NONE;
-    /* VDD2_DDR ==> BUCK6 ==> 1100mV */
-    if (BSP_PMIC_WriteReg(board_regulators_table[VDD2_DDR].control_reg1, 0x3C) != BSP_ERROR_NONE)
-    {
-      return BSP_ERROR_PMIC;
-    }
+    return BSP_ERROR_PMIC;
+  }
 
-    /* VDD1_DDR ==> LDO3 ==> 1800mV */
-    if (BSP_PMIC_UpdateReg(board_regulators_table[VDD1_DDR].control_reg1, (0x9 << 1)) != BSP_ERROR_NONE)
-    {
-      return BSP_ERROR_PMIC;
-    }
+  /* VDD1_DDR ==> LDO3 ==> 1800mV */
+  if (BSP_PMIC_UpdateReg(board_regulators_table[VDD1_DDR].control_reg1, (0x9 << 1)) != BSP_ERROR_NONE)
+  {
+    return BSP_ERROR_PMIC;
+  }
 
 #ifdef __AARCH64__
     bsp_pmic_delay_us(2UL);
 #else /* __AARCH64__ */
-    HAL_Delay(2);
+  HAL_Delay(2);
 #endif /* __AARCH64__ */
 
-
-    /* enable VTT_DDR/VDD1_DDR */
-    if (BSP_PMIC_UpdateReg(board_regulators_table[VDD1_DDR].control_reg1, 0x1) != BSP_ERROR_NONE)
-    {
-      return BSP_ERROR_PMIC;
-    }
+  /* enable VTT_DDR/VDD1_DDR */
+  if (BSP_PMIC_UpdateReg(board_regulators_table[VDD1_DDR].control_reg1, 0x1) != BSP_ERROR_NONE)
+  {
+    return BSP_ERROR_PMIC;
+  }
 
 #ifdef __AARCH64__
     bsp_pmic_delay_us(2UL);
 #else /* __AARCH64__ */
-    HAL_Delay(2);
+  HAL_Delay(2);
 #endif /* __AARCH64__ */
 
-    /* enable vdd2_ddr (1100mV) ==> BUCK6 */
-    if (BSP_PMIC_UpdateReg(board_regulators_table[VDD2_DDR].control_reg2, 0x1 != BSP_ERROR_NONE))
-    {
-      return BSP_ERROR_PMIC;
-    }
-
-    return status;
+  /* enable vdd2_ddr (1100mV) ==> BUCK6 */
+  if (BSP_PMIC_UpdateReg(board_regulators_table[VDD2_DDR].control_reg2, 0x1 != BSP_ERROR_NONE))
+  {
+    return BSP_ERROR_PMIC;
   }
 
-  uint32_t BSP_PMIC_REGU_Set_On(board_regul_t regu)
+  return status;
+}
+
+uint32_t BSP_PMIC_REGU_Set_On(board_regul_t regu)
+{
+  uint32_t  status = BSP_ERROR_NONE;
+  uint8_t data;
+
+  switch (regu)
   {
-    uint32_t  status = BSP_ERROR_NONE;
-    uint8_t data;
-
-    switch (regu)
-    {
-      case VDDA1V8_AON:
-      case VDD_EMMC:
-      case VDD1_DDR:
-      case VDD3V3_USB:
-      case VDD_SDCARD:
-      case VDDIO_SDCARD:
-        /* set enable bit */
-        if (BSP_PMIC_UpdateReg(board_regulators_table[regu].control_reg1, MAIN_CR_EN) != BSP_ERROR_NONE)
-        {
-          return BSP_ERROR_PMIC;
-        }
-        break;
-      case VDDCPU:
-      case VDDCORE:
-      case VDDGPU:
-      case VDDIO_PMIC:
-      case V1V8:
-      case VDD2_DDR:
-      case V3V3:
-        /* Forbid VDDGPU to be set on if VDDCORE is not enabled */
-        if (regu == VDDGPU)
-        {
-          /* read control reg */
-          if (BSP_PMIC_ReadReg(board_regulators_table[VDDCORE].control_reg2, &data) != BSP_ERROR_NONE)
-          {
-            return BSP_ERROR_PMIC;
-          }
-
-          if ((data & MAIN_CR_EN) != MAIN_CR_EN)
-          {
-            return BSP_ERROR_PMIC;
-          }
-        }
-        /* set enable bit */
-        if (BSP_PMIC_UpdateReg(board_regulators_table[regu].control_reg2, MAIN_CR_EN) != BSP_ERROR_NONE)
-        {
-          return BSP_ERROR_PMIC;
-        }
-        break;
-      default:
-        status = BSP_ERROR_WRONG_PARAM ;
-        break;
-    }
-
-    return status;
-  }
-
-  uint32_t BSP_PMIC_REGU_Set_Off(board_regul_t regu)
-  {
-    uint32_t  status = BSP_ERROR_NONE;
-    uint8_t data;
-
-    switch (regu)
-    {
-      case VDDA1V8_AON:
-      case VDD_EMMC:
-      case VDD1_DDR:
-      case VDD3V3_USB:
-      case VDD_SDCARD:
-      case VDDIO_SDCARD:
-        /* disable ==> clear enable bit */
-        if (BSP_PMIC_ReadReg(board_regulators_table[regu].control_reg1,
-                             &data) != BSP_ERROR_NONE) /* read control reg to save data */
-        {
-          return BSP_ERROR_PMIC;
-        }
-
-        data &= ~MAIN_CR_EN; /* clear enable bit */
-        if (BSP_PMIC_WriteReg(board_regulators_table[regu].control_reg1,
-                              data) != BSP_ERROR_NONE) /* write control reg to clear enable bit */
-        {
-          return BSP_ERROR_PMIC;
-        }
-        break;
-      case VDDCPU:
-      case VDDCORE:
-      case VDDGPU:
-      case VDDIO_PMIC:
-      case V1V8:
-      case VDD2_DDR:
-      case V3V3:
-        /* disable ==> clear enable bit */
-        if (BSP_PMIC_ReadReg(board_regulators_table[regu].control_reg2,
-                             &data) != BSP_ERROR_NONE) /* read control reg to save data */
-        {
-          return BSP_ERROR_PMIC;
-        }
-
-        data &= ~MAIN_CR_EN; /* clear enable bit */
-        if (BSP_PMIC_WriteReg(board_regulators_table[regu].control_reg2,
-                              data) != BSP_ERROR_NONE) /* write control reg to clear enable bit */
-        {
-          return BSP_ERROR_PMIC;
-        }
-        break;
-      default:
-        status = BSP_ERROR_WRONG_PARAM ;
-        break;
-    }
-
-    return status;
-  }
-
-  uint32_t BSP_PMIC_DDR_Power_Off()
-  {
-    uint32_t  status = BSP_ERROR_NONE;
-    uint8_t data;
-
-    /* disable vdd_ddr */
-    if (BSP_PMIC_ReadReg(board_regulators_table[VDD2_DDR].control_reg2,
-                         &data) != BSP_ERROR_NONE) /* read control reg to save data */
-    {
-      return BSP_ERROR_PMIC;
-    }
-
-    data &= ~MAIN_CR_EN; /* clear enable bit */
-    if (BSP_PMIC_WriteReg(board_regulators_table[VDD2_DDR].control_reg2,
-                          data) != BSP_ERROR_NONE) /* write control reg to clear enable bit */
-    {
-      return BSP_ERROR_PMIC;
-    }
-
-    /* disable vtt_ddr */
-    if (BSP_PMIC_ReadReg(board_regulators_table[VDD1_DDR].control_reg1,
-                         &data) != BSP_ERROR_NONE) /* read control reg to save data */
-    {
-      return BSP_ERROR_PMIC;
-    }
-
-    data &= ~MAIN_CR_EN; /* clear enable bit */
-    if (BSP_PMIC_WriteReg(board_regulators_table[VDD1_DDR].control_reg1,
-                          data) != BSP_ERROR_NONE) /* write control reg to clear enable bit */
-    {
-      return BSP_ERROR_PMIC;
-    }
-
-    return status;
-  }
-
-  /**
-    * @brief  BSP_PMIC_Set_Power_Mode Set PMIC run/low power mode
-    * @param  mode  mode to set
-    * @retval status
-    */
-  /* Disco board: TBD */
-  uint32_t BSP_PMIC_Power_Mode_Init()
-  {
-    uint32_t  status = BSP_ERROR_NONE;
-    return status;
-  }
-  uint32_t BSP_PMIC_Set_Power_Mode(__attribute__((unused))uint32_t mode)
-  {
-    uint32_t  status = BSP_ERROR_NONE;
-    return status;
-  }
-
-  void STPMIC_Enable_Interrupt(PMIC_IRQn IRQn)
-  {
-    uint8_t irq_reg;
-    uint8_t irq_reg_value;
-    uint8_t mask ;
-
-    if (IRQn >= IRQ_NR)
-    {
-      return ;
-    }
-
-    /* IRQ register is IRQ Number divided by 8 */
-    irq_reg = IRQn >> 3 ;
-
-    /* value to be set in IRQ register corresponds to BIT(N) where N is the Interrupt id modulo 8 */
-    irq_reg_value = 1 << (IRQn % 8);
-
-    /* Get active mask from register */
-    BSP_PMIC_ReadReg(INT_MASK_R1 + irq_reg, &mask);
-    mask &=  ~irq_reg_value ;
-    /* Clear relevant mask to enable interrupt */
-    BSP_PMIC_WriteReg(INT_MASK_R1 + irq_reg, mask);
-
-  }
-
-  void STPMIC_Disable_Interrupt(PMIC_IRQn IRQn)
-  {
-    uint8_t irq_reg;
-    uint8_t irq_reg_value;
-    uint8_t mask ;
-
-    if (IRQn >= IRQ_NR)
-    {
-      return ;
-    }
-
-    /* IRQ register is IRQ Number divided by 8 */
-    irq_reg = IRQn >> 3 ;
-
-    /* value to be set in IRQ register corresponds to BIT(N) where N is the Interrupt id modulo 8 */
-    irq_reg_value = 1 << (IRQn % 8);
-
-    /* Get active mask from register */
-    BSP_PMIC_ReadReg(INT_MASK_R1 + irq_reg, &mask);
-    mask |=  irq_reg_value ;
-    /* Set relevant mask to disable interrupt */
-    BSP_PMIC_WriteReg(INT_MASK_R1 + irq_reg, mask);
-
-  }
-
-
-  void STPMIC_IrqHandler(void)
-  {
-    uint8_t irq_reg;
-    uint8_t mask;
-    uint8_t pending_events;
-    uint8_t i;
-
-    for (irq_reg = 0 ; irq_reg < STM32_PMIC_NUM_IRQ_REGS ; irq_reg++)
-    {
-      /* Get pending events & active mask */
-      BSP_PMIC_ReadReg(INT_MASK_R1 + irq_reg, &mask);
-      BSP_PMIC_ReadReg(INT_PENDING_R1 + irq_reg, &pending_events);
-      pending_events &=  ~mask ;
-
-      /* Go through all bits for each register */
-      for (i = 0 ; i < 8 ; i++)
+    case VDDA1V8_AON:
+    case VDD_EMMC:
+    case VDD1_DDR:
+    case VDD3V3_USB:
+    case VDD_SDCARD:
+    case VDDIO_SDCARD:
+      /* set enable bit */
+      if (BSP_PMIC_UpdateReg(board_regulators_table[regu].control_reg1, MAIN_CR_EN) != BSP_ERROR_NONE)
       {
-        if (pending_events & (1 << i))
+        return BSP_ERROR_PMIC;
+      }
+      break;
+    case VDDCPU:
+    case VDDCORE:
+    case VDDGPU:
+    case VDDIO_PMIC:
+    case V1V8:
+    case VDD2_DDR:
+    case V3V3:
+      /* Forbid VDDGPU to be set on if VDDCORE is not enabled */
+      if (regu == VDDGPU)
+      {
+        /* read control reg */
+        if (BSP_PMIC_ReadReg(board_regulators_table[VDDCORE].control_reg2, &data) != BSP_ERROR_NONE)
         {
-          /* Callback with parameter computes as "PMIC Interrupt" enum */
-          STPMIC_INTn_Callback((PMIC_IRQn)(irq_reg * 8 + (7 - i)));
+          return BSP_ERROR_PMIC;
+        }
+
+        if ((data & MAIN_CR_EN) != MAIN_CR_EN)
+        {
+          return BSP_ERROR_PMIC;
         }
       }
-      /* Clear events in appropriate register for the event with mask set */
-      BSP_PMIC_WriteReg(INT_CLEAR_R1 + irq_reg, pending_events);
-    }
-
+      /* set enable bit */
+      if (BSP_PMIC_UpdateReg(board_regulators_table[regu].control_reg2, MAIN_CR_EN) != BSP_ERROR_NONE)
+      {
+        return BSP_ERROR_PMIC;
+      }
+      break;
+    default:
+      status = BSP_ERROR_WRONG_PARAM ;
+      break;
   }
 
-  void STPMIC_Sw_Reset(void)
+  return status;
+}
+
+uint32_t BSP_PMIC_REGU_Set_Off(board_regul_t regu)
+{
+  uint32_t  status = BSP_ERROR_NONE;
+  uint8_t data;
+
+  switch (regu)
   {
-    /* Write 1 in bit 0 of MAIN_CONTROL Register */
-    BSP_PMIC_UpdateReg(MAIN_CR, SOFTWARE_SWITCH_OFF_ENABLED);
+    case VDDA1V8_AON:
+    case VDD_EMMC:
+    case VDD1_DDR:
+    case VDD3V3_USB:
+    case VDD_SDCARD:
+    case VDDIO_SDCARD:
+      /* disable ==> clear enable bit */
+      if (BSP_PMIC_ReadReg(board_regulators_table[regu].control_reg1,
+                           &data) != BSP_ERROR_NONE) /* read control reg to save data */
+      {
+        return BSP_ERROR_PMIC;
+      }
+
+      data &= ~MAIN_CR_EN; /* clear enable bit */
+      if (BSP_PMIC_WriteReg(board_regulators_table[regu].control_reg1,
+                            data) != BSP_ERROR_NONE) /* write control reg to clear enable bit */
+      {
+        return BSP_ERROR_PMIC;
+      }
+      break;
+    case VDDCPU:
+    case VDDCORE:
+    case VDDGPU:
+    case VDDIO_PMIC:
+    case V1V8:
+    case VDD2_DDR:
+    case V3V3:
+      /* disable ==> clear enable bit */
+      if (BSP_PMIC_ReadReg(board_regulators_table[regu].control_reg2,
+                           &data) != BSP_ERROR_NONE) /* read control reg to save data */
+      {
+        return BSP_ERROR_PMIC;
+      }
+
+      data &= ~MAIN_CR_EN; /* clear enable bit */
+      if (BSP_PMIC_WriteReg(board_regulators_table[regu].control_reg2,
+                            data) != BSP_ERROR_NONE) /* write control reg to clear enable bit */
+      {
+        return BSP_ERROR_PMIC;
+      }
+      break;
+    default:
+      status = BSP_ERROR_WRONG_PARAM ;
+      break;
+  }
+
+  return status;
+}
+
+uint32_t BSP_PMIC_DDR_Power_Off()
+{
+  uint32_t  status = BSP_ERROR_NONE;
+  uint8_t data;
+
+  /* disable vdd_ddr */
+  if (BSP_PMIC_ReadReg(board_regulators_table[VDD2_DDR].control_reg2,
+                       &data) != BSP_ERROR_NONE) /* read control reg to save data */
+  {
+    return BSP_ERROR_PMIC;
+  }
+
+  data &= ~MAIN_CR_EN; /* clear enable bit */
+  if (BSP_PMIC_WriteReg(board_regulators_table[VDD2_DDR].control_reg2,
+                        data) != BSP_ERROR_NONE) /* write control reg to clear enable bit */
+  {
+    return BSP_ERROR_PMIC;
+  }
+
+  /* disable vtt_ddr */
+  if (BSP_PMIC_ReadReg(board_regulators_table[VDD1_DDR].control_reg1,
+                       &data) != BSP_ERROR_NONE) /* read control reg to save data */
+  {
+    return BSP_ERROR_PMIC;
+  }
+
+  data &= ~MAIN_CR_EN; /* clear enable bit */
+  if (BSP_PMIC_WriteReg(board_regulators_table[VDD1_DDR].control_reg1,
+                        data) != BSP_ERROR_NONE) /* write control reg to clear enable bit */
+  {
+    return BSP_ERROR_PMIC;
+  }
+
+  return status;
+}
+
+/**
+  * @brief  BSP_PMIC_Set_Power_Mode Set PMIC run/low power mode
+  * @param  mode  mode to set
+  * @retval status
+  */
+uint32_t BSP_PMIC_Power_Mode_Init()
+{
+  uint32_t  status = BSP_ERROR_NONE;
+  return status;
+}
+uint32_t BSP_PMIC_Set_Power_Mode(__attribute__((unused))uint32_t mode)
+{
+  uint32_t  status = BSP_ERROR_NONE;
+  return status;
+}
+
+void STPMIC_Enable_Interrupt(PMIC_IRQn IRQn)
+{
+  uint8_t irq_reg;
+  uint8_t irq_reg_value;
+  uint8_t mask ;
+
+  if (IRQn >= IRQ_NR)
+  {
     return ;
   }
 
+  /* IRQ register is IRQ Number divided by 8 */
+  irq_reg = IRQn >> 3 ;
 
-  __weak void BSP_PMIC_INTn_Callback(PMIC_IRQn IRQn)
+  /* value to be set in IRQ register corresponds to BIT(N) where N is the Interrupt id modulo 8 */
+  irq_reg_value = 1 << (IRQn % 8);
+
+  /* Get active mask from register */
+  BSP_PMIC_ReadReg(INT_MASK_R1 + irq_reg, &mask);
+  mask &=  ~irq_reg_value ;
+  /* Clear relevant mask to enable interrupt */
+  BSP_PMIC_WriteReg(INT_MASK_R1 + irq_reg, mask);
+
+}
+
+void STPMIC_Disable_Interrupt(PMIC_IRQn IRQn)
+{
+  uint8_t irq_reg;
+  uint8_t irq_reg_value;
+  uint8_t mask ;
+
+  if (IRQn >= IRQ_NR)
   {
-    switch (IRQn)
+    return ;
+  }
+
+  /* IRQ register is IRQ Number divided by 8 */
+  irq_reg = IRQn >> 3 ;
+
+  /* value to be set in IRQ register corresponds to BIT(N) where N is the Interrupt id modulo 8 */
+  irq_reg_value = 1 << (IRQn % 8);
+
+  /* Get active mask from register */
+  BSP_PMIC_ReadReg(INT_MASK_R1 + irq_reg, &mask);
+  mask |=  irq_reg_value ;
+  /* Set relevant mask to disable interrupt */
+  BSP_PMIC_WriteReg(INT_MASK_R1 + irq_reg, mask);
+
+}
+
+
+void STPMIC_IrqHandler(void)
+{
+  uint8_t irq_reg;
+  uint8_t mask;
+  uint8_t pending_events;
+  uint8_t i;
+
+  for (irq_reg = 0 ; irq_reg < STM32_PMIC_NUM_IRQ_REGS ; irq_reg++)
+  {
+    /* Get pending events & active mask */
+    BSP_PMIC_ReadReg(INT_MASK_R1 + irq_reg, &mask);
+    BSP_PMIC_ReadReg(INT_PENDING_R1 + irq_reg, &pending_events);
+    pending_events &=  ~mask ;
+
+    /* Go through all bits for each register */
+    for (i = 0 ; i < 8 ; i++)
     {
-      case STPMIC2_IT_PONKEY_F:
-        printf("STPMIC2_IT_PONKEY_F");
-        break;
-      case STPMIC2_IT_PONKEY_R:
-        printf("STPMIC2_IT_PONKEY_R");
-        break;
-      case STPMIC2_IT_WKP_FA:
-        printf("STPMIC2_IT_WKP_FA");
-        break;
-      case STPMIC2_IT_WKP_RI:
-        printf("STPMIC2_IT_WKP_RI");
-        break;
-      case STPMIC2_IT_VINLOW_FA:
-        printf("STPMIC2_IT_VINLOW_FA");
-        break;
-      case STPMIC2_IT_VINLOW_RI:
-        printf("STPMIC2_IT_VINLOW_RI");
-        break;
-      case STPMIC2_IT_VBUS_FA:
-        printf("STPMIC2_IT_VBUS_FA");
-        break;
-      case STPMIC2_IT_VBUS_RI:
-        printf("STPMIC2_IT_VBUS_RI");
-        break;
-      case STPMIC2_IT_THW_FA:
-        printf("STPMIC2_IT_THW_FA");
-        break;
-      case STPMIC2_IT_THW_RI:
-        printf("STPMIC2_IT_THW_RI");
-        break;
-      case STPMIC2_IT_BUCK1_OCP:
-        printf("STPMIC2_IT_BUCK1_OCP");
-        break;
-      case STPMIC2_IT_BUCK2_OCP:
-        printf("STPMIC2_IT_BUCK2_OCP");
-        break;
-      case STPMIC2_IT_BUCK3_OCP:
-        printf("STPMIC2_IT_BUCK3_OCP");
-        break;
-      case STPMIC2_IT_BUCK4_OCP:
-        printf("STPMIC2_IT_BUCK4_OCP");
-        break;
-      case STPMIC2_IT_BUCK5_OCP:
-        printf("STPMIC2_IT_BUCK5_OCP");
-        break;
-      case STPMIC2_IT_BUCK6_OCP:
-        printf("STPMIC2_IT_BUCK6_OCP");
-        break;
-      case STPMIC2_IT_BUCK7_OCP:
-        printf("STPMIC2_IT_BUCK7_OCP");
-        break;
-      case STPMIC2_IT_REFDDR_OCP:
-        printf("STPMIC2_IT_REFDDR_OCP");
-        break;
-      case STPMIC2_IT_LDO1_OCP:
-        printf("STPMIC2_IT_LDO1_OCP");
-        break;
-      case STPMIC2_IT_LDO2_OCP:
-        printf("STPMIC2_IT_LDO2_OCP");
-        break;
-      case STPMIC2_IT_LDO3_OCP:
-        printf("STPMIC2_IT_LDO3_OCP");
-        break;
-      case STPMIC2_IT_LDO4_OCP:
-        printf("STPMIC2_IT_LDO4_OCP");
-        break;
-      case STPMIC2_IT_LDO5_OCP:
-        printf("STPMIC2_IT_LDO5_OCP");
-        break;
-      case STPMIC2_IT_LDO6_OCP:
-        printf("STPMIC2_IT_LDO6_OCP");
-        break;
-      case STPMIC2_IT_LDO7_OCP:
-        printf("STPMIC2_IT_LDO7_OCP");
-        break;
-      case STPMIC2_IT_LDO8_OCP:
-        printf("STPMIC2_IT_LDO8_OCP");
-        break;
-      default:
-        printf("Unknown IRQ %d", IRQn);
-        break;
+      if (pending_events & (1 << i))
+      {
+        /* Callback with parameter computes as "PMIC Interrupt" enum */
+        STPMIC_INTn_Callback((PMIC_IRQn)(irq_reg * 8 + (7 - i)));
+      }
     }
-    printf(" Interrupt received\n\r");
+    /* Clear events in appropriate register for the event with mask set */
+    BSP_PMIC_WriteReg(INT_CLEAR_R1 + irq_reg, pending_events);
   }
 
-  void STPMIC_INTn_Callback(PMIC_IRQn IRQn)
+}
+
+void STPMIC_Sw_Reset(void)
+{
+  /* Write 1 in bit 0 of MAIN_CONTROL Register */
+  BSP_PMIC_UpdateReg(MAIN_CR, SOFTWARE_SWITCH_OFF_ENABLED);
+  return ;
+}
+
+
+__weak void BSP_PMIC_INTn_Callback(PMIC_IRQn IRQn)
+{
+  switch (IRQn)
   {
-    BSP_PMIC_INTn_Callback(IRQn);
-  };
+    case STPMIC2_IT_PONKEY_F:
+      printf("STPMIC2_IT_PONKEY_F");
+      break;
+    case STPMIC2_IT_PONKEY_R:
+      printf("STPMIC2_IT_PONKEY_R");
+      break;
+    case STPMIC2_IT_WKP_FA:
+      printf("STPMIC2_IT_WKP_FA");
+      break;
+    case STPMIC2_IT_WKP_RI:
+      printf("STPMIC2_IT_WKP_RI");
+      break;
+    case STPMIC2_IT_VINLOW_FA:
+      printf("STPMIC2_IT_VINLOW_FA");
+      break;
+    case STPMIC2_IT_VINLOW_RI:
+      printf("STPMIC2_IT_VINLOW_RI");
+      break;
+    case STPMIC2_IT_VBUS_FA:
+      printf("STPMIC2_IT_VBUS_FA");
+      break;
+    case STPMIC2_IT_VBUS_RI:
+      printf("STPMIC2_IT_VBUS_RI");
+      break;
+    case STPMIC2_IT_THW_FA:
+      printf("STPMIC2_IT_THW_FA");
+      break;
+    case STPMIC2_IT_THW_RI:
+      printf("STPMIC2_IT_THW_RI");
+      break;
+    case STPMIC2_IT_BUCK1_OCP:
+      printf("STPMIC2_IT_BUCK1_OCP");
+      break;
+    case STPMIC2_IT_BUCK2_OCP:
+      printf("STPMIC2_IT_BUCK2_OCP");
+      break;
+    case STPMIC2_IT_BUCK3_OCP:
+      printf("STPMIC2_IT_BUCK3_OCP");
+      break;
+    case STPMIC2_IT_BUCK4_OCP:
+      printf("STPMIC2_IT_BUCK4_OCP");
+      break;
+    case STPMIC2_IT_BUCK5_OCP:
+      printf("STPMIC2_IT_BUCK5_OCP");
+      break;
+    case STPMIC2_IT_BUCK6_OCP:
+      printf("STPMIC2_IT_BUCK6_OCP");
+      break;
+    case STPMIC2_IT_BUCK7_OCP:
+      printf("STPMIC2_IT_BUCK7_OCP");
+      break;
+    case STPMIC2_IT_REFDDR_OCP:
+      printf("STPMIC2_IT_REFDDR_OCP");
+      break;
+    case STPMIC2_IT_LDO1_OCP:
+      printf("STPMIC2_IT_LDO1_OCP");
+      break;
+    case STPMIC2_IT_LDO2_OCP:
+      printf("STPMIC2_IT_LDO2_OCP");
+      break;
+    case STPMIC2_IT_LDO3_OCP:
+      printf("STPMIC2_IT_LDO3_OCP");
+      break;
+    case STPMIC2_IT_LDO4_OCP:
+      printf("STPMIC2_IT_LDO4_OCP");
+      break;
+    case STPMIC2_IT_LDO5_OCP:
+      printf("STPMIC2_IT_LDO5_OCP");
+      break;
+    case STPMIC2_IT_LDO6_OCP:
+      printf("STPMIC2_IT_LDO6_OCP");
+      break;
+    case STPMIC2_IT_LDO7_OCP:
+      printf("STPMIC2_IT_LDO7_OCP");
+      break;
+    case STPMIC2_IT_LDO8_OCP:
+      printf("STPMIC2_IT_LDO8_OCP");
+      break;
+    default:
+      printf("Unknown IRQ %d", IRQn);
+      break;
+  }
+  printf(" Interrupt received\n\r");
+}
+
+void STPMIC_INTn_Callback(PMIC_IRQn IRQn)
+{
+  BSP_PMIC_INTn_Callback(IRQn);
+};
 #if 0 /* SBA test */
-  void BSP_PMIC_INTn_IRQHandler(void)
-  {
-    /*printf("%s:%d\n\r", __FUNCTION__, __LINE__);*/
-    /* Call HAL EXTI IRQ Handler to clear appropriate flags */
-    HAL_GPIO_EXTI_IRQHandler(PMIC_INTn_PIN);
+void BSP_PMIC_INTN_IRQHANDLER(void)
+{
+  /*printf("%s:%d\n\r", __FUNCTION__, __LINE__);*/
+  /* Call HAL EXTI IRQ Handler to clear appropriate flags */
+  HAL_GPIO_EXTI_IRQHandler(PMIC_INTN_PIN);
 
-    STPMIC_IrqHandler();
-  }
+  STPMIC_IrqHandler();
+}
 #endif /* SBA test */
 
-  /**
-    * @}
-    */
+/**
+  * @}
+  */
 
-  /**
-    * @}
-    */
+/**
+  * @}
+  */
 
-  /**
-    * @}
-    */
+/**
+  * @}
+  */
 
-  /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+/**
+  * @}
+  */
+
+/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

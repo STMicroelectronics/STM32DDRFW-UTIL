@@ -10,7 +10,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2020 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -253,13 +253,8 @@ HAL_StatusTypeDef HAL_PWREx_EnableGPUSupply(void)
   uint32_t maskEn;
   uint32_t maskRdy;
 
-#if ! defined(STM32MP2XX_ASSY2_3_2)
   maskEn = PWR_CR12_GPUSV;
   maskRdy = PWR_CR12_VDDGPURDY;
-#else /* ! defined(STM32MP2XX_ASSY2_3_2) */
-  maskEn = PWR_CR12_GPUPDEN;
-  maskRdy = PWR_CR12_GPUPDRDY;
-#endif /* else ! defined(STM32MP2XX_ASSY2_3_2) */
 
   /*request monitoring of supply*/
   (void)HAL_PWREx_EnableGPUSupplyMonitoring();
@@ -289,11 +284,7 @@ HAL_StatusTypeDef HAL_PWREx_EnableGPUSupply(void)
 void HAL_PWREx_DisableGPUSupply(void)
 {
   /* set supply isolation  */
-#if ! defined(STM32MP2XX_ASSY2_3_2)
   CLEAR_BIT(PWR->CR12, PWR_CR12_GPUSV);
-#else /* ! defined(STM32MP2XX_ASSY2_3_2) */
-  CLEAR_BIT(PWR->CR12, PWR_CR12_GPUPDEN);
-#endif /* else ! defined(STM32MP2XX_ASSY2_3_2) */
 
   /*remove supply monitoring*/
   HAL_PWREx_DisableGPUSupplyMonitoring();
@@ -909,18 +900,22 @@ void pvmPosition(uint32_t periph, __IO uint32_t **regPtr, pvmPosTypeDef *pvmPos)
       pvmPos->ready   = PWR_CR1_VDDIO3RDY_Pos;
       pvmPos->monitor = PWR_CR1_VDDIO3VMEN_Pos;
       break;
+#if defined(PWR_CR1_VDDIO4SV)
     case PWR_PVM_VDDIO4 :
       *regPtr = &PWR->CR1;
       pvmPos->active   = PWR_CR1_VDDIO4SV_Pos;
       pvmPos->ready   = PWR_CR1_VDDIO4RDY_Pos;
       pvmPos->monitor = PWR_CR1_VDDIO4VMEN_Pos;
       break;
+#endif
+#if defined(PWR_CR1_USB33SV)
     case PWR_PVM_USB33 :
       *regPtr = &PWR->CR1;
       pvmPos->active   = PWR_CR1_USB33SV_Pos;
       pvmPos->ready   = PWR_CR1_USB33RDY_Pos;
       pvmPos->monitor = PWR_CR1_USB33VMEN_Pos;
       break;
+#endif
 #if defined(PWR_CR1_UCPDSV)
     case PWR_PVM_UCPD :
       *regPtr = &PWR->CR1;
@@ -1352,5 +1347,3 @@ void HAL_PWREx_ClearStatusFlag(void)
   * @}
   */
 
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

@@ -31,11 +31,11 @@
   * @{
   */
 
-/** @defgroup STM32MP257F_DK_LOW_LEVEL LOW LEVEL
+/** @defgroup LOW_LEVEL LOW LEVEL
   * @{
   */
 
-/** @defgroup STM32MP257F_DK_LOW_LEVEL_Private_TypesDefinitions  Private Types Definitions
+/** @defgroup Private_TypesDefinitions  Private Types Definitions
   * @{
   */
 typedef void (* BSP_EXTI_LineCallback)(void);
@@ -43,7 +43,7 @@ typedef void (* BSP_EXTI_LineCallback)(void);
   * @}
   */
 
-/** @defgroup STM32MP257F_DK_LOW_LEVEL_Private_FunctionPrototypes  Private Function Prototypes
+/** @defgroup Private_FunctionPrototypes  Private Function Prototypes
   * @{
   */
 #if defined (CORE_CA35) || defined (CORE_CM33)
@@ -64,7 +64,7 @@ static void USART_MspDeInit(UART_HandleTypeDef *huart);
   * @}
   */
 
-/** @defgroup STM32MP257F_DK_LOW_LEVEL_Exported_Variables Exported Variables
+/** @defgroup Exported_Variables Exported Variables
   * @{
   */
 EXTI_HandleTypeDef hpb_exti[BUTTONn];
@@ -84,7 +84,7 @@ USART_TypeDef *COM_USART[COMn] =
   * @}
   */
 
-/** @defgroup STM32MP257F_DK_LOW_LEVEL_Private_Variables Private Variables
+/** @defgroup Private_Variables Private Variables
   * @{
   */
 #if defined (CORE_CA35) || defined (CORE_CM33)
@@ -139,7 +139,7 @@ static uint32_t IsComMspCbValid[COMn] = {0};
   * @}
   */
 
-/** @defgroup STM32MP257F_DK_LOW_LEVEL_Exported_Functions Exported Functions
+/** @defgroup Exported_Functions Exported Functions
   * @{
   */
 
@@ -220,17 +220,18 @@ int32_t  BSP_LED_DeInit(Led_TypeDef Led)
   int32_t ret = BSP_ERROR_NONE;
   GPIO_InitTypeDef  gpio_init_structure;
 
+  /* DeInit the GPIO_LED pin */
+  gpio_init_structure.Pin = LED_PIN [Led];
+  /* Turn off LED */
+  HAL_GPIO_WritePin(LED_PORT [Led], (uint16_t)LED_PIN[Led], GPIO_LED_OFF[Led]);
+  HAL_GPIO_DeInit(LED_PORT [Led], gpio_init_structure.Pin);
+
   /* BSP LED  MSP DeInit configuration*/
   if (BSP_LED_MspDeInit(Led) != BSP_ERROR_NONE)
   {
     return BSP_ERROR_MSP_FAILURE;
   }
 
-  /* DeInit the GPIO_LED pin */
-  gpio_init_structure.Pin = LED_PIN [Led];
-  /* Turn off LED */
-  HAL_GPIO_WritePin(LED_PORT [Led], (uint16_t)LED_PIN[Led], GPIO_LED_OFF[Led]);
-  HAL_GPIO_DeInit(LED_PORT [Led], gpio_init_structure.Pin);
   return ret;
 }
 
@@ -480,12 +481,6 @@ int32_t BSP_PB_DeInit(Button_TypeDef Button)
 {
   GPIO_InitTypeDef gpio_init_structure;
 
-  /* BSP PB  MSP DeInit configuration*/
-  if (BSP_PB_MspDeInit(Button) != BSP_ERROR_NONE)
-  {
-    return BSP_ERROR_MSP_FAILURE;
-  }
-
   gpio_init_structure.Pin = BUTTON_PIN[Button];
 #if defined(CORE_CA35)
   IRQ_Disable((IRQn_Type)(BUTTON_IRQn[Button]));
@@ -493,6 +488,13 @@ int32_t BSP_PB_DeInit(Button_TypeDef Button)
   HAL_NVIC_DisableIRQ((IRQn_Type)(BUTTON_IRQn[Button]));
 #endif /* CORE_CA35 */
   HAL_GPIO_DeInit(BUTTON_PORT[Button], gpio_init_structure.Pin);
+
+
+  /* BSP PB  MSP DeInit configuration*/
+  if (BSP_PB_MspDeInit(Button) != BSP_ERROR_NONE)
+  {
+    return BSP_ERROR_MSP_FAILURE;
+  }
 
   return BSP_ERROR_NONE;
 }
@@ -739,24 +741,14 @@ int32_t BSP_COM_DeInit(COM_TypeDef COM)
     /* USART configuration */
     hcom_uart[COM].Instance = COM_USART[COM];
 
-    if (!IS_DEVELOPER_BOOT_MODE() && COM == COM_VCP_CM33)
+    if (HAL_UART_DeInit(&hcom_uart[COM]) != HAL_OK)
     {
-      if (ResMgr_Release(COM_CM33_RIF_RES_TYP_TX_PIN, COM_CM33_RIF_RES_NUM_TX_PIN) != RESMGR_STATUS_ACCESS_OK
-          && ResMgr_Release(COM_CM33_RIF_RES_TYP_RX_PIN, COM_CM33_RIF_RES_NUM_RX_PIN) != RESMGR_STATUS_ACCESS_OK
-          && ResMgr_Release(COM_CM33_RIF_RES_TYP_UART, COM_CM33_RIF_RES_NUM_UART) != RESMGR_STATUS_ACCESS_OK)
-      {
-        ret = BSP_ERROR_PERIPH_FAILURE;
-      }
+      ret = BSP_ERROR_PERIPH_FAILURE;
     }
 
 #if (USE_HAL_UART_REGISTER_CALLBACKS == 0)
     USART_MspDeInit(&hcom_uart[COM]);
 #endif /* (USE_HAL_UART_REGISTER_CALLBACKS == 0) */
-
-    if (HAL_UART_DeInit(&hcom_uart[COM]) != HAL_OK)
-    {
-      ret = BSP_ERROR_PERIPH_FAILURE;
-    }
   }
 
   return ret;
@@ -931,7 +923,7 @@ static void USART_MspInit(UART_HandleTypeDef *huart)
   if (huart->Instance == COM_CA35_UART)
   {
     /* USART2 clock config */
-    (void)ResMgr_Request(RESMGR_RESOURCE_RIFSC, STM32MP25_RIFSC_USART2_ID);
+    (void)ResMgr_Request(RESMGR_RESOURCE_RIFSC, COM_CA35_RIF_RES_NUM_UART);
 
     /* Enable USART clock */
     COM_CA35_TX_GPIO_CLK_ENABLE();
@@ -950,8 +942,6 @@ static void USART_MspInit(UART_HandleTypeDef *huart)
   else if (huart->Instance == COM_CM33_UART)
   {
 
-    /* UART5 clock config */
-    (void)ResMgr_Request(RESMGR_RESOURCE_RIFSC, STM32MP25_RIFSC_UART5_ID);
     /* Enable UART clock */
     COM_CM33_CLK_ENABLE();
 

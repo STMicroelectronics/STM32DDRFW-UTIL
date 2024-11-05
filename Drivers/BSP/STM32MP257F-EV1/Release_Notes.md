@@ -8,7 +8,7 @@ header-includes: <link rel="icon" type="image/x-icon" href="_htmresc/favicon.png
 
 <center>
 # Release Notes for <mark>STM32MP257F-EV1 BSP Drivers</mark>
-Copyright &copy; 2023 STMicroelectronics\
+Copyright &copy; 2024 STMicroelectronics\
     
 [![ST logo](_htmresc/st_logo_2020.png)](https://www.st.com){.logo}
 </center>
@@ -28,19 +28,18 @@ From project settings points of view, user has only to add the necessary driverâ
 
 ::: {.collapse}
 <input type="checkbox" id="collapse-section0" checked aria-hidden="true">
-<label for="collapse-section0" aria-hidden="true">__V1.0.0.RC4 / 17-May-2024__</label>
+<label for="collapse-section0" aria-hidden="true">__V1.0.0 / 31-May-2024__</label>
 <div>			
 
 ## Main Changes
 
-**v1.0.0.RC4 release** of STMP32MP257F-EV1 BSP
+**v1.0.0 release** of STMP32MP257F-EV1 BSP
 
 ## Contents
 
-- Support for STPMIC
-- Support available for controlling USBPD.
-- Support for LEDs and Buttons available.
-- Integrated Resource Manager.
+- Updated Documentation.
+- General Cleanup of code.
+- Fixes around resourcemanager usage.
 
 
 ## Notes

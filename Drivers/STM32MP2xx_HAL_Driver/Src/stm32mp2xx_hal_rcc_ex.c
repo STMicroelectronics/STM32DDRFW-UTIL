@@ -12,7 +12,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2020 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -1867,11 +1867,12 @@ int32_t HAL_RCCEx_MeasureClockFreq(uint32_t clk_id, uint32_t ref_id, uint32_t *f
   /* (mandatory to handle timeout within measurement algorithm) */
   /* Take into account that STGENC is not visible from M33 */
   /* . by assuming it runs at 64MHz on validation platforms and 32MHz on FPGA */
-#if defined(USE_STM32MP257CXX_VALID1) || defined(USE_STM32MP257CXX_VALID2) || defined(USE_STM32MP257CXX_VALID3)
-#define STGEN_FREQ_IN_HZ 64000000
+  /* STGEN_VALUE defined in clock.h FPGA BSP */
+#if defined(STGEN_VALUE)
+#define STGEN_FREQ_IN_HZ STGEN_VALUE
 #else
-#define STGEN_FREQ_IN_HZ 32000000
-#endif /* defined(USE_STM32MP257CXX_VALID1) || defined(USE_STM32MP257CXX_VALID2) || defined(USE_STM32MP257CXX_VALID3) */
+#define STGEN_FREQ_IN_HZ 64000000
+#endif /* STGEN_VALUE */
   /* . by checking STGENC clock is enabled and STGENR value low is changing */
   if (0U == (RCC->STGENCFGR & RCC_STGENCFGR_STGENEN))
   {
@@ -2478,9 +2479,9 @@ static uint32_t RCCEx_ComputePLLClockFreq(const RCC_PLLInitTypeDef *pll)
   uint32_t source_freq;
   uint64_t pll_output;
 
-#if defined(USE_STM32MP257CXX_FPGA) || defined (USE_STM32MP215FXX_FPGA)
+#if defined(PLL4_VALUE)
   source_freq = PLL4_VALUE;
-#else /* USE_STM32MP257CXX_FPGA */
+#else /* PLL4_VALUE */
   switch (pll->PLLSource)
   {
     case RCC_PLLSOURCE_HSI:
@@ -2505,7 +2506,7 @@ static uint32_t RCCEx_ComputePLLClockFreq(const RCC_PLLInitTypeDef *pll)
       source_freq = 0;
       break;
   }
-#endif /* USE_STM32MP257CXX_FPGA */
+#endif /* PLL4_VALUE */
 
   /* Compute PLL frequency from PLL parameters according to fractional mode selection */
   /* Note : keep maximum computing precision by doubling integer resolution */
@@ -2542,4 +2543,3 @@ static uint32_t RCCEx_ComputePLLClockFreq(const RCC_PLLInitTypeDef *pll)
 /**
   * @}
   */
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

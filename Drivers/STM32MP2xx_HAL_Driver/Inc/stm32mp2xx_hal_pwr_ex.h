@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2020 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -119,8 +119,8 @@ typedef struct
   * @{
   */
 #if defined (PWR_CR6_VCPUMONEN)
-#define PWR_VDDCPUDLEVEL_0  (0U<<PWR_CR6_VCPULLS_Pos) /* 0.72V TBC in 16 FinFet*/
-#define PWR_VDDCPUDLEVEL_1  (1U<<PWR_CR6_VCPULLS_Pos) /* 0.81V TBC in 16 FinFet*/
+#define PWR_VDDCPUDLEVEL_0  (0U<<PWR_CR6_VCPULLS_Pos)
+#define PWR_VDDCPUDLEVEL_1  (1U<<PWR_CR6_VCPULLS_Pos)
 #endif /* PWR_CR6_VCPUMONEN */
 /**
   * @}
@@ -766,5 +766,3 @@ void HAL_PWREx_WKUP_Callback(__attribute__((unused))uint16_t line);
 
 
 #endif /* __STM32MP2xx_HAL_PWR_EX_H */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

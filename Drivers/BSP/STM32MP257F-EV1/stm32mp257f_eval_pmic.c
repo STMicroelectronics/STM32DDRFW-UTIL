@@ -27,12 +27,16 @@
   * @{
   */
 
-/** @addtogroup STM32MP257F_EVAL_STPMU
+/** @addtogroup STM32MP257F_EV1
+  * @{
+  */
+
+/** @addtogroup STPMIC
   * @{
   */
 
 
-/** @defgroup STM32MP257F_EVAL_STPMU_Private_Constants Private Constants
+/** @defgroup STPMIC_Private_Constants Private Constants
   * @{
   */
 /* Driver for PMIC ---------------------------------------------------------------*/
@@ -42,7 +46,7 @@
   * @}
   */
 
-/** @defgroup STM32MP257F_EVAL_STPMU_Private_Defines Private Defines
+/** @defgroup STPMIC_Private_Defines Private Defines
   * @{
  */
 /* Private typedef -----------------------------------------------------------*/
@@ -56,7 +60,7 @@
   * @}
  */
 
-/** @defgroup STM32MP257F_EVAL_STPMU_Private_Variables Private Variables
+/** @defgroup STPMIC_Private_Variables Private Variables
   * @{
   */
 
@@ -143,7 +147,7 @@ board_regul_struct_t board_regulators_table[] =
   * @}
  */
 
-/** @defgroup STM32MP257F_EVAL_STPMU_Private_Functions Private Functionss
+/** @defgroup STPMIC_Private_Functions Private Functionss
   * @{
   */
 
@@ -220,13 +224,13 @@ uint32_t BSP_PMIC_Init(void)
 #else
   GPIO_InitTypeDef  GPIO_InitStruct;
 
-  if (ResMgr_Request(RESMGR_RESOURCE_RIF_RCC, RESMGR_RCC_RESOURCE(90)) == RESMGR_STATUS_ACCESS_OK)
+  if (ResMgr_Request(RESMGR_RESOURCE_RIF_RCC, PMIC_INTN_RCC_RES) == RESMGR_STATUS_ACCESS_OK)
   {
     /* INTn - Interrupt Line - Active Low (Falling Edge) */
     PMIC_INTN_CLK_ENABLE();
   }
   /* Acquire GPIOA0 using Resource manager */
-  if (RESMGR_STATUS_ACCESS_OK != ResMgr_Request(RESMGR_RESOURCE_RIF_GPIOA, RESMGR_GPIO_PIN(0)))
+  if (RESMGR_STATUS_ACCESS_OK != ResMgr_Request(PMIC_INTN_RIF_RES, PMIC_INTN_PIN_RIF_RES))
   {
     return BSP_ERROR_PERIPH_FAILURE;
   }
@@ -260,7 +264,7 @@ uint32_t BSP_PMIC_DeInit(void)
   {
     return BSP_ERROR_COMPONENT_FAILURE;
   }
-  if (RESMGR_STATUS_ACCESS_OK != ResMgr_Release(RESMGR_RESOURCE_RIF_GPIOA, RESMGR_GPIO_PIN(0)))
+  if (RESMGR_STATUS_ACCESS_OK != ResMgr_Release(PMIC_INTN_RIF_RES, PMIC_INTN_PIN_RIF_RES))
   {
     return BSP_ERROR_PERIPH_FAILURE;
   }
@@ -684,7 +688,7 @@ uint32_t BSP_PMIC_Power_Mode_Init()
   /* VDDIO_SDCARD: LDO8, PWRCTRL_SEL=3, PWRCTRL_DLY_H=0, PWRCTRL_DLY_L=0, PWRCTRL_EN=0,
   PWRCTRL_RST=1, Msk_Rst=0, Source=NA, V=BYPASS/1.8, State=ON */
   status = BSP_PMIC_WriteReg(board_regulators_table[VDDIO_SDCARD].control_reg1, \
-                             (0x9 << 1) | MAIN_CR_BYPASS | MAIN_CR_EN); /* TBC mode bypass or not????? */
+                             (0x9 << 1) | MAIN_CR_BYPASS | MAIN_CR_EN); 
   status = BSP_PMIC_WriteReg(board_regulators_table[VDDIO_SDCARD].pwr_control_reg, \
                              PWRCTRL_CR_SEL3 | PWRCTRL_CR_DLY_H0 | PWRCTRL_CR_DLY_L0 | PWRCTRL_CR_RST);
   /* VREF_DDR: REFDDR, PWRCTRL_SEL=1, PWRCTRL_DLY_H=0, PWRCTRL_DLY_L=0, PWRCTRL_EN=1,
@@ -778,7 +782,7 @@ uint32_t BSP_PMIC_Set_Power_Mode(uint32_t mode)
       /* VDDIO_SDCARD: LDO8, PWRCTRL_SEL=3, PWRCTRL_DLY_H=0, PWRCTRL_DLY_L=0, PWRCTRL_EN=0,
       PWRCTRL_RST=1, Msk_Rst=0, Source=NA, V=BYPASS/1.8, State=ON */
       status = BSP_PMIC_WriteReg(board_regulators_table[VDD_SDCARD].control_reg1, \
-                                 (0x9 << 1) | MAIN_CR_BYPASS | MAIN_CR_EN); /* TBC mode bypass or not????? */
+                                 (0x9 << 1) | MAIN_CR_BYPASS | MAIN_CR_EN); 
       /* VREF_DDR: REFDDR, PWRCTRL_SEL=1, PWRCTRL_DLY_H=0, PWRCTRL_DLY_L=0, PWRCTRL_EN=1,
       PWRCTRL_RST=0, Msk_Rst=0, Source=NA, V=NA, State=ON */
       status = BSP_PMIC_WriteReg(board_regulators_table[VREF_DDR].control_reg1, \
@@ -1340,6 +1344,10 @@ void BSP_PMIC_INTn_IRQHandler(void)
   STPMIC_IrqHandler();
 }
 #endif /* 0 */
+
+/**
+  * @}
+  */
 
 /**
   * @}

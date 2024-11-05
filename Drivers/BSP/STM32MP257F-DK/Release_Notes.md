@@ -28,19 +28,17 @@ From project settings points of view, user has only to add the necessary driverâ
 
 ::: {.collapse}
 <input type="checkbox" id="collapse-section0" checked aria-hidden="true">
-<label for="collapse-section0" aria-hidden="true">__V1.0.0.RC4 / 17-May-2024__</label>
+<label for="collapse-section0" aria-hidden="true">__V1.0.0 / 31-May-2024__</label>
 <div>			
 
 ## Main Changes
 
-**v1.0.0.RC4 release** of STMP32MP257F-DK BSP
+**v1.0.0 release** of STMP32MP257F-DK BSP
 
 ## Contents
 
-- Support for STPMIC
-- Support available for controlling USBPD.
-- Support for LEDs and Buttons available.
-- Integrated Resource Manager.
+- Documentation updated.
+- Cleanup and Fixes around usage of ResourcesManager
 
 
 ## Notes

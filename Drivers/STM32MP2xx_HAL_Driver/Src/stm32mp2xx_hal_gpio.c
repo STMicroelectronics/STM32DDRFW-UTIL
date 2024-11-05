@@ -329,10 +329,10 @@ EXTI_TypeDef *getUsedExti(const GPIO_TypeDef  *GPIOx, uint32_t pinPosition)
   uint32_t temp;
 #if defined(GPIOJ) && defined(GPIOK)
   GPIO_TypeDef *port[] = {GPIOA, GPIOB, GPIOC, GPIOD, GPIOE, GPIOF, GPIOG, GPIOH, GPIOI, GPIOJ, GPIOK, GPIOZ};
-#else
+#else   /* defined(GPIOJ) && defined(GPIOK) */
   GPIO_TypeDef *port[] = {GPIOA, GPIOB, GPIOC, GPIOD, GPIOE, GPIOF, GPIOG, GPIOH, GPIOI, GPIOZ};
-#endif
-  EXTI_Core_TypeDef *EXTI_CurrentCPU;
+#endif  /* defined(GPIOJ) && defined(GPIOK) */
+  const EXTI_Core_TypeDef *EXTI_CurrentCPU;
 
 
 #if defined(CORE_CM33)
@@ -728,8 +728,8 @@ __weak void HAL_GPIO_EXTI1_Falling_Callback(uint16_t GPIO_Pin)
 /**
   * @brief  Configure RIF attribute of a GPIO pin bitmap.
   *         Available RIF attributes are CID, security and privilege protection.
-  *         RIF attribut is applied on all pins of input param bitmap.
-  * @note   If no CID attribut provide, CID filtering is disabled.
+  *         RIF attribute is applied on all pins of input param bitmap.
+  * @note   If no CID attribute provide, CID filtering is disabled.
   * @param  GPIOx : pointer to GPIO peripheral instance
   * @param  GPIO_Pin : gpio pin bitmap.
   * @param  PinAttributes: RIF (CID/secure/privilege) attributes.
@@ -876,10 +876,10 @@ HAL_StatusTypeDef HAL_GPIO_GetConfigPinAttributes(const GPIO_TypeDef *GPIOx, uin
 /**
   * @brief  Attempt to acquire semaphore(s) of  GPIO pin bitmap.
   * @note   In case of semaphore acquisition failure, returned status is HAL_KO and
-  *         semaphore acquition is abandoned  for all bitmap
+  *         semaphore acquisition is abandoned  for all bitmap
   * @param  GPIOx : pointer to GPIO peripheral instance
   * @param  GPIO_Pin : gpio pin bitmap
-  * @retval HAL Status, HAL_OK if semaphore acquisition for all pins of GPIO_Pin is sucessful
+  * @retval HAL Status, HAL_OK if semaphore acquisition for all pins of GPIO_Pin is successful
   */
 
 HAL_StatusTypeDef HAL_GPIO_TakePinSemaphore(GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin)

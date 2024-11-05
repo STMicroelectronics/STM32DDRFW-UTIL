@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2020 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -221,14 +221,14 @@ typedef struct
 #define NS_RESOURCE_NSEC                     (NS_RESOURCE_ATTR_SEC_SELECT)                                 /*!< Resource is non-secure   */
 #endif /* __ARM_SECURE_STATE */
 
-#define NS_RESOURCE_CID_STATIC_0     (NS_RESOURCE_ATTR_CID_STATIC_SELECT | (0<<PWR_R0CIDCFGR_CID_Pos))   /*!< Enable CID filtering (static mode) and give pin control  to CID0 */
-#define NS_RESOURCE_CID_STATIC_1     (NS_RESOURCE_ATTR_CID_STATIC_SELECT | (1<<PWR_R0CIDCFGR_CID_Pos))   /*!< Enable CID filtering (static mode) and give pin control  to CID1 */
-#define NS_RESOURCE_CID_STATIC_2     (NS_RESOURCE_ATTR_CID_STATIC_SELECT | (2<<PWR_R0CIDCFGR_CID_Pos))   /*!< Enable CID filtering (static mode) and give pin control  to CID2 */
-#define NS_RESOURCE_CID_STATIC_3     (NS_RESOURCE_ATTR_CID_STATIC_SELECT | (3<<PWR_R0CIDCFGR_CID_Pos))   /*!< Enable CID filtering (static mode) and give pin control  to CID3 */
-#define NS_RESOURCE_CID_STATIC_4     (NS_RESOURCE_ATTR_CID_STATIC_SELECT | (4<<PWR_R0CIDCFGR_CID_Pos))   /*!< Enable CID filtering (static mode) and give pin control  to CID4 */
-#define NS_RESOURCE_CID_STATIC_5     (NS_RESOURCE_ATTR_CID_STATIC_SELECT | (5<<PWR_R0CIDCFGR_CID_Pos))   /*!< Enable CID filtering (static mode) and give pin control  to CID5 */
-#define NS_RESOURCE_CID_STATIC_6     (NS_RESOURCE_ATTR_CID_STATIC_SELECT | (6<<PWR_R0CIDCFGR_CID_Pos))   /*!< Enable CID filtering (static mode) and give pin control  to CID6 */
-#define NS_RESOURCE_CID_STATIC_7     (NS_RESOURCE_ATTR_CID_STATIC_SELECT | (7<<PWR_R0CIDCFGR_CID_Pos))   /*!< Enable CID filtering (static mode) and give pin control  to CID7 */
+#define NS_RESOURCE_CID_STATIC_0     (NS_RESOURCE_ATTR_CID_STATIC_SELECT | (0<<PWR_R0CIDCFGR_SCID_Pos))   /*!< Enable CID filtering (static mode) and give pin control  to CID0 */
+#define NS_RESOURCE_CID_STATIC_1     (NS_RESOURCE_ATTR_CID_STATIC_SELECT | (1<<PWR_R0CIDCFGR_SCID_Pos))   /*!< Enable CID filtering (static mode) and give pin control  to CID1 */
+#define NS_RESOURCE_CID_STATIC_2     (NS_RESOURCE_ATTR_CID_STATIC_SELECT | (2<<PWR_R0CIDCFGR_SCID_Pos))   /*!< Enable CID filtering (static mode) and give pin control  to CID2 */
+#define NS_RESOURCE_CID_STATIC_3     (NS_RESOURCE_ATTR_CID_STATIC_SELECT | (3<<PWR_R0CIDCFGR_SCID_Pos))   /*!< Enable CID filtering (static mode) and give pin control  to CID3 */
+#define NS_RESOURCE_CID_STATIC_4     (NS_RESOURCE_ATTR_CID_STATIC_SELECT | (4<<PWR_R0CIDCFGR_SCID_Pos))   /*!< Enable CID filtering (static mode) and give pin control  to CID4 */
+#define NS_RESOURCE_CID_STATIC_5     (NS_RESOURCE_ATTR_CID_STATIC_SELECT | (5<<PWR_R0CIDCFGR_SCID_Pos))   /*!< Enable CID filtering (static mode) and give pin control  to CID5 */
+#define NS_RESOURCE_CID_STATIC_6     (NS_RESOURCE_ATTR_CID_STATIC_SELECT | (6<<PWR_R0CIDCFGR_SCID_Pos))   /*!< Enable CID filtering (static mode) and give pin control  to CID6 */
+#define NS_RESOURCE_CID_STATIC_7     (NS_RESOURCE_ATTR_CID_STATIC_SELECT | (7<<PWR_R0CIDCFGR_SCID_Pos))   /*!< Enable CID filtering (static mode) and give pin control  to CID7 */
 
 
 #define WIO_RESOURCE_POS   NON_SHAREABLE_RESOURCE_NB
@@ -425,12 +425,7 @@ typedef struct
 /** @defgroup PWR_Flag PWR Flag
   * @{
   */
-#if ! defined(STM32MP2XX_ASSY2_3_2)
 #define PWR_FLAG_VDDGPURDY         (0x00U)   /* to check readiness of GPU power domain       */
-#else /* ! defined(STM32MP2XX_ASSY2_3_2) */
-#define PWR_FLAG_GPUPDRDY          (0x00U)   /* to check readiness of GPU power domain       */
-#endif /* else ! defined(STM32MP2XX_ASSY2_3_2) */
-#define PWR_FLAG_GPUPDRDY          (0x00U)   /* to check readiness of GPU power domain       */
 #define PWR_FLAG_D3RDY             (0x01U)   /* to check readiness of D3 domain supply       */
 #define PWR_FLAG_PVDO              (0x03U)   /* to check if VDD  is lower than PVD threshold */
 #define PWR_FLAG_VBATL             (0x04U)   /* to check if VBAT is equal or lower  than VBAT low  threshold */
@@ -520,20 +515,6 @@ typedef struct
 
 #define IS_PWR_ITEMS(__ITEM__)           (IS_WIO_RESOURCE(__ITEM__) || IS_NS_RESOURCE(__ITEM__))
 
-/** @brief  Check PWR flag is set or not.
-  * @param  __FLAG__: specifies the flag to check.
-  *           This parameter can be one of the following values:
-  *            @arg PWR_FLAG_GPUPRDY: GPU supply ready
-  *            @arg PWR_FLAG_USB: USB 3.3V supply ready
-  *
-  * @retval The new state of __FLAG__ (TRUE or FALSE).
-  */
-
-#if defined(STM32MP2XX_ASSY2_3_2)
-/* to easy management of both ASSY3.0.0 and ASS2.3.x */
-#define PWR_CR12_VDDGPURDY PWR_CR12_GPUPDRDY
-#define PWR_FLAG_VDDGPURDY PWR_FLAG_GPUPDRDY
-#endif /* defined(STM32MP2XX_ASSY2_3_2) */
 
 #if defined(PWR_D3CR_D3RDY)
 #define __HAL_PWR_GET_COMMON_FLAG(__FLAG__) ( \

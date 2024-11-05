@@ -50,15 +50,15 @@ extern "C" {
   * @{
   */
 
-/** @addtogroup STM32MP257F_EVAL
+/** @addtogroup STM32MP257F_EV1
   * @{
   */
 
-/** @addtogroup STM32MP257F_EVAL_LOW_LEVEL
+/** @addtogroup LOW_LEVEL
   * @{
   */
 
-/** @defgroup STM32MP257F_EVAL_LOW_LEVEL_Exported_Types Exported Types
+/** @defgroup LOW_LEVEL_Exported_Types Exported Types
   * @{
   */
 typedef enum
@@ -169,7 +169,7 @@ typedef struct
   * @}
   */
 
-/** @defgroup STM32MP257F_EVAL_LOW_LEVEL_Exported_Constants Exported Constants
+/** @defgroup LOW_LEVEL_Exported_Constants Exported Constants
   * @{
   */
 /**
@@ -182,7 +182,7 @@ typedef struct
   * @brief STM32MP257F EVAL BSP Driver version number VX.Y.Z
   */
 #define STM32MP257F_EV1_BSP_VERSION_MAIN   (0x01U) /*!< [31:24] main version */
-#define STM32MP257F_EV1_BSP_VERSION_SUB1   (0x00U) /*!< [23:16] sub1 version */
+#define STM32MP257F_EV1_BSP_VERSION_SUB1   (0x01U) /*!< [23:16] sub1 version */
 #define STM32MP257F_EV1_BSP_VERSION_SUB2   (0x00U) /*!< [15:8]  sub2 version */
 #define STM32MP257F_EV1_BSP_VERSION_RC     (0x04U) /*!< [7:0]  release candidate */
 #define STM32MP257F_EV1_BSP_VERSION        ((STM32MP257F_EV1_BSP_VERSION_MAIN << 24)  \
@@ -192,7 +192,7 @@ typedef struct
 #define STM32MP257F_EV1_BSP_BOARD_NAME  "STM32MP257F-EV1";
 #define STM32MP257F_EV1_BSP_BOARD_ID    "MB1936-A01";
 
-/** @defgroup STM32MP257F_EVAL_LOW_LEVEL_LED EVAL LOW LEVEL LED
+/** @defgroup LOW_LEVEL_LED EVAL LOW LEVEL LED
   * @{
   */
 #if defined (CORE_CA35) || defined (CORE_CM33)
@@ -240,7 +240,7 @@ typedef struct
   * @}
   */
 
-/** @defgroup STM32MP257F_EVAL_LOW_LEVEL_BUTTON LOW LEVEL BUTTON
+/** @defgroup LOW_LEVEL_BUTTON LOW LEVEL BUTTON
   * @{
   */
 /* Button state */
@@ -306,7 +306,7 @@ typedef struct
   * @}
   */
 
-/** @defgroup STM32MP257F_EVAL_LOW_LEVEL_COM LOW LEVEL COM
+/** @defgroup LOW_LEVEL_COM LOW LEVEL COM
   * @{
   */
 #if (USE_BSP_COM_FEATURE > 0)
@@ -320,152 +320,311 @@ typedef struct
   #define COM_CA35_UART                       USART1
   #define COM_CA35_CLK_ENABLE()             __HAL_RCC_USART1_CLK_ENABLE()
   #define COM_CA35_CLK_DISABLE()            __HAL_RCC_USART1_CLK_DISABLE()
+  #define COM_CA35_RIF_RES_NUM_UART         RESMGR_RIFSC_USART1_ID
 #elif (UTIL_UART_INSTANCE == UTIL_USART2)
   #define COM_CA35_UART                       USART2
   #define COM_CA35_CLK_ENABLE()             __HAL_RCC_USART2_CLK_ENABLE()
   #define COM_CA35_CLK_DISABLE()            __HAL_RCC_USART2_CLK_DISABLE()
+  #define COM_CA35_RIF_RES_NUM_UART         RESMGR_RIFSC_USART2_ID
 #elif (UTIL_UART_INSTANCE == UTIL_USART3)
   #define COM_CA35_UART                       USART3
   #define COM_CA35_CLK_ENABLE()             __HAL_RCC_USART3_CLK_ENABLE()
   #define COM_CA35_CLK_DISABLE()            __HAL_RCC_USART3_CLK_DISABLE()
+  #define COM_CA35_RIF_RES_NUM_UART         RESMGR_RIFSC_USART3_ID
 #elif (UTIL_UART_INSTANCE == UTIL_UART4)
   #define COM_CA35_UART                       UART4
   #define COM_CA35_CLK_ENABLE()             __HAL_RCC_UART4_CLK_ENABLE()
   #define COM_CA35_CLK_DISABLE()            __HAL_RCC_UART4_CLK_DISABLE()
+  #define COM_CA35_RIF_RES_NUM_UART         RESMGR_RIFSC_UART4_ID
 #elif (UTIL_UART_INSTANCE == UTIL_UART5)
   #define COM_CA35_UART                       UART5
   #define COM_CA35_CLK_ENABLE()             __HAL_RCC_UART5_CLK_ENABLE()
   #define COM_CA35_CLK_DISABLE()            __HAL_RCC_UART5_CLK_DISABLE()
+  #define COM_CA35_RIF_RES_NUM_UART         RESMGR_RIFSC_UART5_ID
 #elif (UTIL_UART_INSTANCE == UTIL_USART6)
   #define COM_CA35_UART                       USART6
   #define COM_CA35_CLK_ENABLE()             __HAL_RCC_USART6_CLK_ENABLE()
   #define COM_CA35_CLK_DISABLE()            __HAL_RCC_USART6_CLK_DISABLE()
+  #define COM_CA35_RIF_RES_NUM_UART         RESMGR_RIFSC_USART6_ID
 #elif (UTIL_UART_INSTANCE == UTIL_UART7)
   #define COM_CA35_UART                       UART7
   #define COM_CA35_CLK_ENABLE()             __HAL_RCC_UART7_CLK_ENABLE()
   #define COM_CA35_CLK_DISABLE()            __HAL_RCC_UART7_CLK_DISABLE()
+  #define COM_CA35_RIF_RES_NUM_UART         RESMGR_RIFSC_UART7_ID
 #elif (UTIL_UART_INSTANCE == UTIL_UART8)
   #define COM_CA35_UART                       UART8
   #define COM_CA35_CLK_ENABLE()             __HAL_RCC_UART8_CLK_ENABLE()
   #define COM_CA35_CLK_DISABLE()            __HAL_RCC_UART8_CLK_DISABLE()
+  #define COM_CA35_RIF_RES_NUM_UART         RESMGR_RIFSC_UART8_ID
 #elif (UTIL_UART_INSTANCE == UTIL_UART9)
   #define COM_CA35_UART                       UART9
   #define COM_CA35_CLK_ENABLE()             __HAL_RCC_UART9_CLK_ENABLE()
   #define COM_CA35_CLK_DISABLE()            __HAL_RCC_UART9_CLK_DISABLE()
+  #define COM_CA35_RIF_RES_NUM_UART         RESMGR_RIFSC_UART9_ID
 #elif (UTIL_UART_INSTANCE == UTIL_LPUART1)
   #define COM_CA35_UART                       LPUART1
   #define COM_CA35_CLK_ENABLE()             __HAL_RCC_LPUART1_CLK_ENABLE()
   #define COM_CA35_CLK_DISABLE()            __HAL_RCC_LPUART1_CLK_DISABLE()
+  #define COM_CA35_RIF_RES_NUM_UART         RESMGR_RIFSC_LPUART1_ID
 #else
   #error "unknown UTIL_UART_INSTANCE definition."
 #endif
 
-#define COM_CA35_TX_PIN                     UTIL_UART_TX_PIN
+#if (UTIL_UART_TX_PIN == UTIL_PIN0)
+#define COM_CA35_TX_PIN                     GPIO_PIN_0
+#define COM_CA35_RIF_RES_NUM_TX_PIN         RESMGR_GPIO_PIN(0)
+#elif (UTIL_UART_TX_PIN == UTIL_PIN1)
+#define COM_CA35_TX_PIN                     GPIO_PIN_1
+#define COM_CA35_RIF_RES_NUM_TX_PIN         RESMGR_GPIO_PIN(1)
+#elif (UTIL_UART_TX_PIN == UTIL_PIN2)
+#define COM_CA35_TX_PIN                     GPIO_PIN_2
+#define COM_CA35_RIF_RES_NUM_TX_PIN         RESMGR_GPIO_PIN(2)
+#elif (UTIL_UART_TX_PIN == UTIL_PIN3)
+#define COM_CA35_TX_PIN                     GPIO_PIN_3
+#define COM_CA35_RIF_RES_NUM_TX_PIN         RESMGR_GPIO_PIN(3)
+#elif (UTIL_UART_TX_PIN == UTIL_PIN4)
+#define COM_CA35_TX_PIN                     GPIO_PIN_4
+#define COM_CA35_RIF_RES_NUM_TX_PIN         RESMGR_GPIO_PIN(4)
+#elif (UTIL_UART_TX_PIN == UTIL_PIN5)
+#define COM_CA35_TX_PIN                     GPIO_PIN_5
+#define COM_CA35_RIF_RES_NUM_TX_PIN         RESMGR_GPIO_PIN(5)
+#elif (UTIL_UART_TX_PIN == UTIL_PIN6)
+#define COM_CA35_TX_PIN                     GPIO_PIN_6
+#define COM_CA35_RIF_RES_NUM_TX_PIN         RESMGR_GPIO_PIN(6)
+#elif (UTIL_UART_TX_PIN == UTIL_PIN7)
+#define COM_CA35_TX_PIN                     GPIO_PIN_7
+#define COM_CA35_RIF_RES_NUM_TX_PIN         RESMGR_GPIO_PIN(7)
+#elif (UTIL_UART_TX_PIN == UTIL_PIN8)
+#define COM_CA35_TX_PIN                     GPIO_PIN_8
+#define COM_CA35_RIF_RES_NUM_TX_PIN         RESMGR_GPIO_PIN(8)
+#elif (UTIL_UART_TX_PIN == UTIL_PIN9)
+#define COM_CA35_TX_PIN                     GPIO_PIN_9
+#define COM_CA35_RIF_RES_NUM_TX_PIN         RESMGR_GPIO_PIN(9)
+#elif (UTIL_UART_TX_PIN == UTIL_PIN10)
+#define COM_CA35_TX_PIN                     GPIO_PIN_10
+#define COM_CA35_RIF_RES_NUM_TX_PIN         RESMGR_GPIO_PIN(10)
+#elif (UTIL_UART_TX_PIN == UTIL_PIN11)
+#define COM_CA35_TX_PIN                     GPIO_PIN_11
+#define COM_CA35_RIF_RES_NUM_TX_PIN         RESMGR_GPIO_PIN(11)
+#elif (UTIL_UART_TX_PIN == UTIL_PIN12)
+#define COM_CA35_TX_PIN                     GPIO_PIN_12
+#define COM_CA35_RIF_RES_NUM_TX_PIN         RESMGR_GPIO_PIN(12)
+#elif (UTIL_UART_TX_PIN == UTIL_PIN13)
+#define COM_CA35_TX_PIN                     GPIO_PIN_13
+#define COM_CA35_RIF_RES_NUM_TX_PIN         RESMGR_GPIO_PIN(13)
+#elif (UTIL_UART_TX_PIN == UTIL_PIN14)
+#define COM_CA35_TX_PIN                     GPIO_PIN_14
+#define COM_CA35_RIF_RES_NUM_TX_PIN         RESMGR_GPIO_PIN(14)
+#elif (UTIL_UART_TX_PIN == UTIL_PIN15)
+#define COM_CA35_TX_PIN                     GPIO_PIN_15
+#define COM_CA35_RIF_RES_NUM_TX_PIN         RESMGR_GPIO_PIN(15)
+#else
+  #error "unknown UTIL_UART_TX_PIN definition."
+#endif
+
 
 #if (UTIL_UART_TX_GPIO_PORT == UTIL_GPIOA)
   #define COM_CA35_TX_GPIO_PORT             GPIOA
   #define COM_CA35_TX_GPIO_CLK_ENABLE()     __HAL_RCC_GPIOA_CLK_ENABLE()
   #define COM_CA35_TX_GPIO_CLK_DISABLE()    __HAL_RCC_GPIOA_CLK_DISABLE()
+  #define COM_CA35_RIF_RES_TYP_TX_PIN       RESMGR_RESOURCE_RIF_GPIOA
+  #define COM_CA35_RCC_RES_TX_PIN           RESMGR_RCC_RESOURCE(90)
 #elif (UTIL_UART_TX_GPIO_PORT == UTIL_GPIOB)
   #define COM_CA35_TX_GPIO_PORT             GPIOB
   #define COM_CA35_TX_GPIO_CLK_ENABLE()     __HAL_RCC_GPIOB_CLK_ENABLE()
   #define COM_CA35_TX_GPIO_CLK_DISABLE()    __HAL_RCC_GPIOB_CLK_DISABLE()
+  #define COM_CA35_RIF_RES_TYP_TX_PIN       RESMGR_RESOURCE_RIF_GPIOA
+  #define COM_CA35_RCC_RES_TX_PIN           RESMGR_RCC_RESOURCE(91)
 #elif (UTIL_UART_TX_GPIO_PORT == UTIL_GPIOC)
   #define COM_CA35_TX_GPIO_PORT             GPIOC
   #define COM_CA35_TX_GPIO_CLK_ENABLE()     __HAL_RCC_GPIOC_CLK_ENABLE()
   #define COM_CA35_TX_GPIO_CLK_DISABLE()    __HAL_RCC_GPIOC_CLK_DISABLE()
+  #define COM_CA35_RIF_RES_TYP_TX_PIN       RESMGR_RESOURCE_RIF_GPIOA
+  #define COM_CA35_RCC_RES_TX_PIN           RESMGR_RCC_RESOURCE(92)
 #elif (UTIL_UART_TX_GPIO_PORT == UTIL_GPIOD)
   #define COM_CA35_TX_GPIO_PORT             GPIOD
   #define COM_CA35_TX_GPIO_CLK_ENABLE()     __HAL_RCC_GPIOD_CLK_ENABLE()
   #define COM_CA35_TX_GPIO_CLK_DISABLE()    __HAL_RCC_GPIOD_CLK_DISABLE()
+  #define COM_CA35_RIF_RES_TYP_TX_PIN       RESMGR_RESOURCE_RIF_GPIOA
+  #define COM_CA35_RCC_RES_TX_PIN           RESMGR_RCC_RESOURCE(93)
 #elif (UTIL_UART_TX_GPIO_PORT == UTIL_GPIOE)
   #define COM_CA35_TX_GPIO_PORT             GPIOE
   #define COM_CA35_TX_GPIO_CLK_ENABLE()     __HAL_RCC_GPIOE_CLK_ENABLE()
   #define COM_CA35_TX_GPIO_CLK_DISABLE()    __HAL_RCC_GPIOE_CLK_DISABLE()
+  #define COM_CA35_RIF_RES_TYP_TX_PIN       RESMGR_RESOURCE_RIF_GPIOA
+  #define COM_CA35_RCC_RES_TX_PIN           RESMGR_RCC_RESOURCE(94)
 #elif (UTIL_UART_TX_GPIO_PORT == UTIL_GPIOF)
   #define COM_CA35_TX_GPIO_PORT             GPIOF
   #define COM_CA35_TX_GPIO_CLK_ENABLE()     __HAL_RCC_GPIOF_CLK_ENABLE()
   #define COM_CA35_TX_GPIO_CLK_DISABLE()    __HAL_RCC_GPIOF_CLK_DISABLE()
+  #define COM_CA35_RIF_RES_TYP_TX_PIN       RESMGR_RESOURCE_RIF_GPIOA
+  #define COM_CA35_RCC_RES_TX_PIN           RESMGR_RCC_RESOURCE(95)
 #elif (UTIL_UART_TX_GPIO_PORT == UTIL_GPIOG)
   #define COM_CA35_TX_GPIO_PORT             GPIOG
   #define COM_CA35_TX_GPIO_CLK_ENABLE()     __HAL_RCC_GPIOG_CLK_ENABLE()
   #define COM_CA35_TX_GPIO_CLK_DISABLE()    __HAL_RCC_GPIOG_CLK_DISABLE()
+  #define COM_CA35_RIF_RES_TYP_TX_PIN       RESMGR_RESOURCE_RIF_GPIOA
+  #define COM_CA35_RCC_RES_TX_PIN           RESMGR_RCC_RESOURCE(96)
 #elif (UTIL_UART_TX_GPIO_PORT == UTIL_GPIOH)
   #define COM_CA35_TX_GPIO_PORT             GPIOH
   #define COM_CA35_TX_GPIO_CLK_ENABLE()     __HAL_RCC_GPIOH_CLK_ENABLE()
   #define COM_CA35_TX_GPIO_CLK_DISABLE()    __HAL_RCC_GPIOH_CLK_DISABLE()
+  #define COM_CA35_RIF_RES_TYP_TX_PIN       RESMGR_RESOURCE_RIF_GPIOA
+  #define COM_CA35_RCC_RES_TX_PIN           RESMGR_RCC_RESOURCE(97)
 #elif (UTIL_UART_TX_GPIO_PORT == UTIL_GPIOI)
   #define COM_CA35_TX_GPIO_PORT             GPIOI
   #define COM_CA35_TX_GPIO_CLK_ENABLE()     __HAL_RCC_GPIOI_CLK_ENABLE()
   #define COM_CA35_TX_GPIO_CLK_DISABLE()    __HAL_RCC_GPIOI_CLK_DISABLE()
+  #define COM_CA35_RIF_RES_TYP_TX_PIN       RESMGR_RESOURCE_RIF_GPIOA
+  #define COM_CA35_RCC_RES_TX_PIN           RESMGR_RCC_RESOURCE(98)
 #elif (UTIL_UART_TX_GPIO_PORT == UTIL_GPIOJ)
   #define COM_CA35_TX_GPIO_PORT             GPIOJ
   #define COM_CA35_TX_GPIO_CLK_ENABLE()     __HAL_RCC_GPIOJ_CLK_ENABLE()
   #define COM_CA35_TX_GPIO_CLK_DISABLE()    __HAL_RCC_GPIOJ_CLK_DISABLE()
+  #define COM_CA35_RIF_RES_TYP_TX_PIN       RESMGR_RESOURCE_RIF_GPIOA
+  #define COM_CA35_RCC_RES_TX_PIN           RESMGR_RCC_RESOURCE(99)
 #elif (UTIL_UART_TX_GPIO_PORT == UTIL_GPIOK)
   #define COM_CA35_TX_GPIO_PORT             GPIOK
   #define COM_CA35_TX_GPIO_CLK_ENABLE()     __HAL_RCC_GPIOK_CLK_ENABLE()
   #define COM_CA35_TX_GPIO_CLK_DISABLE()    __HAL_RCC_GPIOK_CLK_DISABLE()
+  #define COM_CA35_RIF_RES_TYP_TX_PIN       RESMGR_RESOURCE_RIF_GPIOA
+  #define COM_CA35_RCC_RES_TX_PIN           RESMGR_RCC_RESOURCE(100)
 #elif (UTIL_UART_TX_GPIO_PORT == UTIL_GPIOZ)
   #define COM_CA35_TX_GPIO_PORT             GPIOZ
   #define COM_CA35_TX_GPIO_CLK_ENABLE()     __HAL_RCC_GPIOZ_CLK_ENABLE()
   #define COM_CA35_TX_GPIO_CLK_DISABLE()    __HAL_RCC_GPIOZ_CLK_DISABLE()
+  #define COM_CA35_RIF_RES_TYP_TX_PIN       RESMGR_RESOURCE_RIF_GPIOA
+  #define COM_CA35_RCC_RES_TX_PIN           RESMGR_RCC_RESOURCE(101)
 #else
   #error "unknown UTIL_UART_TX_GPIO_PORT definition."
 #endif
 
 #define COM_CA35_TX_AF                      UTIL_UART_TX_AF
 
-#define COM_CA35_RX_PIN                     UTIL_UART_RX_PIN
+#if (UTIL_UART_RX_PIN == UTIL_PIN0)
+#define COM_CA35_RX_PIN                     GPIO_PIN_0
+#define COM_CA35_RIF_RES_NUM_RX_PIN         RESMGR_GPIO_PIN(0)
+#elif (UTIL_UART_RX_PIN == UTIL_PIN1)
+#define COM_CA35_RX_PIN                     GPIO_PIN_1
+#define COM_CA35_RIF_RES_NUM_RX_PIN         RESMGR_GPIO_PIN(1)
+#elif (UTIL_UART_RX_PIN == UTIL_PIN2)
+#define COM_CA35_RX_PIN                     GPIO_PIN_2
+#define COM_CA35_RIF_RES_NUM_RX_PIN         RESMGR_GPIO_PIN(2)
+#elif (UTIL_UART_RX_PIN == UTIL_PIN3)
+#define COM_CA35_RX_PIN                     GPIO_PIN_3
+#define COM_CA35_RIF_RES_NUM_RX_PIN         RESMGR_GPIO_PIN(3)
+#elif (UTIL_UART_RX_PIN == UTIL_PIN4)
+#define COM_CA35_RX_PIN                     GPIO_PIN_4
+#define COM_CA35_RIF_RES_NUM_RX_PIN         RESMGR_GPIO_PIN(4)
+#elif (UTIL_UART_RX_PIN == UTIL_PIN5)
+#define COM_CA35_RX_PIN                     GPIO_PIN_5
+#define COM_CA35_RIF_RES_NUM_RX_PIN         RESMGR_GPIO_PIN(5)
+#elif (UTIL_UART_RX_PIN == UTIL_PIN6)
+#define COM_CA35_RX_PIN                     GPIO_PIN_6
+#define COM_CA35_RIF_RES_NUM_RX_PIN         RESMGR_GPIO_PIN(6)
+#elif (UTIL_UART_RX_PIN == UTIL_PIN7)
+#define COM_CA35_RX_PIN                     GPIO_PIN_7
+#define COM_CA35_RIF_RES_NUM_RX_PIN         RESMGR_GPIO_PIN(7)
+#elif (UTIL_UART_RX_PIN == UTIL_PIN8)
+#define COM_CA35_RX_PIN                     GPIO_PIN_8
+#define COM_CA35_RIF_RES_NUM_RX_PIN         RESMGR_GPIO_PIN(8)
+#elif (UTIL_UART_RX_PIN == UTIL_PIN9)
+#define COM_CA35_RX_PIN                     GPIO_PIN_9
+#define COM_CA35_RIF_RES_NUM_RX_PIN         RESMGR_GPIO_PIN(9)
+#elif (UTIL_UART_RX_PIN == UTIL_PIN10)
+#define COM_CA35_RX_PIN                     GPIO_PIN_10
+#define COM_CA35_RIF_RES_NUM_RX_PIN         RESMGR_GPIO_PIN(10)
+#elif (UTIL_UART_RX_PIN == UTIL_PIN11)
+#define COM_CA35_RX_PIN                     GPIO_PIN_11
+#define COM_CA35_RIF_RES_NUM_RX_PIN         RESMGR_GPIO_PIN(11)
+#elif (UTIL_UART_RX_PIN == UTIL_PIN12)
+#define COM_CA35_RX_PIN                     GPIO_PIN_12
+#define COM_CA35_RIF_RES_NUM_RX_PIN         RESMGR_GPIO_PIN(12)
+#elif (UTIL_UART_RX_PIN == UTIL_PIN13)
+#define COM_CA35_RX_PIN                     GPIO_PIN_13
+#define COM_CA35_RIF_RES_NUM_RX_PIN         RESMGR_GPIO_PIN(13)
+#elif (UTIL_UART_RX_PIN == UTIL_PIN14)
+#define COM_CA35_RX_PIN                     GPIO_PIN_14
+#define COM_CA35_RIF_RES_NUM_RX_PIN         RESMGR_GPIO_PIN(14)
+#elif (UTIL_UART_RX_PIN == UTIL_PIN15)
+#define COM_CA35_RX_PIN                     GPIO_PIN_15
+#define COM_CA35_RIF_RES_NUM_RX_PIN         RESMGR_GPIO_PIN(15)
+#else
+  #error "unknown UTIL_UART_RX_PIN definition."
+#endif
 
 #if (UTIL_UART_RX_GPIO_PORT == UTIL_GPIOA)
   #define COM_CA35_RX_GPIO_PORT             GPIOA
   #define COM_CA35_RX_GPIO_CLK_ENABLE()     __HAL_RCC_GPIOA_CLK_ENABLE()
   #define COM_CA35_RX_GPIO_CLK_DISABLE()    __HAL_RCC_GPIOA_CLK_DISABLE()
+  #define COM_CA35_RIF_RES_TYP_RX_PIN       RESMGR_RESOURCE_RIF_GPIOA
+  #define COM_CA35_RCC_RES_RX_PIN           RESMGR_RCC_RESOURCE(90)
 #elif (UTIL_UART_RX_GPIO_PORT == UTIL_GPIOB)
   #define COM_CA35_RX_GPIO_PORT             GPIOB
   #define COM_CA35_RX_GPIO_CLK_ENABLE()     __HAL_RCC_GPIOB_CLK_ENABLE()
   #define COM_CA35_RX_GPIO_CLK_DISABLE()    __HAL_RCC_GPIOB_CLK_DISABLE()
+  #define COM_CA35_RIF_RES_TYP_RX_PIN       RESMGR_RESOURCE_RIF_GPIOA
+  #define COM_CA35_RCC_RES_RX_PIN           RESMGR_RCC_RESOURCE(91)
 #elif (UTIL_UART_RX_GPIO_PORT == UTIL_GPIOC)
   #define COM_CA35_RX_GPIO_PORT             GPIOC
   #define COM_CA35_RX_GPIO_CLK_ENABLE()     __HAL_RCC_GPIOC_CLK_ENABLE()
   #define COM_CA35_RX_GPIO_CLK_DISABLE()    __HAL_RCC_GPIOC_CLK_DISABLE()
+  #define COM_CA35_RIF_RES_TYP_RX_PIN       RESMGR_RESOURCE_RIF_GPIOA
+  #define COM_CA35_RCC_RES_RX_PIN           RESMGR_RCC_RESOURCE(92)
 #elif (UTIL_UART_RX_GPIO_PORT == UTIL_GPIOD)
   #define COM_CA35_RX_GPIO_PORT             GPIOD
   #define COM_CA35_RX_GPIO_CLK_ENABLE()     __HAL_RCC_GPIOD_CLK_ENABLE()
   #define COM_CA35_RX_GPIO_CLK_DISABLE()    __HAL_RCC_GPIOD_CLK_DISABLE()
+  #define COM_CA35_RIF_RES_TYP_RX_PIN       RESMGR_RESOURCE_RIF_GPIOA
+  #define COM_CA35_RCC_RES_RX_PIN           RESMGR_RCC_RESOURCE(93)
 #elif (UTIL_UART_RX_GPIO_PORT == UTIL_GPIOE)
   #define COM_CA35_RX_GPIO_PORT             GPIOE
   #define COM_CA35_RX_GPIO_CLK_ENABLE()     __HAL_RCC_GPIOE_CLK_ENABLE()
   #define COM_CA35_RX_GPIO_CLK_DISABLE()    __HAL_RCC_GPIOE_CLK_DISABLE()
+  #define COM_CA35_RIF_RES_TYP_RX_PIN       RESMGR_RESOURCE_RIF_GPIOA
+  #define COM_CA35_RCC_RES_RX_PIN           RESMGR_RCC_RESOURCE(94)
 #elif (UTIL_UART_RX_GPIO_PORT == UTIL_GPIOF)
   #define COM_CA35_RX_GPIO_PORT             GPIOF
   #define COM_CA35_RX_GPIO_CLK_ENABLE()     __HAL_RCC_GPIOF_CLK_ENABLE()
   #define COM_CA35_RX_GPIO_CLK_DISABLE()    __HAL_RCC_GPIOF_CLK_DISABLE()
+  #define COM_CA35_RIF_RES_TYP_RX_PIN       RESMGR_RESOURCE_RIF_GPIOA
+  #define COM_CA35_RCC_RES_RX_PIN           RESMGR_RCC_RESOURCE(95)
 #elif (UTIL_UART_RX_GPIO_PORT == UTIL_GPIOG)
   #define COM_CA35_RX_GPIO_PORT             GPIOG
   #define COM_CA35_RX_GPIO_CLK_ENABLE()     __HAL_RCC_GPIOG_CLK_ENABLE()
   #define COM_CA35_RX_GPIO_CLK_DISABLE()    __HAL_RCC_GPIOG_CLK_DISABLE()
+  #define COM_CA35_RIF_RES_TYP_RX_PIN       RESMGR_RESOURCE_RIF_GPIOA
+  #define COM_CA35_RCC_RES_RX_PIN           RESMGR_RCC_RESOURCE(96)
 #elif (UTIL_UART_RX_GPIO_PORT == UTIL_GPIOH)
   #define COM_CA35_RX_GPIO_PORT             GPIOH
   #define COM_CA35_RX_GPIO_CLK_ENABLE()     __HAL_RCC_GPIOH_CLK_ENABLE()
   #define COM_CA35_RX_GPIO_CLK_DISABLE()    __HAL_RCC_GPIOH_CLK_DISABLE()
+  #define COM_CA35_RIF_RES_TYP_RX_PIN       RESMGR_RESOURCE_RIF_GPIOA
+  #define COM_CA35_RCC_RES_RX_PIN           RESMGR_RCC_RESOURCE(97)
 #elif (UTIL_UART_RX_GPIO_PORT == UTIL_GPIOI)
   #define COM_CA35_RX_GPIO_PORT             GPIOI
   #define COM_CA35_RX_GPIO_CLK_ENABLE()     __HAL_RCC_GPIOI_CLK_ENABLE()
   #define COM_CA35_RX_GPIO_CLK_DISABLE()    __HAL_RCC_GPIOI_CLK_DISABLE()
+  #define COM_CA35_RIF_RES_TYP_RX_PIN       RESMGR_RESOURCE_RIF_GPIOA
+  #define COM_CA35_RCC_RES_RX_PIN           RESMGR_RCC_RESOURCE(98)
 #elif (UTIL_UART_RX_GPIO_PORT == UTIL_GPIOJ)
   #define COM_CA35_RX_GPIO_PORT             GPIOJ
   #define COM_CA35_RX_GPIO_CLK_ENABLE()     __HAL_RCC_GPIOJ_CLK_ENABLE()
   #define COM_CA35_RX_GPIO_CLK_DISABLE()    __HAL_RCC_GPIOJ_CLK_DISABLE()
+  #define COM_CA35_RIF_RES_TYP_RX_PIN       RESMGR_RESOURCE_RIF_GPIOA
+  #define COM_CA35_RCC_RES_RX_PIN           RESMGR_RCC_RESOURCE(99)
 #elif (UTIL_UART_RX_GPIO_PORT == UTIL_GPIOK)
   #define COM_CA35_RX_GPIO_PORT             GPIOK
   #define COM_CA35_RX_GPIO_CLK_ENABLE()     __HAL_RCC_GPIOK_CLK_ENABLE()
   #define COM_CA35_RX_GPIO_CLK_DISABLE()    __HAL_RCC_GPIOK_CLK_DISABLE()
+  #define COM_CA35_RIF_RES_TYP_RX_PIN       RESMGR_RESOURCE_RIF_GPIOA
+  #define COM_CA35_RCC_RES_RX_PIN           RESMGR_RCC_RESOURCE(100)
 #elif (UTIL_UART_RX_GPIO_PORT == UTIL_GPIOZ)
   #define COM_CA35_RX_GPIO_PORT             GPIOZ
   #define COM_CA35_RX_GPIO_CLK_ENABLE()     __HAL_RCC_GPIOZ_CLK_ENABLE()
   #define COM_CA35_RX_GPIO_CLK_DISABLE()    __HAL_RCC_GPIOZ_CLK_DISABLE()
+  #define COM_CA35_RIF_RES_TYP_RX_PIN       RESMGR_RESOURCE_RIF_GPIOA
+  #define COM_CA35_RCC_RES_RX_PIN           RESMGR_RCC_RESOURCE(101)
 #else
   #error "unknown UTIL_UART_RX_GPIO_PORT definition."
 #endif
@@ -534,7 +693,7 @@ typedef struct
   * @}
   */
 
-/** @addtogroup STM32MP257F_EVAL_LOW_LEVEL_Exported_Variables
+/** @addtogroup LOW_LEVEL_Exported_Variables
   * @{
   */
 extern EXTI_HandleTypeDef hpb_exti[];
@@ -547,7 +706,7 @@ extern USART_TypeDef *COM_USART[];
   * @}
   */
 
-/** @addtogroup STM32MP257F_EVAL_LOW_LEVEL_Exported_Functions
+/** @addtogroup LOW_LEVEL_Exported_Functions
   * @{
   */
 int32_t BSP_GetVersion(void);

@@ -44,6 +44,23 @@
 #define UTIL_GPIOK    10
 #define UTIL_GPIOZ    11
 
+#define UTIL_PIN0     0
+#define UTIL_PIN1     1
+#define UTIL_PIN2     2
+#define UTIL_PIN3     3
+#define UTIL_PIN4     4
+#define UTIL_PIN5     5
+#define UTIL_PIN6     6
+#define UTIL_PIN7     7
+#define UTIL_PIN8     8
+#define UTIL_PIN9     9
+#define UTIL_PIN10    10
+#define UTIL_PIN11    11
+#define UTIL_PIN12    12
+#define UTIL_PIN13    13
+#define UTIL_PIN14    14
+#define UTIL_PIN15    15
+
 #define UTIL_I2C1     0
 #define UTIL_I2C2     1
 #define UTIL_I2C3     2

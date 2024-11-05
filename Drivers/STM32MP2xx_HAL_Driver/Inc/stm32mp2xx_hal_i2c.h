@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2024 STMicroelectronics.
+  * Copyright (c) 2020 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -746,14 +746,14 @@ uint32_t             HAL_I2C_GetError(const I2C_HandleTypeDef *hi2c);
 #define IS_I2C_DUAL_ADDRESS(ADDRESS)    (((ADDRESS) == I2C_DUALADDRESS_DISABLE) || \
                                          ((ADDRESS) == I2C_DUALADDRESS_ENABLE))
 
-#define IS_I2C_OWN_ADDRESS2_MASK(MASK)  (((MASK) == I2C_OA2_NOMASK)  || \
-                                         ((MASK) == I2C_OA2_MASK01) || \
-                                         ((MASK) == I2C_OA2_MASK02) || \
-                                         ((MASK) == I2C_OA2_MASK03) || \
-                                         ((MASK) == I2C_OA2_MASK04) || \
-                                         ((MASK) == I2C_OA2_MASK05) || \
-                                         ((MASK) == I2C_OA2_MASK06) || \
-                                         ((MASK) == I2C_OA2_MASK07))
+#define IS_I2C_OWN_ADDRESS2_MASK(I2C_MASK) (((I2C_MASK) == I2C_OA2_NOMASK) || \
+                                            ((I2C_MASK) == I2C_OA2_MASK01) || \
+                                            ((I2C_MASK) == I2C_OA2_MASK02) || \
+                                            ((I2C_MASK) == I2C_OA2_MASK03) || \
+                                            ((I2C_MASK) == I2C_OA2_MASK04) || \
+                                            ((I2C_MASK) == I2C_OA2_MASK05) || \
+                                            ((I2C_MASK) == I2C_OA2_MASK06) || \
+                                            ((I2C_MASK) == I2C_OA2_MASK07))
 
 #define IS_I2C_GENERAL_CALL(CALL)       (((CALL) == I2C_GENERALCALL_DISABLE) || \
                                          ((CALL) == I2C_GENERALCALL_ENABLE))

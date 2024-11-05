@@ -53,6 +53,11 @@
 #include "stm32mp2xx-ddr3-1x8Gbits-1x16bits-800MHz-palladium.h"
 #endif /* (DDR_FREQ == 800) */
 #endif /* USE_STM32MP257CXX_EMU */
+#ifndef USE_STM32MP257CXX_EMU
+#if (DDR_FREQ == 800)
+#include "stm32mp2xx-ddr3-1x8Gbits-1x16bits-800MHz.h"
+#endif /* (DDR_FREQ == 800) */
+#endif /* !USE_STM32MP257CXX_EMU */
 #endif /* (STM32MP_DDR3_TYPE && (DDR_SIZE_Gb == 8)) && defined(STM32MP_DDR_16_BIT_INTERFACE) */
 
 #if (STM32MP_DDR3_TYPE && (DDR_SIZE_Gb == 8)) && !defined(STM32MP_DDR_16_BIT_INTERFACE)
@@ -77,6 +82,11 @@
 #include "stm32mp2xx-ddr4-1x32Gbits-1x16bits-800MHz-palladium.h"
 #endif /* (DDR_FREQ == 800) */
 #endif /* USE_STM32MP257CXX_EMU */
+#ifndef USE_STM32MP257CXX_EMU
+#if (DDR_FREQ == 800)
+#include "stm32mp2xx-ddr4-1x32Gbits-1x16bits-800MHz.h"
+#endif /* (DDR_FREQ == 800) */
+#endif /* USE_STM32MP257CXX_EMU */
 #endif /* (STM32MP_DDR4_TYPE && (DDR_SIZE_Gb == 32)) && defined(STM32MP_DDR_16_BIT_INTERFACE) */
 
 #if (STM32MP_DDR4_TYPE && (DDR_SIZE_Gb == 32)) && !defined(STM32MP_DDR_16_BIT_INTERFACE)
@@ -98,6 +108,14 @@
 #include "stm32mp2xx-lpddr4-1x16Gbits-1x16bits-800MHz-palladium.h"
 #endif /* (DDR_FREQ == 800) */
 #endif /* USE_STM32MP257CXX_EMU */
+#ifndef USE_STM32MP257CXX_EMU
+#if (DDR_FREQ == 800)
+#include "stm32mp2xx-lpddr4-1x16Gbits-1x16bits-800MHz.h"
+#endif /* (DDR_FREQ == 800) */
+#if (DDR_FREQ == 1200)
+#include "stm32mp2xx-lpddr4-1x16Gbits-1x16bits-1200MHz.h"
+#endif /* (DDR_FREQ == 1200) */
+#endif /* !USE_STM32MP257CXX_EMU */
 #endif /* (STM32MP_LPDDR4_TYPE && (DDR_SIZE_Gb == 16)) && defined(STM32MP_DDR_16_BIT_INTERFACE) */
 
 #if (STM32MP_LPDDR4_TYPE && (DDR_SIZE_Gb == 32)) && !defined(STM32MP_DDR_16_BIT_INTERFACE)
@@ -1149,7 +1167,7 @@ static uintptr_t ddr_test_addr_bus(void)
   {
     if (*(addr + (offset / sizeof(uintptr_t))) != DDR_PATTERN)
     {
-      return (uintptr_t)(addr + offset * sizeof(uintptr_t));
+      return (uintptr_t)(addr + offset / sizeof(uintptr_t));
     }
   }
 
@@ -1171,7 +1189,7 @@ static uintptr_t ddr_test_addr_bus(void)
       if ((*(addr + (offset / sizeof(uintptr_t))) != DDR_PATTERN) &&
           (offset != testoffset))
       {
-        return (uintptr_t)(addr + offset * sizeof(uintptr_t));
+        return (uintptr_t)(addr + (offset / sizeof(uintptr_t)));
       }
     }
 
@@ -1789,6 +1807,11 @@ static int32_t set_reg(reg_type type, uintptr_t param)
   uint8_t i;
   void *base_addr = get_base_addr(ddr_registers[type].base);
   const reg_desc_t *desc = ddr_registers[type].desc;
+
+  if (base_addr == (void *)0U)
+  {
+    return -1;
+  }
 
   for (i = 0U; i < ddr_registers[type].size; i++)
   {
@@ -3014,7 +3037,7 @@ __weak bool HAL_DDR_Interactive(__attribute__((unused))HAL_DDR_InteractStepTypeD
   */
 HAL_StatusTypeDef HAL_DDR_Init(DDR_InitTypeDef *iddr)
 {
-  int32_t iret;
+  int32_t iret  = -1;
   uint32_t uret;
   uint32_t ddr_retdis;
   HAL_DDR_SelfRefreshModeTypeDef mode;
@@ -3028,7 +3051,7 @@ HAL_StatusTypeDef HAL_DDR_Init(DDR_InitTypeDef *iddr)
 
 #ifdef STM32MP_GATHER_DDRCTRL_SETTING_IN_STATIC_ARRAY
   {
-    uint32_t *ptr_src:
+    uint32_t *ptr_src;
     uint32_t *ptr_dest;
     uint32_t j;
     uint32_t start = 0U;

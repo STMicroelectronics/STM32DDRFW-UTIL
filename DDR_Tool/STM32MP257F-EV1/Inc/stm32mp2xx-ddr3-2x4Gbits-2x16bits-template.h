@@ -2,6 +2,7 @@
  * STM32MP25 DDR3 board configuration
  * DDR3 2x4Gbits 2x16bits 933MHz
  *
+ * version     2
  * package     1       Package selection (18x18 and 14x14)
  * memclk      933MHz  (2x DFI clock) + range check
  * Speed-Bin   Worse   from JEDEC list
@@ -265,4 +266,3 @@
 #define DDR_PLL_SSM_DIVVAL 0U
 
 #endif /* STM32MP2XX_DDR3_2x4GBITS_2x16BITS_933MHZ_H */
-

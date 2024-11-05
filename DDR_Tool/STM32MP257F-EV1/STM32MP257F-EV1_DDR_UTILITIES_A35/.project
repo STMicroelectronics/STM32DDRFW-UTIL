@@ -45,32 +45,32 @@
 		<link>
 			<name>User/ddr_tests.c</name>
 			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/Src/ddr_tests.c</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/Common_MP2/Src/ddr_tests.c</locationURI>
 		</link>
 		<link>
 			<name>User/ddr_tool.c</name>
 			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/Src/ddr_tool.c</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/Common_MP2/Src/ddr_tool.c</locationURI>
 		</link>
 		<link>
 			<name>User/main.c</name>
 			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/Src/main.c</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/Common_MP2/Src/main.c</locationURI>
 		</link>
 		<link>
 			<name>User/stm32mp1xx_hal_msp.c</name>
 			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/Src/stm32mp2xx_hal_msp.c</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/Common_MP2/Src/stm32mp2xx_hal_msp.c</locationURI>
 		</link>
 		<link>
 			<name>User/stm32mp1xx_it.c</name>
 			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/Src/stm32mp2xx_it.c</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/Common_MP2/Src/stm32mp2xx_it.c</locationURI>
 		</link>
 		<link>
 			<name>User/minimal_startup64_a35.s</name>
 			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/Src/minimal_startup64_a35.s</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/Common_MP2/Src/minimal_startup64_a35.s</locationURI>
 		</link>
 		<link>
 			<name>User/ddr_tool_util.c</name>

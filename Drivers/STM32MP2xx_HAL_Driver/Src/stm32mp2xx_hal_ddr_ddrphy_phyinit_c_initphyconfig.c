@@ -87,7 +87,7 @@ static void atxslewrate_program(void)
   int32_t anib;
   int32_t atxpren; /* Default to 0xf (max). Optimal setting is technology specific. */
   int32_t atxprep; /* Default to 0xf (max). Optimal setting is technology specific. */
-  int32_t ck_anib_inst[2];
+  int32_t ck_anib_inst[2] = { 0 };
 
   atxprep = userinputadvanced.txslewriseac;
   atxpren = userinputadvanced.txslewfallac;

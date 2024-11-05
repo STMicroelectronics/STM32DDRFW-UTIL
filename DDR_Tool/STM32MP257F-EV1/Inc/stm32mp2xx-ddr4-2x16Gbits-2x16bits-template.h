@@ -2,15 +2,15 @@
  * STM32MP25 DDR4 board configuration
  * DDR4 2x16Gbits 2x16bits 1200MHz
  *
- * version     2
- * package     1        Package selection (18x18 and 14x14)
- * memclk      1200MHz  (2x DFI clock) + range check
- * Speed_Bin   Worse    from JEDEC
- * width       32       32: full width / 16: half width
- * ranks       1        Single or Dual rank
- * density     16Gbits  (per 16bit device)
- * addressing  RBC      row/bank interleaving
- * RDBI        No       Read DBI
+ * version      2
+ * package      1        Package selection (18x18 and 14x14)
+ * memclk       1200MHz  (2x DFI clock) + range check
+ * Speed_Bin    Worse    from JEDEC
+ * device_width 16       x16 by default
+ * width        32       32: full width / 16: half width
+ * density      16Gbits  (per 16bit device)
+ * addressing   RBC      row/bank interleaving
+ * RDBI         No       Read DBI
   ******************************************************************************
   * @attention
   *

@@ -11,7 +11,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2020 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -98,7 +98,7 @@ static void GateCortexSubsystemClockOnSleepEntry(void);
 static void KeepCortexSubsystemClockOnSleepEntry(void);
 static void ClearStandbyRequest();
 #if !defined(CORE_CM0PLUS)
-static void SetStandbyRequest(uint8_t STANDBYType);
+static void SetStandbyRequest(__attribute__((unused))uint8_t STANDBYType);
 #endif /* CORE_CM0PLUS */
 static void SetRegulatorStopModeIndicator(uint32_t Regulator);
 static void ClearRegulatorStopModeIndicator(void);
@@ -1089,7 +1089,7 @@ void ClearStandbyRequest(void)
   * @note Beware request may not be granted by PWR (case activity on others CPUs)
   * @retval None
   */
-void SetStandbyRequest(uint8_t STANDBYType)
+void SetStandbyRequest(__attribute__((unused))uint8_t STANDBYType)
 {
   /*clear all standby flag, mandatory otherwise  standby flags are not relevant  at reset (except if reset is pon !)*/
   __HAL_PWR_CLEAR_FLAG();
@@ -1344,7 +1344,7 @@ HAL_StatusTypeDef HAL_PWR_ConfigNonShareableResourceAttributes(uint16_t Resource
         /*static CID field value used ONLY is CID filtering not disable */
       {
         /* Write static CID configuration */
-        *regaddr = ((ResourceAttributes & PWR_R0CIDCFGR_CID_Msk) | PWR_R0CIDCFGR_CFEN);
+        *regaddr = ((ResourceAttributes & PWR_R0CIDCFGR_SCID_Msk) | PWR_R0CIDCFGR_CFEN);
       }
     }
     position++;
@@ -1393,7 +1393,7 @@ HAL_StatusTypeDef HAL_PWR_GetConfigNonShareableResourceAttributes(uint16_t Resou
       if ((*regaddr & PWR_R0CIDCFGR_CFEN_Msk) == PWR_R0CIDCFGR_CFEN)
       {
         /* Get CIDs value from Static CID field */
-        *pResourceAttributes |= (NS_RESOURCE_ATTR_CID_STATIC_SELECT | ((*regaddr) & PWR_R0CIDCFGR_CID_Msk));
+        *pResourceAttributes |= (NS_RESOURCE_ATTR_CID_STATIC_SELECT | ((*regaddr) & PWR_R0CIDCFGR_SCID_Msk));
       }
       else
       {
@@ -1550,5 +1550,3 @@ HAL_StatusTypeDef HAL_PWR_GetConfigResourceAttributes(uint16_t Item, uint32_t *p
 /**
   * @}
   */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

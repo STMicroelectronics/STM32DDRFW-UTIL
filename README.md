@@ -9,7 +9,7 @@ This document describes:
 
 ## 1 STM32DDRFW-UTIL Architecture and Design
 
-STM32DDRFW-UTIL v1.1.0 applies to STM32MP1 (STM32MP13XX and STM32MP15XX) and STM32MP2 (STM32MP25XX) series.
+STM32DDRFW-UTIL v1.2.0 applies to STM32MP1 (STM32MP13XX and STM32MP15XX) and STM32MP2 (STM32MP23XX and STM32MP25XX) series.
 
 ### 1.1 Package overview
 
@@ -343,7 +343,7 @@ This section describes how to compile and launch these projects in STM32CubeIDE.
 
 	- <span style="color: red;">Extra procedures <span style="color: blue;">(marked in blue below)</span> must complete nominal ones.</span>
 
-The projects contained in STM32DDRFW-UTIL package have been tested on <span style="background-color: yellow;">STM32CubeIDE 1.16 release</span>.
+The projects contained in STM32DDRFW-UTIL package have been tested on <span style="background-color: yellow;">STM32CubeIDE 1.17 release</span>.
 
 #### 2.2.1 Import the project in STM32CubeIDE
 

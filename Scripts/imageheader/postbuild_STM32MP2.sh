@@ -65,6 +65,9 @@ if [ -n "$version" ] ; then
     2.2)
       header_version="$version"
       ;;
+    2.3)
+      header_version="$version"
+      ;;
     *)
       echo "ERROR header version not supported : $version"
       exit 1
