@@ -8,7 +8,7 @@
  * Speed_Bin    Worse    from JEDEC
  * device_width 16       x16 by default
  * width        32       32: full width / 16: half width
- * density      16Gbits  (per 16bit device)
+ * density      16Gbits  (per device)
  * addressing   RBC      row/bank interleaving
  * RDBI         No       Read DBI
   ******************************************************************************
