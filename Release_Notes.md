@@ -26,6 +26,13 @@ supported boards
 Update history
 ==============
 
+**V1.2.1 / 10-January-2025**
+
+This is the **V1.2.1 release of STM32DDRFW-UTIL**.
+
+-   Fix MP1 STM32 file generation script (header entry point issue)
+-   Update related binaries.
+
 **V1.2.0 / 24-October-2024**
 
 This is the **V1.2.0 release of STM32DDRFW-UTIL** (V6.0.0 global release).

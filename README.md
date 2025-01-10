@@ -9,7 +9,7 @@ This document describes:
 
 ## 1 STM32DDRFW-UTIL Architecture and Design
 
-STM32DDRFW-UTIL v1.2.0 applies to STM32MP1 (STM32MP13XX and STM32MP15XX) and STM32MP2 (STM32MP23XX and STM32MP25XX) series.
+STM32DDRFW-UTIL v1.2.1 applies to STM32MP1 (STM32MP13XX and STM32MP15XX) and STM32MP2 (STM32MP23XX and STM32MP25XX) series.
 
 ### 1.1 Package overview
 

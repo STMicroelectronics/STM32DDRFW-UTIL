@@ -54,7 +54,7 @@ if [ ${debug} -ne 0 ] ; then
 fi
 
 # elf_entry_point is in format 0x%x so Reformat to 0x%08X and process entry-point address
-formatted_ep_addr=$(printf "%08x" $((elf_entry_point)))
+formatted_ep_addr=$(printf "%08x" $(($elf_entry_point & 0xfffffffe)))
 if [ ${debug} -ne 0 ] ; then
   echo "<D> formatted_ep_addr           =<$formatted_ep_addr>"
 fi
